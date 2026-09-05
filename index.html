@@ -553,7 +553,14 @@ var CHECKIN_DONE=false;
 var CHECKIN_ENERGY="";
 var TIME_LIMIT=0;
 var WEEK_REVIEW_DONE=false;
-var DEBRIEF_STATE="idle"; // "idle"|"loading"|"result"
+var DEBRIEF_STATE="idle";
+var RUCK_TRACKING=false;
+var NOTES_OPEN=false;
+var RUCK_WATCH_ID=null;
+var RUCK_POSITIONS=[];
+var RUCK_START_TIME=null;
+var RUCK_LIVE_DIST=0;
+var RUCK_LIVE_ELAPSED=0; // "idle"|"loading"|"result"
 var DEBRIEF_RESULT="";
 var API_SETTINGS_OPEN=false;
 
@@ -1065,6 +1072,24 @@ function bWorkout(){
     +"<button id=\"recovery-btn\" style=\"flex:1;font-size:11px;background:#7c3aed;color:#fff;border:none;border-radius:8px;padding:7px 6px;cursor:pointer;font-family:inherit;font-weight:700\">&#128149; Recovery</button>"
     +"<button id=\"rearrange-btn\" style=\"flex:1;font-size:11px;background:#e8f3fb;color:#1a6fa8;border:1.5px solid #9fd0ef;border-radius:8px;padding:7px 6px;cursor:pointer;font-family:inherit;font-weight:700\">&#128260; Rearrange</button>"
     +"</div>";
+  // WORKOUT NOTES
+  var existingNote=getSessionData(W,DAY)&&getSessionData(W,DAY).note||"";
+  var notesOpen=existingNote.length>0||NOTES_OPEN;
+  h+="<div style=\"background:#fff;border-radius:12px;border:1px solid #d1d5db;padding:10px 12px;margin-bottom:10px\">"
+    +"<button id=\"notes-toggle\" style=\"width:100%;text-align:left;background:none;border:none;padding:0;cursor:pointer;font-family:inherit;display:flex;justify-content:space-between;align-items:center\">"
+    +"<span style=\"font-size:12px;font-weight:700\">&#128221; Session Notes"+(existingNote?" &#10003;":"")+"</span>"
+    +"<span style=\"font-size:11px;color:#6b7280\">"+(notesOpen?"&#9650;":"&#9660;")+"</span>"
+    +"</button>"
+    +(notesOpen
+      ?"<textarea id=\"session-note\" rows=\"3\" placeholder=\"How did it feel? Any PRs? Adjustments?\" "
+        +"style=\"width:100%;margin-top:8px;border:1.5px solid #d1d5db;border-radius:8px;padding:8px;font-size:13px;"
+        +"font-family:inherit;color:#1a1a2a;background:#f9fafb;resize:none;outline:none\">"
+        +existingNote+"</textarea>"
+        +"<button id=\"note-save-btn\" style=\"margin-top:6px;padding:7px 16px;border-radius:8px;border:none;"
+        +"background:#1a6fa8;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit\">Save Note</button>"
+      :"")
+    +"</div>";
+
   // SCALED MODE upgrade prompt
   if(WORKOUT_MODE==="scaled"){
     h+="<div style=\"background:#fdf0e6;border-radius:12px;border:1.5px solid #f5c89a;padding:12px 14px;margin-bottom:10px;text-align:center\">"
@@ -1209,7 +1234,22 @@ function bRuck(){
   var ruckDist=lg("ruck.dist")||"";
   var ruckTime=lg("ruck.time")||"";
   var ruckNote="";
-  return measBanner+ruckDetails
+  var gpsPanel=RUCK_TRACKING
+    ?"<div style=\"background:linear-gradient(135deg,#1a6fa8,#1a7a44);border-radius:14px;padding:18px;margin-bottom:12px;text-align:center;color:#fff\">"
+      +"<div style=\"font-size:12px;font-weight:700;opacity:.85;margin-bottom:12px;letter-spacing:1px\">&#128205; GPS TRACKING</div>"
+      +"<div style=\"display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px\">"
+      +"<div><div id=\"ruck-live-dist\" style=\"font-size:22px;font-weight:800\">0.00</div><div style=\"font-size:10px;opacity:.8\">miles</div></div>"
+      +"<div><div id=\"ruck-live-time\" style=\"font-size:22px;font-weight:800\">0:00</div><div style=\"font-size:10px;opacity:.8\">time</div></div>"
+      +"<div><div id=\"ruck-live-pace\" style=\"font-size:22px;font-weight:800\">--:--</div><div style=\"font-size:10px;opacity:.8\">pace</div></div>"
+      +"</div>"
+      +"<button id=\"ruck-stop-btn\" style=\"width:100%;padding:13px;border-radius:11px;border:2px solid rgba(255,255,255,.6);background:rgba(255,255,255,.15);color:#fff;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit\">&#9632; Stop &amp; Log</button>"
+      +"</div>"
+    :"<div style=\"background:#e8f3fb;border-radius:12px;padding:11px 13px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between\">"
+      +"<div><div style=\"font-size:12px;font-weight:700;color:#1a6fa8\">&#128205; GPS Ruck Tracker</div>"
+      +"<div style=\"font-size:11px;color:#6b7280\">Auto-logs distance, time &amp; pace</div></div>"
+      +"<button id=\"ruck-start-btn\" style=\"padding:9px 16px;border-radius:9px;border:none;background:#1a6fa8;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit\">&#9654; Start</button>"
+      +"</div>";
+  return measBanner+ruckDetails+gpsPanel
     +"<div style=\"margin-bottom:10px\"><div class=\"lbl\">Ruck</div>"
     +"<select class=\"inp\" data-key=\"ruck.done\">"
     +"<option value=\""+((!sg("ruck.done"))?" selected":"")+">-- select --</option>"
@@ -2144,6 +2184,81 @@ function generateMealSuggestion(){
 }
 
 // AI WORKOUT GENERATOR
+// ── RUCK GPS TRACKER ─────────────────────────────────────────────────────
+function haversine(lat1,lon1,lat2,lon2){
+  var R=3958.8; // miles
+  var dLat=(lat2-lat1)*Math.PI/180;
+  var dLon=(lon2-lon1)*Math.PI/180;
+  var a=Math.sin(dLat/2)*Math.sin(dLat/2)
+    +Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)
+    *Math.sin(dLon/2)*Math.sin(dLon/2);
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+function fmtElapsed(ms){
+  var s=Math.floor(ms/1000);
+  var m=Math.floor(s/60);
+  var h=Math.floor(m/60);
+  return(h>0?h+":":"")+(h>0?(m%60<10?"0":""):"")+m%60+":"+(s%60<10?"0":"")+s%60;
+}
+function fmtPace(miles,ms){
+  if(miles<0.05) return "--:--";
+  var minPerMile=(ms/1000/60)/miles;
+  var m=Math.floor(minPerMile);
+  var s=Math.round((minPerMile-m)*60);
+  return m+":"+(s<10?"0":"")+s+" /mi";
+}
+function onRuckPosition(pos){
+  if(!RUCK_TRACKING) return;
+  RUCK_POSITIONS.push({lat:pos.coords.latitude,lng:pos.coords.longitude,t:Date.now()});
+  if(RUCK_POSITIONS.length>=2){
+    var total=0;
+    for(var i=1;i<RUCK_POSITIONS.length;i++){
+      total+=haversine(RUCK_POSITIONS[i-1].lat,RUCK_POSITIONS[i-1].lng,
+                       RUCK_POSITIONS[i].lat,RUCK_POSITIONS[i].lng);
+    }
+    RUCK_LIVE_DIST=Math.round(total*100)/100;
+  }
+  RUCK_LIVE_ELAPSED=Date.now()-RUCK_START_TIME;
+  // Update live display directly
+  var distEl=document.getElementById("ruck-live-dist");
+  var timeEl=document.getElementById("ruck-live-time");
+  var paceEl=document.getElementById("ruck-live-pace");
+  if(distEl) distEl.textContent=RUCK_LIVE_DIST.toFixed(2)+" mi";
+  if(timeEl) timeEl.textContent=fmtElapsed(RUCK_LIVE_ELAPSED);
+  if(paceEl) paceEl.textContent=fmtPace(RUCK_LIVE_DIST,RUCK_LIVE_ELAPSED);
+}
+function startRuckTracking(){
+  if(!navigator.geolocation){
+    alert("GPS not available on this device.");return;
+  }
+  RUCK_TRACKING=true;
+  RUCK_POSITIONS=[];
+  RUCK_LIVE_DIST=0;
+  RUCK_START_TIME=Date.now();
+  RUCK_WATCH_ID=navigator.geolocation.watchPosition(onRuckPosition,
+    function(err){console.log("GPS error:",err.message);},
+    {enableHighAccuracy:true,maximumAge:5000,timeout:10000});
+  markDirty("workout");paint();
+}
+function stopRuckTracking(){
+  if(RUCK_WATCH_ID!==null) navigator.geolocation.clearWatch(RUCK_WATCH_ID);
+  RUCK_WATCH_ID=null;
+  RUCK_TRACKING=false;
+  var elapsed=Date.now()-RUCK_START_TIME;
+  var mins=Math.floor(elapsed/60000);
+  var secs=Math.floor((elapsed%60000)/1000);
+  var timeStr=mins+":"+(secs<10?"0":"")+secs;
+  // Auto-save to session
+  var data=getSessionData(W,DAY)||{};
+  data.ruck=data.ruck||{};
+  data.ruck.done="done";
+  data.ruck.dist=RUCK_LIVE_DIST.toFixed(2);
+  data.ruck.time=timeStr;
+  data.ruck.gps=true;
+  saveSessionData(W,DAY,data);
+  markDirty("workout");paint();
+}
+
 function buildWeekSummaryForAI(w){
   // Gather real week data to send to Claude
   var sched=getWeekSchedule(w);
@@ -2175,7 +2290,15 @@ function buildWeekSummaryForAI(w){
     week:w,phase:p.ph,points:pts,
     workouts:workouts,rucks:rucks,
     avgWeight:avgWt,review:review,
-    calTarget:getCalTarget()
+    calTarget:getCalTarget(),
+    notes:(function(){
+      var ns=[];
+      for(var d=0;d<7;d++){
+        var nd=getSessionData(w,d);
+        if(nd&&nd.note&&nd.note.trim()) ns.push(dayNames[d]+": "+nd.note.trim());
+      }
+      return ns;
+    })()
   };
 }
 function generateWeeklyDebrief(){
@@ -2338,6 +2461,21 @@ document.addEventListener("click",function(e){
     AI_INTENSITY="easy";
     setTab("ai");return;
   }
+  if(t.id==="notes-toggle"){NOTES_OPEN=!NOTES_OPEN;markDirty("workout");paint();return;}
+  if(t.id==="note-save-btn"){
+    var noteEl=document.getElementById("session-note");
+    if(noteEl){
+      var data=getSessionData(W,DAY)||{};
+      data.note=noteEl.value;
+      saveSessionData(W,DAY,data);
+      var chip=document.getElementById("saved-chip");
+      if(chip){chip.textContent="Note saved!";chip.style.opacity="1";
+               setTimeout(function(){chip.style.opacity="0";},1500);}
+    }
+    return;
+  }
+  if(t.id==="ruck-start-btn"){startRuckTracking();return;}
+  if(t.id==="ruck-stop-btn"){stopRuckTracking();return;}
   if(t.id==="travel-btn"){
     AI_TRAVEL=true;
     AI_STATE="idle";
