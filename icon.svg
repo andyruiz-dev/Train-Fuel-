@@ -1,21 +1,64 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <!-- Background gradient -->
   <defs>
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#1a6fa8"/>
-      <stop offset="100%" style="stop-color:#1a7a44"/>
+      <stop offset="0%" style="stop-color:#1a3a5c"/>
+      <stop offset="100%" style="stop-color:#0f2d1f"/>
+    </linearGradient>
+    <linearGradient id="flame" x1="0%" y1="100%" x2="50%" y2="0%">
+      <stop offset="0%" style="stop-color:#ff6b00"/>
+      <stop offset="60%" style="stop-color:#ffb300"/>
+      <stop offset="100%" style="stop-color:#fff176"/>
     </linearGradient>
   </defs>
+
+  <!-- Dark background -->
+  <rect width="512" height="512" rx="90" ry="90" fill="url(#bg)"/>
+
+  <!-- Rucksack body -->
+  <rect x="130" y="155" width="252" height="235" rx="30" ry="30" fill="none" stroke="white" stroke-width="22"/>
   
-  <!-- Rounded square background -->
-  <rect width="512" height="512" rx="100" ry="100" fill="url(#bg)"/>
+  <!-- Rucksack top strap/collar -->
+  <path d="M185 155 Q185 100 256 100 Q327 100 327 155" fill="none" stroke="white" stroke-width="22" stroke-linecap="round"/>
+
+  <!-- Rucksack handle -->
+  <path d="M218 100 Q218 68 256 68 Q294 68 294 100" fill="none" stroke="white" stroke-width="18" stroke-linecap="round"/>
+
+  <!-- Center pocket -->
+  <rect x="176" y="210" width="160" height="110" rx="16" ry="16" fill="none" stroke="white" stroke-width="16"/>
+
+  <!-- Pocket zipper line -->
+  <line x1="176" y1="250" x2="336" y2="250" stroke="white" stroke-width="10" stroke-dasharray="12,8"/>
+
+  <!-- Side compression straps -->
+  <line x1="130" y1="220" x2="108" y2="220" stroke="white" stroke-width="14" stroke-linecap="round"/>
+  <line x1="130" y1="300" x2="108" y2="300" stroke="white" stroke-width="14" stroke-linecap="round"/>
+  <line x1="382" y1="220" x2="404" y2="220" stroke="white" stroke-width="14" stroke-linecap="round"/>
+  <line x1="382" y1="300" x2="404" y2="300" stroke="white" stroke-width="14" stroke-linecap="round"/>
+
+  <!-- Bottom bar -->
+  <line x1="160" y1="390" x2="352" y2="390" stroke="white" stroke-width="14" stroke-linecap="round"/>
+
+  <!-- Flame - bottom right -->
+  <path d="M370 410 
+           C370 370 395 355 385 320
+           C400 345 408 330 402 305
+           C420 325 425 355 415 375
+           C430 360 432 340 425 318
+           C445 345 448 390 435 415
+           C445 405 448 388 443 370
+           C458 395 455 435 435 455
+           C425 465 405 470 390 465
+           C372 460 362 445 370 410Z" 
+        fill="url(#flame)"/>
   
-  <!-- T&F text -->
-  <text x="256" y="200" font-family="Arial Black, sans-serif" font-size="180" 
-        font-weight="900" text-anchor="middle" fill="white" opacity="0.95">T</text>
-  <text x="256" y="370" font-family="Arial Black, sans-serif" font-size="120" 
-        font-weight="900" text-anchor="middle" fill="white" opacity="0.85">&amp;F</text>
-  
-  <!-- Flame accent -->
-  <text x="410" y="140" font-size="100" text-anchor="middle">🔥</text>
+  <!-- Flame inner bright core -->
+  <path d="M385 435
+           C385 415 395 405 390 388
+           C400 400 405 390 400 378
+           C410 390 412 410 405 425
+           C412 418 413 408 410 398
+           C418 412 417 433 408 445
+           C403 450 393 452 385 448
+           C380 443 378 438 385 435Z"
+        fill="white" opacity="0.6"/>
 </svg>
