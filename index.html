@@ -924,7 +924,7 @@ function bWorkoutPanel(){
   var wkPts=getWeekPoints(W)||0;
   var daysLeft=6-DAY;
   var behindBanner="";
-  if(wkPts<2&&daysLeft>1&&DAY>1){
+  if(wkPts<2&&DAY>0){
     behindBanner="<div style=\"background:#fdf0e6;border:1.5px solid #f5c89a;border-radius:12px;padding:10px 13px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center\">"
       +"<div><div style=\"font-size:12px;font-weight:700;color:#c0580a\">Week "+W+" &mdash; behind pace</div>"
       +"<div style=\"font-size:11px;color:#6b7280;margin-top:2px\">"+Math.round(wkPts*10)/10+"/6 pts &middot; Consider repeating this week</div></div>"
