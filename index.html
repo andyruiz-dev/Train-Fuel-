@@ -2061,7 +2061,6 @@ function generateMealSuggestion(){
     +"- If remaining calories are low (<300), suggest a snack instead\n"
     +"- Format clearly with meal name as header, then portions, then macros on one line";
 
-  if(!getApiKey()){MEAL_STATE="error";markDirty("food");paint();return;}
   fetch("https://fancy-cake-3271.andy-p-ruiz.workers.dev",{
     method:"POST",
     headers:apiHeaders(),
@@ -2116,7 +2115,6 @@ function generateAIWorkout(){
 
 
 
-  if(!getApiKey()){AI_STATE="nokey";markDirty("ai");paint();return;}
   fetch("https://fancy-cake-3271.andy-p-ruiz.workers.dev",{
     method:"POST",
     headers:apiHeaders(),
