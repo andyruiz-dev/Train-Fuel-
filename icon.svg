@@ -1,64 +1,121 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0d1117"/>
+      <stop offset="100%" style="stop-color:#1a1a2e"/>
+    </linearGradient>
+    <linearGradient id="shield-fill" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" style="stop-color:#1a3a5c"/>
-      <stop offset="100%" style="stop-color:#0f2d1f"/>
+      <stop offset="100%" style="stop-color:#0d2137"/>
     </linearGradient>
-    <linearGradient id="flame" x1="0%" y1="100%" x2="50%" y2="0%">
-      <stop offset="0%" style="stop-color:#ff6b00"/>
-      <stop offset="60%" style="stop-color:#ffb300"/>
-      <stop offset="100%" style="stop-color:#fff176"/>
+    <linearGradient id="flame" x1="30%" y1="100%" x2="70%" y2="0%">
+      <stop offset="0%" style="stop-color:#c0580a"/>
+      <stop offset="50%" style="stop-color:#f5a623"/>
+      <stop offset="100%" style="stop-color:#fff9c4"/>
     </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
   </defs>
 
   <!-- Dark background -->
   <rect width="512" height="512" rx="90" ry="90" fill="url(#bg)"/>
 
-  <!-- Rucksack body -->
-  <rect x="130" y="155" width="252" height="235" rx="30" ry="30" fill="none" stroke="white" stroke-width="22"/>
-  
-  <!-- Rucksack top strap/collar -->
-  <path d="M185 155 Q185 100 256 100 Q327 100 327 155" fill="none" stroke="white" stroke-width="22" stroke-linecap="round"/>
+  <!-- Shield shape -->
+  <path d="M256 60
+           L420 120
+           L420 280
+           Q420 400 256 460
+           Q92 400 92 280
+           L92 120
+           Z"
+        fill="url(#shield-fill)"
+        stroke="#1a6fa8"
+        stroke-width="10"/>
 
-  <!-- Rucksack handle -->
-  <path d="M218 100 Q218 68 256 68 Q294 68 294 100" fill="none" stroke="white" stroke-width="18" stroke-linecap="round"/>
+  <!-- Shield inner border -->
+  <path d="M256 88
+           L396 140
+           L396 278
+           Q396 382 256 434
+           Q116 382 116 278
+           L116 140
+           Z"
+        fill="none"
+        stroke="#4da6e8"
+        stroke-width="4"
+        opacity="0.4"/>
 
-  <!-- Center pocket -->
-  <rect x="176" y="210" width="160" height="110" rx="16" ry="16" fill="none" stroke="white" stroke-width="16"/>
+  <!-- Flame inside shield -->
+  <path d="M256 390
+           C220 360 185 330 192 280
+           C196 255 210 240 205 210
+           C225 240 228 220 230 195
+           C242 225 248 210 245 182
+           C260 210 272 230 265 260
+           C278 240 280 218 274 198
+           C295 228 305 265 295 300
+           C308 280 312 258 306 235
+           C328 268 332 318 312 355
+           C322 340 326 320 320 302
+           C338 330 338 375 316 400
+           C305 413 282 422 256 422
+           C230 422 207 413 196 400
+           C174 375 174 330 192 302
+           C186 320 190 340 200 355
+           C180 318 184 268 206 235
+           C200 258 204 280 217 300
+           C197 265 201 215 222 182
+           C216 205 220 228 233 248
+           C226 218 232 195 245 170
+           C248 198 252 215 256 200
+           C260 215 264 198 267 170
+           C280 195 286 218 279 248
+           C292 228 296 205 290 182
+           C311 215 317 265 310 300
+           C323 280 327 258 321 235
+           C342 268 346 318 326 355
+           C334 340 338 320 332 302
+           C350 330 350 375 328 400
+           C317 413 294 422 268 422
+           Z"
+        fill="url(#flame)"
+        filter="url(#glow)"/>
 
-  <!-- Pocket zipper line -->
-  <line x1="176" y1="250" x2="336" y2="250" stroke="white" stroke-width="10" stroke-dasharray="12,8"/>
+  <!-- Flame inner bright -->
+  <path d="M256 385
+           C240 365 228 345 232 315
+           C238 295 248 285 244 265
+           C254 280 257 270 256 252
+           C264 268 268 278 262 298
+           C270 283 272 268 268 252
+           C280 270 284 298 274 320
+           C280 308 282 294 278 280
+           C288 298 288 325 276 345
+           C268 358 256 365 244 358
+           C232 345 232 318 242 298
+           C238 310 240 324 246 335
+           C236 315 238 288 250 268
+           C247 282 248 295 254 308
+           C244 288 248 262 258 245
+           C260 260 262 272 266 262
+           C272 278 270 298 262 315
+           C268 298 270 278 264 260
+           C274 278 276 305 268 325
+           C272 312 274 298 270 285
+           C278 300 278 325 268 342
+           C264 350 256 355 248 350
+           Z"
+        fill="white"
+        opacity="0.35"/>
 
-  <!-- Side compression straps -->
-  <line x1="130" y1="220" x2="108" y2="220" stroke="white" stroke-width="14" stroke-linecap="round"/>
-  <line x1="130" y1="300" x2="108" y2="300" stroke="white" stroke-width="14" stroke-linecap="round"/>
-  <line x1="382" y1="220" x2="404" y2="220" stroke="white" stroke-width="14" stroke-linecap="round"/>
-  <line x1="382" y1="300" x2="404" y2="300" stroke="white" stroke-width="14" stroke-linecap="round"/>
+  <!-- Bottom shield banner -->
+  <path d="M160 415 Q256 445 352 415 L362 435 Q256 468 150 435 Z"
+        fill="#1a6fa8" opacity="0.7"/>
 
-  <!-- Bottom bar -->
-  <line x1="160" y1="390" x2="352" y2="390" stroke="white" stroke-width="14" stroke-linecap="round"/>
-
-  <!-- Flame - bottom right -->
-  <path d="M370 410 
-           C370 370 395 355 385 320
-           C400 345 408 330 402 305
-           C420 325 425 355 415 375
-           C430 360 432 340 425 318
-           C445 345 448 390 435 415
-           C445 405 448 388 443 370
-           C458 395 455 435 435 455
-           C425 465 405 470 390 465
-           C372 460 362 445 370 410Z" 
-        fill="url(#flame)"/>
-  
-  <!-- Flame inner bright core -->
-  <path d="M385 435
-           C385 415 395 405 390 388
-           C400 400 405 390 400 378
-           C410 390 412 410 405 425
-           C412 418 413 408 410 398
-           C418 412 417 433 408 445
-           C403 450 393 452 385 448
-           C380 443 378 438 385 435Z"
-        fill="white" opacity="0.6"/>
+  <!-- T+F text in banner -->
+  <text x="256" y="450" font-family="Arial Black, sans-serif" font-size="28"
+        font-weight="900" text-anchor="middle" fill="white" opacity="0.95"
+        letter-spacing="4">T+F</text>
 </svg>
