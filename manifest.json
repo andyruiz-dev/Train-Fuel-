@@ -1,0 +1,18 @@
+{
+  "name": "Train & Fuel",
+  "short_name": "Train+Fuel",
+  "description": "26-week recomp program with AI coaching",
+  "start_url": "/Train-Fuel-/",
+  "display": "standalone",
+  "background_color": "#1a6fa8",
+  "theme_color": "#1a6fa8",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
