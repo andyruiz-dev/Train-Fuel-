@@ -724,7 +724,7 @@ function getDateForDay(w,di){
 }
 
 // STATE
-var W=calcCurrentWeek(),DAY=defaultDay(),TAB="workout";
+var W=calcCurrentWeekGated(),DAY=defaultDay(),TAB="workout";
 (function(){var s=getProgramStart();var n=new Date();n.setHours(12,0,0,0);if(n<s)W=0;}());
 var FDATE=getDateForDay(W,DAY);
 var SCHED_EDIT=false;
@@ -2310,7 +2310,7 @@ document.addEventListener("click",function(e){
     return;
   }
   if(t.id==="today-btn"){
-    W=calcCurrentWeek();DAY=defaultDay();
+    W=calcCurrentWeekGated();DAY=defaultDay();
     FDATE=getDateForDay(W,DAY);
     markAllDirty();renderDayTabs();paint();
     setTab("workout");return;
