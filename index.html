@@ -100,6 +100,7 @@ body.dark .overlay-card{background:#1a1e28}
 </style>
 </head>
 <body>
+<input type="file" id="photo-input" accept="image/*" capture="environment" style="display:none">
 <div class="saved-chip" id="saved-chip">Saved &#10003;</div>
 
 <div class="app-hdr">
@@ -552,6 +553,8 @@ var CHECKIN_DONE=false;
 var CHECKIN_ENERGY="";
 var TIME_LIMIT=0;
 var WEEK_REVIEW_DONE=false;
+var DEBRIEF_STATE="idle"; // "idle"|"loading"|"result"
+var DEBRIEF_RESULT="";
 var API_SETTINGS_OPEN=false;
 
 function sessionHasWorkoutData(w,d){
@@ -1296,6 +1299,31 @@ function bRest(){
     } else {
       h+="<div style=\"background:#e6f7ed;border-radius:10px;padding:10px 12px;margin-bottom:10px;font-size:12px;color:#1a7a44;font-weight:700\">&#10003; Review saved: "+review+"</div>";
     }
+    // AI Weekly Debrief
+    h+="<div style=\"background:#fff;border-radius:14px;border:1px solid #d1d5db;padding:14px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,.08)\">";
+    h+="<div style=\"display:flex;justify-content:space-between;align-items:center;margin-bottom:10px\">";
+    h+="<div style=\"font-size:13px;font-weight:800\">&#9889; AI Coach Debrief</div>";
+    // Share week summary button
+    h+="<div style=\"display:flex;gap:8px;margin-bottom:10px\">"
+      +"<button id=\"share-week-btn\" style=\"flex:1;padding:9px;border-radius:9px;border:1.5px solid #d1d5db;background:#fff;color:#1a1a2a;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit\">&#128257; Share Week</button>"
+      +"</div>";
+    if(DEBRIEF_STATE==="idle"){
+      h+="<button id=\"debrief-btn\" style=\"padding:7px 14px;border-radius:8px;border:none;background:#1a6fa8;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit\">Generate</button>";
+    } else if(DEBRIEF_STATE==="loading"){
+      h+="<span style=\"font-size:11px;color:#6b7280\">Analyzing your week...</span>";
+    } else {
+      h+="<button id=\"debrief-reset\" style=\"padding:5px 10px;border-radius:7px;border:1px solid #d1d5db;background:#fff;font-size:11px;color:#6b7280;cursor:pointer;font-family:inherit\">Refresh</button>";
+    }
+    h+="</div>";
+    if(DEBRIEF_STATE==="loading"){
+      h+="<div style=\"height:4px;background:#e8eaed;border-radius:2px;overflow:hidden\">"
+        +"<div style=\"height:100%;width:60%;background:#1a6fa8;border-radius:2px;animation:none\"></div></div>";
+    } else if(DEBRIEF_STATE==="result"&&DEBRIEF_RESULT){
+      h+="<div style=\"font-size:13px;line-height:1.6;color:#1a1a2a;font-style:italic\">"+DEBRIEF_RESULT+"</div>";
+    } else {
+      h+="<div style=\"font-size:12px;color:#6b7280\">Get an honest AI coaching review of your week — what worked, what didn\'t, and what to focus on next.</div>";
+    }
+    h+="</div>";
   }
   return h;
 }
@@ -1875,12 +1903,36 @@ function bProgress(){
   }
 
   // ── Measurements progress ─────────────────────────────────────────────
+  // ── Progress photos ──────────────────────────────────────────────────────
+  h+="<div style=\"background:#fff;border-radius:12px;border:1px solid #d1d5db;padding:12px 13px;margin-bottom:10px\">"
+    +"<div style=\"display:flex;justify-content:space-between;align-items:center;margin-bottom:8px\">"
+    +"<div style=\"font-size:13px;font-weight:700\">&#128247; Progress Photos</div>"
+    +"<button id=\"photo-btn\" style=\"padding:6px 12px;border-radius:8px;border:none;background:#1a6fa8;color:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit\">Add Photo</button>"
+    +"</div>";
+  (function(){
+    var ph=[];
+    try{ph=JSON.parse(localStorage.getItem("progress_photos")||"[]");}catch(e){}
+    if(ph.length===0){
+      h+="<div style=\"font-size:11px;color:#6b7280\">No progress photos yet. Take one on measurement Mondays to track your visual progress.</div>";
+    } else {
+      h+="<div style=\"display:flex;gap:8px;overflow-x:auto;padding-bottom:4px\">";
+      ph.slice(-4).forEach(function(p){
+        h+="<div style=\"flex:0 0 auto;text-align:center\">"
+          +"<img src=\""+p.data+"\" style=\"width:90px;height:120px;object-fit:cover;border-radius:9px;border:2px solid #d1d5db\">"
+          +"<div style=\"font-size:9px;color:#6b7280;margin-top:3px\">W"+p.week+" &middot; "+p.date+"</div>"
+          +"</div>";
+      });
+      h+="</div>";
+    }
+  })();
+  h+="</div>";
+
   if(mdataM.length>=2){
     var firstM=mdataM[0],lastM=mdataM[mdataM.length-1];
     var mFieldsM=["weight","chest","waist","hips","neck","arm"];
     var mLabelsM={"weight":"Weight","chest":"Chest","waist":"Waist","hips":"Hips","neck":"Neck","arm":"Arm"};
     h+="<div style=\"background:#fff;border-radius:12px;border:1px solid #d1d5db;padding:12px 13px;margin-bottom:10px\">"
-      +"<div style=\"font-size:13px;font-weight:700;margin-bottom:10px\">&#128207; Measurements Progress</div>"
+      +"<div style=\"font-size:13px;font-weight:700;margin-bottom:8px\">&#128207; Measurements Progress</div>"
       +"<div style=\"display:grid;grid-template-columns:repeat(2,1fr);gap:6px\">";
     mFieldsM.forEach(function(f){
       var fv=parseFloat(firstM[f]),lv=parseFloat(lastM[f]);
@@ -2092,6 +2144,77 @@ function generateMealSuggestion(){
 }
 
 // AI WORKOUT GENERATOR
+function buildWeekSummaryForAI(w){
+  // Gather real week data to send to Claude
+  var sched=getWeekSchedule(w);
+  var dayNames=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+  var workouts=[],rucks=[];
+  var totalVol=0;
+  for(var d=0;d<7;d++){
+    var data=getSessionData(w,d);
+    if(!data) continue;
+    if(sched[d]==="workout"&&sessionHasWorkoutData(w,d)){
+      var mode=data.wmode||"full";
+      workouts.push(dayNames[d]+" ("+mode+")");
+      totalVol+=getWeekVolume?getWeekVolume(w):0;
+    }
+    if(sched[d]==="ruck"&&data.ruck&&data.ruck.done==="done"){
+      var dist=data.ruck.dist||"?";
+      var time=data.ruck.time||"?";
+      rucks.push(dayNames[d]+" "+dist+"mi in "+time);
+    }
+  }
+  var pts=getWeekPoints(w);
+  var bwRaw=localStorage.getItem("bw_w"+w);
+  var bwObj=bwRaw?JSON.parse(bwRaw)||{}:{};
+  var weights=Object.values(bwObj).filter(function(v){return v;});
+  var avgWt=weights.length?Math.round(weights.reduce(function(a,b){return parseFloat(a)+parseFloat(b);},0)/weights.length*10)/10:null;
+  var review=localStorage.getItem("review_w"+w)||"not submitted";
+  var p=prog(w);
+  return{
+    week:w,phase:p.ph,points:pts,
+    workouts:workouts,rucks:rucks,
+    avgWeight:avgWt,review:review,
+    calTarget:getCalTarget()
+  };
+}
+function generateWeeklyDebrief(){
+  DEBRIEF_STATE="loading";markDirty("workout");paint();
+  var summary=buildWeekSummaryForAI(W);
+  var prompt="You are a direct, honest, and encouraging strength coach reviewing a client's week.\n"
+    +"Program: 26-week recomp. Phase "+summary.phase+". Week "+summary.week+".\n"
+    +"Completion: "+summary.points+"/6 points.\n"
+    +"Workouts completed: "+(summary.workouts.length>0?summary.workouts.join(", "):"none")+".\n"
+    +"Rucks completed: "+(summary.rucks.length>0?summary.rucks.join(", "):"none")+".\n"
+    +(summary.avgWeight?"Average weight this week: "+summary.avgWeight+"lb.\n":"")
+    +"Weekly review: "+summary.review+".\n"
+    +"Calorie target: "+summary.calTarget+" cal/day.\n\n"
+    +"Write a 3-4 sentence coaching debrief. Be direct and honest about what happened this week. "
+    +"Acknowledge what was done, address what was missed without dwelling on it, and give one clear focus for next week. "
+    +"Tone: a coach who believes in the athlete and doesn't sugarcoat but never tears down. "
+    +"No bullet points. Just speak directly to them.";
+  fetch("https://restless-lake-653e.andy-p-ruiz.workers.dev",{
+    method:"POST",
+    headers:apiHeaders(),
+    body:JSON.stringify({
+      model:"claude-sonnet-4-6",
+      max_tokens:300,
+      messages:[{role:"user",content:prompt}]
+    })
+  })
+  .then(function(r){return r.json();})
+  .then(function(data){
+    if(data&&data.content&&data.content[0]&&data.content[0].text){
+      DEBRIEF_RESULT=data.content[0].text;
+      DEBRIEF_STATE="result";
+    } else {
+      DEBRIEF_STATE="idle";
+    }
+    markDirty("workout");paint();
+  })
+  .catch(function(){DEBRIEF_STATE="idle";markDirty("workout");paint();});
+}
+
 function generateAIWorkout(){
   var p=prog(W===0?1:W);
   var phaseMap={1:"Phase 1 - Push Board and 1-Arm DB Rows",2:"Phase 2 - Incline Push-Ups and Ring Rows",3:"Phase 3 - Ring Dips and Pull-Ups"};
@@ -2260,6 +2383,28 @@ document.addEventListener("click",function(e){
              setTimeout(function(){chip.style.opacity="0";},2000);}
     return;
   }
+  if(t.id==="share-week-btn"){
+    var sum=buildWeekSummaryForAI(W);
+    var txt="🔥 Train & Fuel — Week "+sum.week+" Summary\n"
+      +"Phase "+sum.phase+" | "+sum.points+"/6 pts\n"
+      +"Workouts: "+(sum.workouts.length>0?sum.workouts.join(", "):"none")+"\n"
+      +"Rucks: "+(sum.rucks.length>0?sum.rucks.join(", "):"none")+"\n"
+      +(sum.avgWeight?"Avg weight: "+sum.avgWeight+"lb\n":"")
+      +"Week review: "+sum.review+"\n"
+      +"#TrainAndFuel #Rucking #Recomp";
+    if(navigator.share){
+      navigator.share({title:"Week "+W+" Summary",text:txt});
+    } else {
+      navigator.clipboard.writeText(txt).then(function(){
+        var chip=document.getElementById("saved-chip");
+        if(chip){chip.textContent="Copied to clipboard!";chip.style.opacity="1";
+                 setTimeout(function(){chip.style.opacity="0";},2000);}
+      });
+    }
+    return;
+  }
+  if(t.id==="debrief-btn"){generateWeeklyDebrief();return;}
+  if(t.id==="debrief-reset"){DEBRIEF_STATE="idle";DEBRIEF_RESULT="";markDirty("workout");paint();return;}
   if(t.dataset&&t.dataset.review){
     localStorage.setItem("review_w"+W,t.dataset.review);
     WEEK_REVIEW_DONE=true;markDirty("workout");paint();return;
@@ -2350,6 +2495,27 @@ document.addEventListener("click",function(e){
     if(DARK_MODE) document.body.classList.add("dark");
     else document.body.classList.remove("dark");
     markDirty("progress");paint();return;
+  }
+  if(t.id==="photo-btn"){
+    var inp=document.getElementById("photo-input");
+    if(inp){inp.onchange=function(e){
+      var file=e.target.files[0];
+      if(!file) return;
+      var reader=new FileReader();
+      reader.onload=function(ev){
+        var photos=[];
+        try{photos=JSON.parse(localStorage.getItem("progress_photos")||"[]");}catch(e){}
+        photos.push({date:FDATE,week:W,data:ev.target.result});
+        if(photos.length>20) photos=photos.slice(-20); // keep last 20
+        localStorage.setItem("progress_photos",JSON.stringify(photos));
+        var chip=document.getElementById("saved-chip");
+        if(chip){chip.textContent="Photo saved!";chip.style.opacity="1";
+                 setTimeout(function(){chip.style.opacity="0";},2000);}
+        markDirty("progress");paint();
+      };
+      reader.readAsDataURL(file);
+    };inp.click();}
+    return;
   }
   if(t.id==="repeat-week-btn"){
     // Mark all this week's sessions as intentionally repeated
