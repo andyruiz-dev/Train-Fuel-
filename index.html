@@ -2789,13 +2789,24 @@ function bProgress(){
   // ── Advanced settings (collapsed) ───────────────────────────────────────
   // ── Program Library ───────────────────────────────────────────────────
   h+="<div style=\"background:#22273a;border-radius:12px;border:1px solid #2e3347;margin-bottom:10px;overflow:hidden\">";
-  h+="<div style=\"padding:10px 13px;border-bottom:1px solid #2e3347;display:flex;justify-content:space-between;align-items:center\">"
+  h+="<div style=\"padding:10px 13px;display:flex;justify-content:space-between;align-items:center\">"
     +"<div style=\"font-size:12px;font-weight:700;color:#e8eaf0\">&#128218; Program Library</div>"
     +(IMPORTING_PROGRAM
-      ?"<div style=\"font-size:11px;color:#4da6e8\">Analyzing...</div>"
-      :"<button onclick=\"document.getElementById(\'prog-import-inp\').click()\" style=\"padding:5px 12px;border-radius:7px;border:none;background:#4da6e8;color:#0d1e2e;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit\">Import</button>")
-    +"</div>"
-    +"<input type=\"file\" id=\"prog-import-inp\" accept=\"image/*,.pdf,.xlsx,.csv\" style=\"display:none\" onchange=\"importProgramFromFile(this.files[0]);this.value=''\">"; 
+      ?"<div style=\"font-size:11px;color:#4da6e8\">Analyzing "+STAGED_FILES.length+" file(s)...</div>"
+      :"<button onclick=\"document.getElementById('prog-import-inp').click()\" style=\"padding:5px 12px;border-radius:7px;border:none;background:#2e3347;color:#e8eaf0;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit\">+ Add files</button>")
+    +"</div>";
+  h+="<input type=\"file\" id=\"prog-import-inp\" accept=\"image/*,.pdf,.xlsx,.csv\" multiple style=\"display:none\" onchange=\"stageFiles(this)\">";
+  STAGED_FILES.forEach(function(f,i){
+    h+="<div style=\"border-top:1px solid #2e3347;padding:6px 13px;display:flex;justify-content:space-between;align-items:center\">"
+      +"<span style=\"font-size:12px;color:#8a9bb0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px\">&#128196; "+f.name+"</span>"
+      +"<button data-removefile=\""+i+"\" style=\"border:none;background:none;color:#e05c52;cursor:pointer;font-size:14px;padding:0 6px\">&#10005;</button>"
+      +"</div>";
+  });
+  if(STAGED_FILES.length>0&&!IMPORTING_PROGRAM){
+    h+="<div style=\"padding:8px 13px;border-top:1px solid #2e3347\">"
+      +"<button id=\"import-submit\" style=\"width:100%;padding:10px;border-radius:8px;border:none;background:#4da6e8;color:#0d1e2e;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit\">&#128640; Import "+STAGED_FILES.length+" file"+(STAGED_FILES.length>1?"s":"")+" as one program</button>"
+      +"</div>";
+  }
   // Built-in program
   var isBuiltIn=!ACTIVE_PROGRAM_ID;
   h+="<div style=\"padding:10px 13px;border-bottom:1px solid #2e3347;display:flex;justify-content:space-between;align-items:center\">"
@@ -3137,6 +3148,7 @@ function bReadinessCard(){
 var ACTIVE_PROGRAM_ID=null; // null = built-in 26-week
 var IMPORTING_PROGRAM=false;
 var IMPORT_ERROR="";
+var STAGED_FILES=[];
 
 function getCustomPrograms(){
   try{return JSON.parse(localStorage.getItem("custom_programs")||"[]");}
@@ -3244,60 +3256,85 @@ function bCustomWorkout(){
 }
 
 // ── IMPORT FUNCTION ────────────────────────────────────────────────────────
-function importProgramFromFile(file){
-  if(!file) return;
+function stageFiles(inp){
+  if(!inp.files||!inp.files.length) return;
+  for(var i=0;i<inp.files.length;i++) STAGED_FILES.push(inp.files[i]);
+  inp.value="";
+  markDirty("progress");paint();
+}
+function removeStagedFile(idx){
+  STAGED_FILES.splice(idx,1);
+  markDirty("progress");paint();
+}
+function importStagedProgram(){
+  if(!STAGED_FILES.length) return;
   var key=getApiKey();
   if(!key){showToast("Add API key in Progress → Advanced");return;}
   IMPORTING_PROGRAM=true;IMPORT_ERROR="";
   markDirty("progress");paint();
-  var reader=new FileReader();
-  reader.onload=function(e){
-    var b64=e.target.result.split(",")[1];
-    var mt=file.type||"image/jpeg";
-    // For Excel files, ask user to screenshot — use image path
-    var isImage=(mt.indexOf("image")>=0||mt.indexOf("pdf")>=0);
-    var content=isImage
-      ?[{type:"image",source:{type:"base64",media_type:mt,data:b64}},
-        {type:"text",text:IMPORT_PROMPT}]
-      :[{type:"text",text:"Here is text extracted from a fitness program document:\n\n"
-          +"(Note: if this is garbled, please provide an image instead)\n\n"+atob(b64)+"\n\n"+IMPORT_PROMPT}];
-    fetch(getApiBase(),{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        model:"claude-sonnet-4-6",
-        max_tokens:4000,
-        messages:[{role:"user",content:content}]
-      })
-    })
-    .then(function(r){return r.json();})
-    .then(function(data){
-      IMPORTING_PROGRAM=false;
-      var raw=(data.content&&data.content[0]&&data.content[0].text)||"";
-      try{
-        var clean=raw.replace(/```json|```/g,"").trim();
-        var prog=JSON.parse(clean);
-        if(!prog.name||!prog.supersets||!prog.totalWeeks) throw new Error("bad");
-        prog.id="prog_"+Date.now();
-        var progs=getCustomPrograms();
-        progs.push(prog);
-        saveCustomPrograms(progs);
-        showToast("✓ "+prog.name+" imported — "+prog.totalWeeks+" weeks");
-        markDirty("progress");paint();
-      }catch(e){
-        IMPORT_ERROR="Could not parse program — try a clearer image or PDF";
-        showToast(IMPORT_ERROR);
-        markDirty("progress");paint();
+  // Read all files then send together
+  var pending=STAGED_FILES.length;
+  var blocks=[];
+  var files=STAGED_FILES.slice(); // copy
+  files.forEach(function(file,idx){
+    var reader=new FileReader();
+    reader.onload=function(e){
+      var b64=e.target.result.split(",")[1];
+      var mt=file.type||"image/jpeg";
+      if(mt.indexOf("pdf")>=0){
+        blocks[idx]={type:"document",source:{type:"base64",media_type:"application/pdf",data:b64}};
+      } else if(mt.indexOf("image")>=0){
+        blocks[idx]={type:"image",source:{type:"base64",media_type:mt,data:b64}};
+      } else {
+        // Excel or unknown — send as text note
+        blocks[idx]={type:"text",text:"File: "+file.name+" ("+file.type+") — "+file.size+" bytes. If this is a spreadsheet, extract the program data from it."};
       }
-    })
-    .catch(function(){
-      IMPORTING_PROGRAM=false;
-      IMPORT_ERROR="Import failed — check your connection";
-      markDirty("progress");paint();
-    });
-  };
-  reader.readAsDataURL(file);
+      pending--;
+      if(pending===0) sendImportRequest(blocks);
+    };
+    reader.readAsDataURL(file);
+  });
 }
+function sendImportRequest(fileBlocks){
+  var content=fileBlocks.concat([{type:"text",text:IMPORT_PROMPT}]);
+  fetch(getApiBase(),{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      model:"claude-sonnet-4-6",
+      max_tokens:6000,
+      messages:[{role:"user",content:content}]
+    })
+  })
+  .then(function(r){return r.json();})
+  .then(function(data){
+    IMPORTING_PROGRAM=false;
+    var raw=(data.content&&data.content[0]&&data.content[0].text)||"";
+    try{
+      var clean=raw.replace(/```json|```/g,"").trim();
+      var prog=JSON.parse(clean);
+      if(!prog.name||!prog.supersets||!prog.totalWeeks) throw new Error("bad");
+      prog.id="prog_"+Date.now();
+      var progs=getCustomPrograms();
+      progs.push(prog);
+      saveCustomPrograms(progs);
+      STAGED_FILES=[];
+      showToast("✓ "+prog.name+" imported — "+prog.totalWeeks+" weeks");
+      markDirty("progress");paint();
+    }catch(e){
+      IMPORT_ERROR="Could not parse program — try clearer files";
+      showToast(IMPORT_ERROR);
+      IMPORTING_PROGRAM=false;
+      markDirty("progress");paint();
+    }
+  })
+  .catch(function(){
+    IMPORTING_PROGRAM=false;
+    IMPORT_ERROR="Import failed — check connection";
+    markDirty("progress");paint();
+  });
+}
+
 var IMPORT_PROMPT="Analyze this fitness program and return ONLY valid JSON with NO markdown, NO explanation:\n"
   +"{\"name\":\"program name\",\"totalWeeks\":12,\"deloadWeeks\":[4,8,12],"
   +"\"schedule\":[\"workout\",\"ruck\",\"workout\",\"ruck\",\"workout\",\"ruck\",\"rest\"],"
@@ -3596,6 +3633,10 @@ document.addEventListener("click",function(e){
     AI_EQUIPMENT=["Bodyweight","Resistance bands"];
     AI_INTENSITY="easy";
     setTab("ai");return;
+  }
+  if(t.id==="import-submit"){importStagedProgram();return;}
+  if(t.dataset&&t.dataset.removefile!==undefined){
+    removeStagedFile(parseInt(t.dataset.removefile));return;
   }
   if(t.dataset&&t.dataset.setprog){
     setActiveProgram(t.dataset.setprog==="builtin"?null:t.dataset.setprog);
