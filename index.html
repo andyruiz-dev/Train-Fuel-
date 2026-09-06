@@ -1104,7 +1104,9 @@ function submitQuickAdd(){
   if(!cal){alert("Enter at least calories");return;}
   var l=getLog();
   l.push({name:(QA_NAME||"").trim()||"Quick Entry",serving:1,cal:cal,pro:+parseFloat(QA_PRO||0).toFixed(1),carb:+parseFloat(QA_CARB||0).toFixed(1),fat:+parseFloat(QA_FAT||0).toFixed(1)});
-  saveLog(l);QA_NAME="";QA_CAL="";QA_PRO="";QA_CARB="";QA_FAT="";
+  saveLog(l);
+  showToast("✓ "+(QA_NAME||"Entry")+" logged");
+  QA_NAME="";QA_CAL="";QA_PRO="";QA_CARB="";QA_FAT="";
   ["qa-name","qa-cal","qa-pro","qa-carb","qa-fat"].forEach(function(id){var e=document.getElementById(id);if(e)e.value="";});
   var sr=document.getElementById("search-results");if(sr)sr.innerHTML="";
   markDirty("food");paint();
@@ -1425,7 +1427,9 @@ function submitQuickAdd(){
   if(!cal){alert("Enter at least calories");return;}
   var l=getLog();
   l.push({name:(QA_NAME||"").trim()||"Quick Entry",serving:1,cal:cal,pro:+parseFloat(QA_PRO||0).toFixed(1),carb:+parseFloat(QA_CARB||0).toFixed(1),fat:+parseFloat(QA_FAT||0).toFixed(1)});
-  saveLog(l);QA_NAME="";QA_CAL="";QA_PRO="";QA_CARB="";QA_FAT="";
+  saveLog(l);
+  showToast("✓ "+(QA_NAME||"Entry")+" logged");
+  QA_NAME="";QA_CAL="";QA_PRO="";QA_CARB="";QA_FAT="";
   ["qa-name","qa-cal","qa-pro","qa-carb","qa-fat"].forEach(function(id){var e=document.getElementById(id);if(e)e.value="";});
   var sr=document.getElementById("search-results");if(sr)sr.innerHTML="";
   markDirty("food");paint();
@@ -2920,6 +2924,7 @@ function stopRuckTracking(){
   data.ruck.time=timeStr;
   data.ruck.gps=true;
   saveSessionData(W,DAY,data);
+  showToast("✓ Ruck logged — "+RUCK_LIVE_DIST.toFixed(2)+" mi");
   markDirty("workout");paint();
 }
 
@@ -3132,6 +3137,7 @@ document.addEventListener("click",function(e){
       var data=getSessionData(W,DAY)||{};
       data.note=noteEl.value;
       saveSessionData(W,DAY,data);
+      showToast("✓ Note saved");
       var chip=document.getElementById("saved-chip");
       if(chip){chip.textContent="Note saved!";chip.style.opacity="1";
                setTimeout(function(){chip.style.opacity="0";},1500);}
@@ -3212,7 +3218,9 @@ document.addEventListener("click",function(e){
     WEEK_REVIEW_DONE=true;markDirty("workout");paint();return;
   }
   if(t.id==="week-advance-yes"){advanceProgramWeek();W=calcCurrentWeekGated();
-    FDATE=getDateForDay(W,DAY);CHECKIN_DONE=false;markAllDirty();renderDayTabs();paint();return;}
+    FDATE=getDateForDay(W,DAY);CHECKIN_DONE=false;markAllDirty();renderDayTabs();paint();
+    showToast("✓ Advanced to Week "+W+" — let's go");
+    return;}
   if(t.id==="week-stay"){
     // Repeat current week — reset review state and go to Monday
     localStorage.setItem("tf_prog_week",W);
@@ -3317,6 +3325,7 @@ document.addEventListener("click",function(e){
       fat:Math.round(PENDING.fat100*mult*10)/10
     });
     saveLog(l);
+    showToast("✓ "+l[l.length-1].name+" logged");
     PENDING=null;PENDING_SRV=100;
     var el=document.getElementById("food-search");
     if(el){el.value="";}
@@ -3366,12 +3375,14 @@ document.addEventListener("click",function(e){
     API_SETTINGS_OPEN=!API_SETTINGS_OPEN;markDirty("progress");paint();return;
   }
   if(t.id==="api-key-save"){
+    showToast("✓ API key saved");
     var k=document.getElementById("api-key-inp");
     if(k){setApiKey(k.value.trim());flash();markDirty("progress");paint();}
     return;
   }
   if(t.id==="go-settings-btn"){setTab("progress");return;}
-  if(t.id==="hand-save-btn"){localStorage.setItem("tf_hand",JSON.stringify({palm:parseFloat(document.getElementById("hs-palm").value)||85,fist:parseFloat(document.getElementById("hs-fist").value)||130,cupped:parseFloat(document.getElementById("hs-cupped").value)||45,thumb:parseFloat(document.getElementById("hs-thumb").value)||14}));flash();return;}
+  if(t.id==="hand-save-btn"){
+    showToast("✓ Portion sizes saved");localStorage.setItem("tf_hand",JSON.stringify({palm:parseFloat(document.getElementById("hs-palm").value)||85,fist:parseFloat(document.getElementById("hs-fist").value)||130,cupped:parseFloat(document.getElementById("hs-cupped").value)||45,thumb:parseFloat(document.getElementById("hs-thumb").value)||14}));flash();return;}
   if(t.dataset&&t.dataset.delMeas!==undefined){
     var md=[];try{md=JSON.parse(localStorage.getItem("tf_measurements")||"[]");}catch(e){}
     md.splice(parseInt(t.dataset.delMeas),1);
