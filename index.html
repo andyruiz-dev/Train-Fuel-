@@ -554,6 +554,8 @@ var WEEK_REVIEW_DONE=false;
 var DEBRIEF_STATE="idle";
 var RUCK_TRACKING=false;
 var NOTES_OPEN=false;
+var FOOD_SEARCH_TIMER=null;
+var FOOD_SEARCHING=false;
 var RUCK_WATCH_ID=null;
 var RUCK_POSITIONS=[];
 var RUCK_START_TIME=null;
@@ -847,13 +849,51 @@ function submitManual(){
 
 // SEARCH + QUICK ADD
 function updateSearchResults(q){
-  var el=document.getElementById("search-results");if(!el)return;
   q=(q||"").trim();
-  if(!q){el.innerHTML="";SRESULTS=[];return;}
-  SRESULTS=searchFoods(q);
-  if(!SRESULTS.length){el.innerHTML="<div style=\"font-size:12px;color:#8a9bb0;padding:8px 0\">No results</div>";return;}
-  el.innerHTML=SRESULTS.map(function(r,i){return"<div class=\"sri\" data-result=\""+i+"\"><div class=\"sri-n\">"+r.name+"</div><div class=\"sri-c\">"+r.cal100+" cal per 100g</div></div>";}).join("");
+  var el=document.getElementById("search-results");
+  if(!el)return;
+  if(!q){el.innerHTML="";SRESULTS=[];if(FOOD_SEARCH_TIMER)clearTimeout(FOOD_SEARCH_TIMER);return;}
+  if(FOOD_SEARCH_TIMER)clearTimeout(FOOD_SEARCH_TIMER);
+  el.innerHTML="<div style=\"font-size:12px;color:#8a9bb0;padding:8px 0\">Searching...</div>";
+  FOOD_SEARCH_TIMER=setTimeout(function(){searchUSDA(q,el);},400);
 }
+function searchUSDA(q,el){
+  FOOD_SEARCHING=true;
+  var url="https://api.nal.usda.gov/fdc/v1/foods/search?api_key=DEMO_KEY&query="+encodeURIComponent(q)
+    +"&pageSize=8&dataType=Foundation,SR%20Legacy,Survey%20(FNDDS)";
+  fetch(url)
+    .then(function(r){return r.json();})
+    .then(function(data){
+      FOOD_SEARCHING=false;
+      var foods=data.foods||[];
+      SRESULTS=foods.map(function(f){
+        var nuts=f.foodNutrients||[];
+        function get(id){var n=nuts.find(function(x){return x.nutrientId===id||x.nutrientNumber===String(id);});return n?Math.round(n.value*10)/10:0;}
+        var cal=get(1008)||get(2047);
+        var pro=get(1003);
+        var carb=get(1005);
+        var fat=get(1004);
+        var name=f.description.replace(/,? raw$/i,"").replace(/,? cooked.*$/i,"");
+        if(name.length>45) name=name.substring(0,42)+"...";
+        return{name:name,cal100:cal,pro100:pro,carb100:carb,fat100:fat,defServing:100};
+      }).filter(function(f){return f.cal100>0;});
+      if(!SRESULTS.length){
+        el.innerHTML="<div style=\"font-size:12px;color:#8a9bb0;padding:8px 0\">No results — try a simpler search</div>";
+        return;
+      }
+      el.innerHTML=SRESULTS.map(function(r,i){
+        return"<div class=\"sri\" data-result=\""+i+"\"><div class=\"sri-n\">"+r.name+"</div>"
+          +"<div class=\"sri-c\">"+r.cal100+" cal &middot; "+r.pro100+"g P &middot; "+r.carb100+"g C &middot; "+r.fat100+"g F <span style=\"color:#8a9bb0\">(per 100g)</span></div></div>";
+      }).join("");
+    })
+    .catch(function(){
+      FOOD_SEARCHING=false;
+      SRESULTS=[];
+      el.innerHTML="<div style=\"font-size:12px;color:#e05c52;padding:8px 0\">Search unavailable — add manually</div>";
+    });
+}
+function searchFoods(q){return[];}
+
 function submitQuickAdd(){
   var cal=Math.round(parseFloat(QA_CAL)||0);
   if(!cal){alert("Enter at least calories");return;}
