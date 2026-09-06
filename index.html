@@ -634,16 +634,16 @@ function bCheckin(){
 }
 function bModeBar(){
   var modes=[
-    {id:"minimum",label:"Min",  col:"#6b7280",bg:"#f3f4f6",bdr:"#d1d5db"},
-    {id:"scaled", label:"Scaled",col:"#c0580a",bg:"#fdf0e6",bdr:"#f5c89a"},
-    {id:"full",   label:"Full", col:"#1a7a44",bg:"#e6f7ed",bdr:"#9fe0c0"}
+    {id:"minimum",label:"Min",  col:"#8a9bb0",bg:"#8a9bb0",bdr:"#8a9bb0"},
+    {id:"scaled", label:"Scaled",col:"#f5a623",bg:"#f5a623",bdr:"#f5a623"},
+    {id:"full",   label:"Full", col:"#3dd68c",bg:"#3dd68c",bdr:"#3dd68c"}
   ];
   var h="<div style=\"background:#22273a;border-radius:12px;border:1px solid #2e3347;padding:10px 12px;\">"
     +"<div style=\"font-size:12px;color:#8a9bb0;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px\">Mode</div>"
     +"<div style=\"display:flex;gap:5px\">";
   modes.forEach(function(m){
     var isAct=WORKOUT_MODE===m.id;
-    h+="<button data-setmode=\""+m.id+"\" style=\"flex:1;padding:6px 4px;border-radius:8px;border:1.5px solid "+(isAct?m.col:m.bdr)+";background:"+(isAct?m.bg:"transparent")+";cursor:pointer;font-family:inherit;font-size:11px;font-weight:"+(isAct?"700":"500")+";color:"+(isAct?m.col:"#6b7280")+";\">"+m.label+"</button>";
+    h+="<button data-setmode=\""+m.id+"\" style=\"flex:1;padding:6px 4px;border-radius:8px;border:2px solid "+(isAct?m.col:"#2e3347")+";background:"+(isAct?m.bg:"#1e2435")+";cursor:pointer;font-family:inherit;font-size:11px;font-weight:"+(isAct?"800":"500")+";color:"+(isAct?"#0d1e2e":"#8a9bb0")+";\">"+m.label+"</button>";
   });
   return h+"</div></div>";
 }
@@ -780,7 +780,7 @@ function getHandSizes(){try{var s=localStorage.getItem("tf_hand");if(s){var p=JS
 
 // INPUT HELPERS
 function SI(key,rest,rname,cls){return"<input type=\"number\" inputmode=\"numeric\" class=\""+(cls||"sml")+" si\" data-key=\""+key+"\" data-rest=\""+rest+"\" data-rname=\""+rname+"\" placeholder=\"0\" value=\""+(sg(key)||"")+"\">";}
-function CHK(key){var d=sg(key+"_done");return"<button data-chk=\""+key+"\" style=\"width:26px;height:26px;border-radius:6px;border:none;background:"+(d?"#1a7a44":"#e8eaed")+";color:"+(d?"#fff":"#6b6b6b")+";font-size:13px;cursor:pointer;flex-shrink:0;line-height:1\">"+(d?"&#10003;":"&#9711;")+"</button>";}
+function CHK(key){var d=sg(key+"_done");return"<button data-chk=\""+key+"\" style=\"width:26px;height:26px;border-radius:6px;border:none;background:"+(d?"#3dd68c":"#2e3347")+";color:"+(d?"#0d1e2e":"#8a9bb0")+";font-size:13px;cursor:pointer;flex-shrink:0;line-height:1\">"+(d?"&#10003;":"&#9711;")+"</button>";}
 function TI(key,ph){return"<input type=\"text\" class=\"inp ti\" style=\"font-size:12px;padding:8px\" data-key=\""+key+"\" placeholder=\""+ph+"\" value=\""+(sg(key)||"").replace(/"/g,"&quot;")+"\">";}
 function NI(key,ph,cls){return"<input type=\"text\" class=\""+(cls||"inp")+" ni\" data-key=\""+key+"\" placeholder=\""+ph+"\" value=\""+(sg(key)||"").replace(/"/g,"&quot;")+"\">";}
 
@@ -1128,7 +1128,7 @@ function getHandSizes(){try{var s=localStorage.getItem("tf_hand");if(s){var p=JS
 
 // INPUT HELPERS
 function SI(key,rest,rname,cls){return"<input type=\"number\" inputmode=\"numeric\" class=\""+(cls||"sml")+" si\" data-key=\""+key+"\" data-rest=\""+rest+"\" data-rname=\""+rname+"\" placeholder=\"0\" value=\""+(sg(key)||"")+"\">";}
-function CHK(key){var d=sg(key+"_done");return"<button data-chk=\""+key+"\" style=\"width:26px;height:26px;border-radius:6px;border:none;background:"+(d?"#1a7a44":"#e8eaed")+";color:"+(d?"#fff":"#6b6b6b")+";font-size:13px;cursor:pointer;flex-shrink:0;line-height:1\">"+(d?"&#10003;":"&#9711;")+"</button>";}
+function CHK(key){var d=sg(key+"_done");return"<button data-chk=\""+key+"\" style=\"width:26px;height:26px;border-radius:6px;border:none;background:"+(d?"#3dd68c":"#2e3347")+";color:"+(d?"#0d1e2e":"#8a9bb0")+";font-size:13px;cursor:pointer;flex-shrink:0;line-height:1\">"+(d?"&#10003;":"&#9711;")+"</button>";}
 function TI(key,ph){return"<input type=\"text\" class=\"inp ti\" style=\"font-size:12px;padding:8px\" data-key=\""+key+"\" placeholder=\""+ph+"\" value=\""+(sg(key)||"").replace(/"/g,"&quot;")+"\">";}
 function NI(key,ph,cls){return"<input type=\"text\" class=\""+(cls||"inp")+" ni\" data-key=\""+key+"\" placeholder=\""+ph+"\" value=\""+(sg(key)||"").replace(/"/g,"&quot;")+"\">";}
 
