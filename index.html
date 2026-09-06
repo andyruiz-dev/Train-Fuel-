@@ -859,6 +859,209 @@ function updateSearchResults(q){
 }
 function searchUSDA(q,el){
   FOOD_SEARCHING=true;
+  // Include Branded for real-world foods (Chipotle, Quest bars, etc.)
+  var url="https://api.nal.usda.gov/fdc/v1/foods/search?api_key=DEMO_KEY"
+    +"&query="+encodeURIComponent(q)
+    +"&pageSize=10"
+    +"&dataType=Branded,Foundation,SR%20Legacy,Survey%20(FNDDS)";
+  fetch(url)
+    .then(function(r){return r.json();})
+    .then(function(data){
+      FOOD_SEARCHING=false;
+      var foods=data.foods||[];
+      SRESULTS=foods.map(function(f){
+        var nuts=f.foodNutrients||[];
+        // USDA uses nutrientId (int) for Foundation/SR/FNDDS
+        // Branded may use nutrientNumber (string "208","203","204","205")
+        function get(ids,numStr){
+          for(var i=0;i<nuts.length;i++){
+            var n=nuts[i];
+            if(ids.indexOf(n.nutrientId)>=0||n.nutrientNumber===numStr){
+              if(n.value>0) return Math.round(n.value*10)/10;
+            }
+          }
+          return 0;
+        }
+        var cal=get([1008],"208");
+        var pro=get([1003],"203");
+        var carb=get([1005],"205");
+        var fat=get([1004],"204");
+        // Build name — prefer brand + description for branded items
+        var name=f.description||"";
+        if(f.brandOwner&&f.brandOwner.length<20) name=f.brandOwner+" "+name;
+        name=name.replace(/,?\s*raw$/i,"").replace(/,?\s*NFS$/i,"").replace(/,?\s*UPC.*/i,"");
+        if(name.length>50) name=name.substring(0,48)+"...";
+        // servingSize for branded
+        var srv=f.servingSize||(f.servingSizeUnit?"":100);
+        return{name:name.trim(),cal100:cal,pro100:pro,carb100:carb,fat100:fat,defServing:srv||100,servingUnit:f.servingSizeUnit||"g"};
+      }).filter(function(f){return f.cal100>0;});
+      if(!SRESULTS.length){
+        el.innerHTML="<div style=\"font-size:12px;color:#8a9bb0;padding:8px 0\">No results — try a simpler term</div>";
+        return;
+      }
+      el.innerHTML=SRESULTS.map(function(r,i){
+        var macroStr=r.pro100+"g P &middot; "+r.carb100+"g C &middot; "+r.fat100+"g F";
+        return"<div class=\"sri\" data-result=\""+i+"\"><div class=\"sri-n\">"+r.name+"</div>"
+          +"<div class=\"sri-c\">"+r.cal100+" cal &middot; "+macroStr+" <span style=\"color:#8a9bb0\">(per 100g)</span></div></div>";
+      }).join("");
+    })
+    .catch(function(){
+      FOOD_SEARCHING=false;
+      SRESULTS=[];
+      el.innerHTML="<div style=\"font-size:12px;color:#e05c52;padding:8px 0\">Search failed — check connection or add manually</div>";
+    });
+}
+
+function searchFoods(q){
+  if(!q)return[];
+  var w=q.toLowerCase().split(" ").filter(function(x){return x.length>1;});
+  return FOOD_DB.filter(function(f){var n=f.name.toLowerCase();return w.some(function(x){return n.indexOf(x)>=0;});}).slice(0,6);
+}
+
+// AUTO-ADVANCE
+function getProgramStart(){
+  var s=localStorage.getItem("tf_prog_start");
+  if(s)return new Date(s+"T12:00:00");
+  var d=new Date();d.setHours(12,0,0,0);
+  var js=d.getDay(),tm=js===0?-6:1-js;
+  d.setDate(d.getDate()+tm-21);
+  var str=d.toISOString().slice(0,10);
+  localStorage.setItem("tf_prog_start",str);
+  return new Date(str+"T12:00:00");
+}
+function calcCurrentWeek(){
+  var s=getProgramStart(),n=new Date();n.setHours(12,0,0,0);
+  return Math.min(26,Math.max(1,Math.floor((n-s)/(7*864e5))+1));
+}
+function defaultDay(){return(new Date().getDay()+6)%7;}
+function getDateForDay(w,di){
+  if(w===0){var n=new Date();n.setHours(12,0,0,0);var js=n.getDay(),tm=js===0?-6:1-js;n.setDate(n.getDate()+tm+di);return n.toISOString().slice(0,10);}
+  var s=getProgramStart(),d=new Date(s);d.setDate(d.getDate()+(w-1)*7+di);return d.toISOString().slice(0,10);
+}
+
+// STATE
+var W=calcCurrentWeekGated(),DAY=defaultDay(),TAB="workout";
+(function(){var s=getProgramStart();var n=new Date();n.setHours(12,0,0,0);if(n<s)W=0;}());
+var FDATE=getDateForDay(W,DAY);
+var SCHED_EDIT=false;
+var WELCOME_DISMISSED=false;
+var SORE_OPEN=false;
+var AI_STATE="idle";
+var AI_ERROR="";
+var AI_WORKOUT_DATA=null;
+var AI_WORKOUT_ID=0;
+var DARK_MODE=localStorage.getItem("dark_mode")==="1";
+var AI_DURATION=45;
+var AI_TRAVEL=false;
+var AI_RECOVERY=false;
+var MEAL_STATE="idle"; // idle | loading | result | error
+var MEAL_RESULT=""; // idle | loading | result | error
+var AI_RESULT="";
+var AI_EQUIPMENT=[];
+var AI_INTENSITY="moderate";
+var PENDING=null,BUILDING=false,PLATE_CAT=null,PLATE_QTY=1,PLATE_NAME="";
+var QA_NAME="",QA_CAL="",QA_PRO="",QA_CARB="",QA_FAT="";
+var SRESULTS=[];
+var DIRTY={workout:true,food:true,progress:true,ai:true};
+function markDirty(t){DIRTY[t]=true;}
+function markAllDirty(){DIRTY={workout:true,food:true,progress:true,ai:true};}
+
+// STORAGE
+function todayStr(){return new Date().toISOString().slice(0,10);}
+function dk(){return"w"+W+"_"+DAY_NAMES[DAY];}
+function lg(k){try{var v=localStorage.getItem(k);return v?JSON.parse(v):null;}catch(e){return null;}}
+function ls(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+function sg(p){var d=lg("s_"+dk());if(!d)return null;var a=p.split(".");var c=d;for(var i=0;i<a.length;i++){if(c==null)return null;c=c[a[i]];}return c;}
+function ss(p,v){var d=lg("s_"+dk())||{};var a=p.split(".");var c=d;for(var i=0;i<a.length-1;i++){if(!c[a[i]])c[a[i]]={};c=c[a[i]];}c[a[a.length-1]]=v;ls("s_"+dk(),d);flash();}
+function getLog(){var r=lg("food_"+FDATE);return Array.isArray(r)?r:[];}
+function saveLog(l){ls("food_"+FDATE,l);markDirty("food");}
+function fmtDate(s){if(!s)return"";var d=new Date(s+"T12:00:00");return d.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"});}
+function pct(v,t){return Math.min(100,Math.round(v/t*100));}
+function foodTot(l){return l.reduce(function(a,b){return{cal:a.cal+(b.cal||0),pro:a.pro+(b.pro||0),carb:a.carb+(b.carb||0),fat:a.fat+(b.fat||0)};},{cal:0,pro:0,carb:0,fat:0});}
+function flash(){var c=document.getElementById("saved-chip");if(!c)return;c.style.display="block";clearTimeout(c._t);c._t=setTimeout(function(){c.style.display="none";},1200);}
+function getHandSizes(){try{var s=localStorage.getItem("tf_hand");if(s){var p=JSON.parse(s);return{palm:p.palm||85,fist:p.fist||130,cupped:p.cupped||45,thumb:p.thumb||14};}}catch(e){}return{palm:85,fist:130,cupped:45,thumb:14};}
+
+// INPUT HELPERS
+function SI(key,rest,rname,cls){return"<input type=\"number\" inputmode=\"numeric\" class=\""+(cls||"sml")+" si\" data-key=\""+key+"\" data-rest=\""+rest+"\" data-rname=\""+rname+"\" placeholder=\"0\" value=\""+(sg(key)||"")+"\">";}
+function CHK(key){var d=sg(key+"_done");return"<button data-chk=\""+key+"\" style=\"width:26px;height:26px;border-radius:6px;border:none;background:"+(d?"#3dd68c":"#2e3347")+";color:"+(d?"#0d1e2e":"#8a9bb0")+";font-size:13px;cursor:pointer;flex-shrink:0;line-height:1\">"+(d?"&#10003;":"&#9711;")+"</button>";}
+function TI(key,ph){return"<input type=\"text\" class=\"inp ti\" style=\"font-size:12px;padding:8px\" data-key=\""+key+"\" placeholder=\""+ph+"\" value=\""+(sg(key)||"").replace(/"/g,"&quot;")+"\">";}
+function NI(key,ph,cls){return"<input type=\"text\" class=\""+(cls||"inp")+" ni\" data-key=\""+key+"\" placeholder=\""+ph+"\" value=\""+(sg(key)||"").replace(/"/g,"&quot;")+"\">";}
+
+// REST TIMER — recursive setTimeout, wall-clock based
+var RT_END=0,RT_TOT=0,RT_REM=0,RT_IV=null;
+function startRest(secs,name){
+  if(RT_IV){clearTimeout(RT_IV);RT_IV=null;}
+  RT_TOT=secs;RT_REM=secs;RT_END=Date.now()+(secs*1000);
+  var el=document.getElementById("rt-name");if(el)el.textContent=name;
+  var cnt=document.getElementById("rt-cnt");if(cnt)cnt.style.color="#fff";
+  var bar=document.getElementById("rt-bar");if(bar){bar.style.background="#fff";bar.style.opacity="0.7";}
+  var tmr=document.getElementById("rtimer");if(tmr)tmr.classList.add("show");
+  tickTimer();
+}
+function playBeeps(){
+  try{
+    var ctx=new(window.AudioContext||window.webkitAudioContext)();
+    function beep(startTime,freq,dur,vol){
+      var osc=ctx.createOscillator();
+      var gain=ctx.createGain();
+      osc.connect(gain);gain.connect(ctx.destination);
+      osc.frequency.value=freq;
+      osc.type="sine";
+      gain.gain.setValueAtTime(0,startTime);
+      gain.gain.linearRampToValueAtTime(vol||0.4,startTime+0.01);
+      gain.gain.linearRampToValueAtTime(0,startTime+dur);
+      osc.start(startTime);
+      osc.stop(startTime+dur+0.05);
+    }
+    var t=ctx.currentTime;
+    beep(t,880,0.12,0.3);      // beep 1
+    beep(t+0.18,880,0.12,0.3); // beep 2
+    beep(t+0.36,1320,0.5,0.5); // final bell
+  }catch(e){}
+}
+function tickTimer(){
+  RT_REM=Math.max(0,Math.ceil((RT_END-Date.now())/1000));
+  var m=Math.floor(RT_REM/60),s=RT_REM%60;
+  var cnt=document.getElementById("rt-cnt");
+  var bar=document.getElementById("rt-bar");
+  if(cnt)cnt.textContent=m+":"+(s<10?"0":"")+s;
+  if(bar)bar.style.width=(RT_TOT>0?(RT_REM/RT_TOT*100):0)+"%";
+  if(RT_REM>0){
+    RT_IV=setTimeout(tickTimer,250);
+  } else {
+    RT_IV=null;
+    if(bar){bar.style.background="rgba(255,255,255,.9)";bar.style.opacity="1";}
+    if(cnt)cnt.textContent="Go!";
+    playBeeps();
+  }
+}
+function stopRest(){if(RT_IV){clearTimeout(RT_IV);RT_IV=null;}RT_END=0;var t=document.getElementById("rtimer");if(t)t.classList.remove("show");}
+function addTime(s){RT_END+=s*1000;RT_REM=Math.max(0,Math.ceil((RT_END-Date.now())/1000));RT_TOT=Math.max(RT_TOT,RT_REM);}
+
+// MANUAL ENTRY
+function openManual(){["ov-name","ov-cal","ov-p","ov-c","ov-f"].forEach(function(id){var e=document.getElementById(id);if(e)e.value="";});document.getElementById("manual-overlay").style.display="block";setTimeout(function(){var e=document.getElementById("ov-name");if(e)e.focus();},100);}
+function closeManual(){document.getElementById("manual-overlay").style.display="none";}
+function submitManual(){
+  var name=(document.getElementById("ov-name").value||"").trim()||"Custom food";
+  var cal=Math.round(parseFloat(document.getElementById("ov-cal").value)||0);
+  if(!cal){alert("Enter at least the calories");return;}
+  var l=getLog();
+  l.push({name:name,serving:1,cal:cal,pro:+parseFloat(document.getElementById("ov-p").value||0).toFixed(1),carb:+parseFloat(document.getElementById("ov-c").value||0).toFixed(1),fat:+parseFloat(document.getElementById("ov-f").value||0).toFixed(1)});
+  saveLog(l);closeManual();markDirty("food");if(TAB==="food")paint();
+}
+
+// SEARCH + QUICK ADD
+function updateSearchResults(q){
+  q=(q||"").trim();
+  var el=document.getElementById("search-results");
+  if(!el)return;
+  if(!q){el.innerHTML="";SRESULTS=[];if(FOOD_SEARCH_TIMER)clearTimeout(FOOD_SEARCH_TIMER);return;}
+  if(FOOD_SEARCH_TIMER)clearTimeout(FOOD_SEARCH_TIMER);
+  el.innerHTML="<div style=\"font-size:12px;color:#8a9bb0;padding:8px 0\">Searching...</div>";
+  FOOD_SEARCH_TIMER=setTimeout(function(){searchUSDA(q,el);},400);
+}
+function searchUSDA(q,el){
+  FOOD_SEARCHING=true;
   var url="https://api.nal.usda.gov/fdc/v1/foods/search?api_key=DEMO_KEY&query="+encodeURIComponent(q)
     +"&pageSize=8&dataType=Foundation,SR%20Legacy,Survey%20(FNDDS)";
   fetch(url)
