@@ -1901,7 +1901,7 @@ function bAI(){
       +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px">';
     equipList.forEach(function(eq){
       var sel=AI_EQUIPMENT.indexOf(eq)>=0;
-      h+='<button data-equip="'+eq+'" style="padding:10px 8px;border-radius:9px;border:2px solid '+(sel?'#1a6fa8':'#d1d5db')+';background:'+(sel?'#e8f3fb':'#fff')+';color:'+(sel?'#1a6fa8':'#1c1c1e')+';font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;text-align:center">'+eq+'</button>';
+      h+='<button data-equip="'+eq+'" style="padding:10px 8px;border-radius:9px;border:2px solid '+(sel?'#4da6e8':'#2e3347')+';background:'+(sel?'#4da6e8':'#1e2435')+';color:'+(sel?'#0d1e2e':'#8a9bb0')+';font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;text-align:center">'+eq+'</button>';
     });
     h+='</div>';
 
@@ -1909,7 +1909,7 @@ function bAI(){
     h+='<div class="lbl" style="margin-bottom:8px">How long?</div>'      +'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px">';
     [15,30,45,60].forEach(function(dur){
       var sel=AI_DURATION===dur;
-      h+='<button data-duration="'+dur+'" style="padding:9px 4px;border-radius:9px;border:2px solid '+(sel?'#1a6fa8':'#d1d5db')+';background:'+(sel?'#e8f3fb':'#fff')+';color:'+(sel?'#1a6fa8':'#1c1c1e')+';font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;text-align:center">'+dur+' min</button>';
+      h+='<button data-duration="'+dur+'" style="padding:9px 4px;border-radius:9px;border:2px solid '+(sel?'#4da6e8':'#2e3347')+';background:'+(sel?'#4da6e8':'#1e2435')+';color:'+(sel?'#0d1e2e':'#8a9bb0')+';font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;text-align:center">'+dur+' min</button>';
     });
     h+='</div>';
     h+='<div class="lbl" style="margin-bottom:8px">How hard do you want to go?</div>'
@@ -1917,7 +1917,7 @@ function bAI(){
       +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:14px">';
     [["easy","&#128994; Easy"],["moderate","&#128993; Moderate"],["hard","&#128308; Hard"]].forEach(function(opt){
       var sel=AI_INTENSITY===opt[0];
-      h+='<button data-intensity="'+opt[0]+'" style="padding:10px 4px;border-radius:9px;border:2px solid '+(sel?'#1a7a44':'#d1d5db')+';background:'+(sel?'#e6f7ed':'#fff')+';color:'+(sel?'#1a7a44':'#1c1c1e')+';font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;text-align:center">'+opt[1]+'</button>';
+      h+='<button data-intensity="'+opt[0]+'" style="padding:10px 4px;border-radius:9px;border:2px solid '+(sel?'#3dd68c':'#2e3347')+';background:'+(sel?'#3dd68c':'#1e2435')+';color:'+(sel?'#0d1e2e':'#8a9bb0')+';font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;text-align:center">'+opt[1]+'</button>';
     });
     h+='</div>';
 
