@@ -3912,8 +3912,11 @@ document.addEventListener("click",function(e){
     var inp=document.getElementById("prog-start-inp");
     if(inp&&inp.value){
       localStorage.setItem("tf_prog_start",inp.value);
+      localStorage.removeItem("tf_prog_week"); // clear cached week so it recalculates
       W=calcCurrentWeekGated();
+      DAY=defaultDay();
       FDATE=getDateForDay(W,DAY);
+      CHECKIN_DONE=false;
       markAllDirty();renderDayTabs();paint();
       showToast("✓ Program start set — Week "+W);
     }
