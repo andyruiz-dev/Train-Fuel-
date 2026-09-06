@@ -2845,6 +2845,13 @@ function bProgress(){
     +"</button>";
   if(API_SETTINGS_OPEN){
     h+="<div style=\"padding:0 13px 13px\">";
+    // Program start date
+    var progStart=localStorage.getItem("tf_prog_start")||"";
+    h+="<div style=\"font-size:11px;font-weight:700;color:#8a9bb0;margin-bottom:4px\">Program Start Date</div>";
+    h+="<div style=\"display:flex;gap:8px;margin-bottom:12px\">"
+      +"<input type=\"date\" id=\"prog-start-inp\" class=\"inp\" value=\""+progStart+"\" style=\"flex:1;font-size:13px\">"
+      +"<button id=\"prog-start-save\" style=\"padding:8px 14px;border-radius:8px;border:none;background:#4da6e8;color:#0d1e2e;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit\">Save</button>"
+      +"</div>";
     h+="<div style=\"font-size:11px;font-weight:700;color:#8a9bb0;margin-bottom:4px\">Anthropic API Key</div>";
     h+="<div style=\"font-size:11px;color:#8a9bb0;margin-bottom:8px\">Free at console.anthropic.com</div>";
     h+="<input type=\"password\" id=\"api-key-inp\" class=\"inp\" placeholder=\"sk-ant-...\" value=\""+getApiKey()+"\" style=\"font-family:monospace;font-size:12px;margin-bottom:8px\">";
@@ -3900,6 +3907,17 @@ document.addEventListener("click",function(e){
   }
   if(t.id==="api-toggle"){
     API_SETTINGS_OPEN=!API_SETTINGS_OPEN;markDirty("progress");paint();return;
+  }
+  if(t.id==="prog-start-save"){
+    var inp=document.getElementById("prog-start-inp");
+    if(inp&&inp.value){
+      localStorage.setItem("tf_prog_start",inp.value);
+      W=calcCurrentWeekGated();
+      FDATE=getDateForDay(W,DAY);
+      markAllDirty();renderDayTabs();paint();
+      showToast("✓ Program start set — Week "+W);
+    }
+    return;
   }
   if(t.id==="api-key-save"){
     showToast("✓ API key saved");
