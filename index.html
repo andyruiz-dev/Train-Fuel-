@@ -2830,8 +2830,37 @@ function bProgress(){
       +(isActive
         ?"<div style=\"font-size:11px;font-weight:700;color:#3dd68c;margin-right:10px\">&#10003; Active</div>"
         :"<button data-setprog=\""+p.id+"\" style=\"padding:5px 10px;border-radius:7px;border:none;background:#4da6e8;color:#0d1e2e;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;margin-right:8px\">Use</button>")
+      +"<button data-previewprog=\""+p.id+"\" style=\"padding:5px 8px;border-radius:7px;border:1px solid #2e3347;background:transparent;color:#8a9bb0;font-size:11px;cursor:pointer;font-family:inherit;margin-right:4px\">"+(PREVIEW_PROGRAM_ID===p.id?"&#9650;":"&#128065;")+"</button>"
       +"<button data-delprog=\""+p.id+"\" style=\"padding:5px 8px;border-radius:7px;border:1px solid #2e3347;background:transparent;color:#e05c52;font-size:11px;cursor:pointer;font-family:inherit\">&#128465;</button>"
       +"</div>";
+    // Preview panel
+    if(PREVIEW_PROGRAM_ID===p.id){
+      h+="<div style=\"background:#1e2435;border-top:1px solid #2e3347;padding:12px 13px;\">";
+      h+="<div style=\"font-size:11px;font-weight:700;color:#8a9bb0;text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px\">Program Preview</div>";
+      h+="<div style=\"display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px\">";
+      h+="<div style=\"background:#22273a;border-radius:8px;padding:7px;text-align:center\"><div style=\"font-size:16px;font-weight:700;color:#4da6e8\">"+p.totalWeeks+"</div><div style=\"font-size:10px;color:#8a9bb0\">weeks</div></div>";
+      h+="<div style=\"background:#22273a;border-radius:8px;padding:7px;text-align:center\"><div style=\"font-size:16px;font-weight:700;color:#3dd68c\">"+(p.deloadWeeks&&p.deloadWeeks.length||0)+"</div><div style=\"font-size:10px;color:#8a9bb0\">deloads</div></div>";
+      h+="<div style=\"background:#22273a;border-radius:8px;padding:7px;text-align:center\"><div style=\"font-size:16px;font-weight:700;color:#f5a623\">"+(p.supersets&&p.supersets.length||0)+"</div><div style=\"font-size:10px;color:#8a9bb0\">supersets</div></div>";
+      h+="</div>";
+      (p.supersets||[]).forEach(function(ss,si){
+        var col=["#4da6e8","#f5a623","#3dd68c","#2dd4bf"][si%4];
+        h+="<div style=\"margin-bottom:6px;\">"
+          +"<div style=\"font-size:11px;font-weight:700;color:"+col+";margin-bottom:3px\">Superset "+ss.id+" &middot; "+ss.restSec+"s rest</div>";
+        (ss.exercises||[]).forEach(function(ex){
+          var p1=ex.progressions&&ex.progressions[0];
+          var pN=ex.progressions&&ex.progressions[ex.progressions.length-1];
+          h+="<div style=\"font-size:12px;color:#e8eaf0;padding:3px 0\">"
+            +ex.name
+            +(p1?"<span style=\"color:#8a9bb0\"> · W1: "+p1.sets+"×"+p1.reps+(pN&&pN!==p1?" → W"+pN.week+": "+pN.sets+"×"+pN.reps:"")+"</span>":"")
+            +"</div>";
+        });
+        h+="</div>";
+      });
+      if(p.deloadWeeks&&p.deloadWeeks.length){
+        h+="<div style=\"font-size:11px;color:#8a9bb0;margin-top:4px\">Deload weeks: "+p.deloadWeeks.join(", ")+"</div>";
+      }
+      h+="</div>";
+    }
   });
   if(!customProgs.length&&!IMPORTING_PROGRAM){
     h+="<div style=\"padding:12px 13px;font-size:12px;color:#8a9bb0;text-align:center\">Import a program (PDF, image, or Excel screenshot)</div>";
@@ -3156,6 +3185,7 @@ var ACTIVE_PROGRAM_ID=null; // null = built-in 26-week
 var IMPORTING_PROGRAM=false;
 var IMPORT_ERROR="";
 var STAGED_FILES=[];
+var PREVIEW_PROGRAM_ID=null;
 
 function getCustomPrograms(){
   try{return JSON.parse(localStorage.getItem("custom_programs")||"[]");}
@@ -3342,13 +3372,13 @@ function sendImportRequest(fileBlocks){
   });
 }
 
-var IMPORT_PROMPT="Analyze this fitness program and return ONLY valid JSON with NO markdown, NO explanation:\n"
+var IMPORT_PROMPT="You are receiving MULTIPLE DOCUMENTS that together form ONE complete fitness program. Read ALL of them, then return ONLY valid JSON with NO markdown, NO explanation.\n"
   +"{\"name\":\"program name\",\"totalWeeks\":12,\"deloadWeeks\":[4,8,12],"
   +"\"schedule\":[\"workout\",\"ruck\",\"workout\",\"ruck\",\"workout\",\"ruck\",\"rest\"],"
   +"\"supersets\":[{\"id\":\"A\",\"restSec\":90,\"exercises\":["
   +"{\"key\":\"a1\",\"name\":\"Exercise Name\",\"progressions\":["
   +"{\"week\":1,\"sets\":3,\"reps\":\"8-10\"}]}]}]}\n"
-  +"Rules: schedule must be 7 items using only: workout ruck rest. "
+  +"Rules: ALL documents together form ONE program — sum the TOTAL duration across all files (e.g. 7 PDFs of 7-8 weeks each = ~52 weeks total). schedule must be 7 items using only: workout ruck rest. "
   +"If sets/reps missing generate logical progressions. "
   +"If length missing derive from progressions. "
   +"Max 4 supersets with 2 exercises each. "
@@ -3642,6 +3672,10 @@ document.addEventListener("click",function(e){
     setTab("ai");return;
   }
   if(t.id==="import-submit"){importStagedProgram();return;}
+  if(t.dataset&&t.dataset.previewprog!==undefined){
+    PREVIEW_PROGRAM_ID=PREVIEW_PROGRAM_ID===t.dataset.previewprog?null:t.dataset.previewprog;
+    markDirty("progress");paint();return;
+  }
   if(t.dataset&&t.dataset.removefile!==undefined){
     removeStagedFile(parseInt(t.dataset.removefile));return;
   }
