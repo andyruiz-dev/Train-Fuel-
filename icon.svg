@@ -12,8 +12,8 @@
     </linearGradient>
   </defs>
 
-  <rect width="200" height="200" rx="36" fill="url(#bg)"/>
-  <rect width="200" height="200" rx="36" fill="none" stroke="#2e3347" stroke-width="1.5"/>
+  <rect width="200" height="200" rx="100" fill="url(#bg)"/>
+  <rect width="200" height="200" rx="100" fill="none" stroke="#2e3347" stroke-width="1.5"/>
 
   <!-- Left bolt dimmer -->
   <polygon points="84,22  46,98  68,98  60,168  104,82  78,82"
