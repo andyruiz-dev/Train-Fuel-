@@ -27,11 +27,11 @@
   <polygon points="115,34  86,98  100,98  94,152  114,92  100,92"
            fill="white" opacity="0.22"/>
 
-  <!-- T+F centered below -->
-  <text x="100" y="188"
+  <!-- T+F centered, moved up so it sits clear of the circle edge -->
+  <text x="100" y="180"
         font-family="'Arial Black','Arial',sans-serif"
-        font-size="13" font-weight="900"
-        fill="#4da6e8" opacity="0.65"
+        font-size="12" font-weight="900"
+        fill="#4da6e8" opacity="0.70"
         text-anchor="middle"
         letter-spacing="3">T+F</text>
 
