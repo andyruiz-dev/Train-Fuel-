@@ -655,7 +655,7 @@ function bTimeSelector(){
     +"<div style=\"display:flex;gap:5px\">";
   opts.forEach(function(o){
     var sel=TIME_LIMIT===o.v;
-    h+="<button data-timelimit=\""+o.v+"\" style=\"flex:1;padding:6px 4px;border-radius:8px;border:1.5px solid "+(sel?"#1a6fa8":"#d1d5db")+";background:"+(sel?"#e8f3fb":"transparent")+";font-size:11px;font-weight:"+(sel?"700":"500")+";color:"+(sel?"#1a6fa8":"#6b7280")+";cursor:pointer;font-family:inherit\">"+o.l+(o.v>0?" min":"")+"</button>";
+    h+="<button data-timelimit=\""+o.v+"\" style=\"flex:1;padding:6px 4px;border-radius:8px;border:2px solid "+(sel?"#4da6e8":"#2e3347")+";background:"+(sel?"#4da6e8":"#1e2435")+";font-size:11px;font-weight:"+(sel?"800":"500")+";color:"+(sel?"#0d1e2e":"#8a9bb0")+";cursor:pointer;font-family:inherit\">"+o.l+(o.v>0?" min":"")+"</button>";
   });
   return h+"</div></div>";
 }
