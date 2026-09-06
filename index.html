@@ -3384,7 +3384,7 @@ var IMPORT_PROMPT="You are receiving MULTIPLE DOCUMENTS that together form ONE c
   +"\"supersets\":[{\"id\":\"A\",\"restSec\":90,\"exercises\":["
   +"{\"key\":\"a1\",\"name\":\"Exercise Name\",\"progressions\":["
   +"{\"week\":1,\"sets\":3,\"reps\":\"8-10\"}]}]}]}\n"
-  +"Rules:\n- ALL documents together form ONE program — sum the TOTAL duration across ALL files (e.g. 7 PDFs of 7-8 weeks each = ~52 weeks total)\n- schedule must be exactly 7 items using only the words: workout ruck rest\n- progressions are CHANGE POINTS only — only add a new entry when sets or reps change, NOT one per week\n- max 4 supersets, max 3 exercises each\n- if sets/reps missing, generate logical progressions with 3-5 change points across the program\n- deloadWeeks should be evenly spaced numbers\n- Return ONLY the JSON, nothing else"
+  +"Rules:\n- ALL documents together form ONE program — determine the TOTAL duration from what is stated in the documents. If not explicitly stated, derive it from the progressions and phases\n- schedule must be exactly 7 items using only the words: workout ruck rest\n- progressions are CHANGE POINTS only — only add a new entry when sets or reps change, NOT one per week\n- max 4 supersets, max 3 exercises each\n- if sets/reps missing, generate logical progressions with 3-5 change points across the program\n- deloadWeeks should be evenly spaced numbers\n- Return ONLY the JSON, nothing else"
   +"If sets/reps missing generate logical progressions. "
   +"If length missing derive from progressions. "
   +"Max 4 supersets with 2 exercises each. "
