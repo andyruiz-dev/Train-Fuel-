@@ -1665,6 +1665,20 @@ function bWorkoutPanel(){
   if(getDayType(DAY,W)==="workout"&&!CHECKIN_DONE){
     return behindBanner+bDailySummary()+(getDayType(DAY,W)==="workout"?bReadinessCard():"")+bCheckin();
   }
+  var custProg=getActiveCustomProgram();
+  if(custProg){
+    // Custom program: use custom schedule
+    var custSchedule=getCustomSchedule(custProg);
+    var custDayType=custSchedule[DAY]||"rest";
+    var custWeek=Math.min(W,custProg.totalWeeks);
+    if(!CHECKIN_DONE&&custDayType==="workout")
+      return behindBanner+bDailySummary()+bReadinessCard()+bCheckin();
+    if(custDayType==="workout")
+      return behindBanner+bDailySummary()+bReadinessCard()+bCustomWorkout();
+    if(custDayType==="ruck")
+      return behindBanner+bDailySummary()+bRuck();
+    return behindBanner+bDailySummary()+bRest();
+  }
   return behindBanner+bDailySummary()+(getDayType(DAY,W)==="workout"?bReadinessCard():"")+bDay();
 }
 
@@ -2773,6 +2787,46 @@ function bProgress(){
     +"</div>";
 
   // ── Advanced settings (collapsed) ───────────────────────────────────────
+  // ── Program Library ───────────────────────────────────────────────────
+  h+="<div style=\"background:#22273a;border-radius:12px;border:1px solid #2e3347;margin-bottom:10px;overflow:hidden\">";
+  h+="<div style=\"padding:10px 13px;border-bottom:1px solid #2e3347;display:flex;justify-content:space-between;align-items:center\">"
+    +"<div style=\"font-size:12px;font-weight:700;color:#e8eaf0\">&#128218; Program Library</div>"
+    +(IMPORTING_PROGRAM
+      ?"<div style=\"font-size:11px;color:#4da6e8\">Analyzing...</div>"
+      :"<button onclick=\"document.getElementById(\'prog-import-inp\').click()\" style=\"padding:5px 12px;border-radius:7px;border:none;background:#4da6e8;color:#0d1e2e;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit\">Import</button>")
+    +"</div>"
+    +"<input type=\"file\" id=\"prog-import-inp\" accept=\"image/*,.pdf,.xlsx,.csv\" style=\"display:none\" onchange=\"importProgramFromFile(this.files[0]);this.value=''\">"; 
+  // Built-in program
+  var isBuiltIn=!ACTIVE_PROGRAM_ID;
+  h+="<div style=\"padding:10px 13px;border-bottom:1px solid #2e3347;display:flex;justify-content:space-between;align-items:center\">"
+    +"<div>"
+    +"<div style=\"font-size:13px;font-weight:700;color:#e8eaf0\">26-Week Recomp</div>"
+    +"<div style=\"font-size:11px;color:#8a9bb0\">Built-in &middot; 26 weeks</div>"
+    +"</div>"
+    +(isBuiltIn
+      ?"<div style=\"font-size:11px;font-weight:700;color:#3dd68c\">&#10003; Active</div>"
+      :"<button data-setprog=\"builtin\" style=\"padding:5px 10px;border-radius:7px;border:1px solid #2e3347;background:#1e2435;color:#8a9bb0;font-size:11px;cursor:pointer;font-family:inherit\">Use</button>")
+    +"</div>";
+  // Custom programs
+  var customProgs=getCustomPrograms();
+  customProgs.forEach(function(p){
+    var isActive=ACTIVE_PROGRAM_ID===p.id;
+    h+="<div style=\"padding:10px 13px;border-bottom:1px solid #2e3347;display:flex;justify-content:space-between;align-items:center\">"
+      +"<div style=\"flex:1\">"
+      +"<div style=\"font-size:13px;font-weight:700;color:#e8eaf0\">"+p.name+"</div>"
+      +"<div style=\"font-size:11px;color:#8a9bb0\">Imported &middot; "+p.totalWeeks+" weeks</div>"
+      +"</div>"
+      +(isActive
+        ?"<div style=\"font-size:11px;font-weight:700;color:#3dd68c;margin-right:10px\">&#10003; Active</div>"
+        :"<button data-setprog=\""+p.id+"\" style=\"padding:5px 10px;border-radius:7px;border:none;background:#4da6e8;color:#0d1e2e;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;margin-right:8px\">Use</button>")
+      +"<button data-delprog=\""+p.id+"\" style=\"padding:5px 8px;border-radius:7px;border:1px solid #2e3347;background:transparent;color:#e05c52;font-size:11px;cursor:pointer;font-family:inherit\">&#128465;</button>"
+      +"</div>";
+  });
+  if(!customProgs.length&&!IMPORTING_PROGRAM){
+    h+="<div style=\"padding:12px 13px;font-size:12px;color:#8a9bb0;text-align:center\">Import a program (PDF, image, or Excel screenshot)</div>";
+  }
+  h+="</div>";
+
   h+="<div style=\"background:#22273a;border-radius:12px;border:1px solid #2e3347;margin-bottom:10px;overflow:hidden\">";
   h+="<button id=\"api-toggle\" style=\"width:100%;text-align:left;background:none;border:none;padding:10px 13px;cursor:pointer;font-family:inherit;display:flex;justify-content:space-between;align-items:center\">"
     +"<span style=\"font-size:12px;font-weight:700;color:#e8eaf0\">&#128274; Advanced &mdash; API Key &amp; Portions</span>"
@@ -3079,6 +3133,184 @@ function bReadinessCard(){
   return h;
 }
 
+// ── CUSTOM PROGRAM ENGINE ─────────────────────────────────────────────────
+var ACTIVE_PROGRAM_ID=null; // null = built-in 26-week
+var IMPORTING_PROGRAM=false;
+var IMPORT_ERROR="";
+
+function getCustomPrograms(){
+  try{return JSON.parse(localStorage.getItem("custom_programs")||"[]");}
+  catch(e){return[];}
+}
+function saveCustomPrograms(progs){
+  localStorage.setItem("custom_programs",JSON.stringify(progs));
+}
+function getActiveCustomProgram(){
+  if(!ACTIVE_PROGRAM_ID) return null;
+  return getCustomPrograms().find(function(p){return p.id===ACTIVE_PROGRAM_ID;})||null;
+}
+function setActiveProgram(id){
+  ACTIVE_PROGRAM_ID=id;
+  if(id){
+    localStorage.setItem("active_program_id",id);
+    var prog=getCustomPrograms().find(function(p){return p.id===id;});
+    if(prog){
+      // Reset to week 1 of new program
+      localStorage.setItem("tf_prog_week","1");
+      W=1; DAY=0; FDATE=getDateForDay(W,0);
+      CHECKIN_DONE=false;
+    }
+  } else {
+    localStorage.removeItem("active_program_id");
+  }
+  markAllDirty();renderDayTabs();paint();
+}
+function loadActiveProgram(){
+  ACTIVE_PROGRAM_ID=localStorage.getItem("active_program_id")||null;
+}
+function deleteCustomProgram(id){
+  var progs=getCustomPrograms().filter(function(p){return p.id!==id;});
+  saveCustomPrograms(progs);
+  if(ACTIVE_PROGRAM_ID===id) setActiveProgram(null);
+  markDirty("progress");paint();
+}
+function getProgressionForWeek(exercise, week){
+  // Find highest progression where startWeek <= week
+  var best=exercise.progressions[0];
+  exercise.progressions.forEach(function(p){
+    if(p.week<=week) best=p;
+  });
+  return best||{sets:3,reps:"8-12"};
+}
+function getCustomSchedule(prog){
+  return prog.schedule||["workout","ruck","workout","ruck","workout","ruck","rest"];
+}
+
+// ── CUSTOM WORKOUT RENDERER ────────────────────────────────────────────────
+var SS_COLORS=["#4da6e8","#f5a623","#3dd68c","#2dd4bf"];
+var SS_DARK=["#0d1e2e","#1e1408","#0a1e14","#0a1e1c"];
+
+function bCustomWorkout(){
+  var prog=getActiveCustomProgram();
+  if(!prog) return bWorkout();
+  var h="";
+  var week=Math.min(W,prog.totalWeeks);
+  var isDeload=prog.deloadWeeks&&prog.deloadWeeks.indexOf(week)>=0;
+  if(isDeload){
+    h+="<div style=\"background:#1e1408;border:1px solid #3a2510;border-radius:12px;padding:10px 13px;margin-bottom:10px;\">"
+      +"<div style=\"font-size:13px;font-weight:700;color:#f5a623\">&#128293; Deload Week</div>"
+      +"<div style=\"font-size:12px;color:#8a9bb0;margin-top:3px\">60% volume — focus on form and recovery</div>"
+      +"</div>";
+  }
+  var scale=isDeload?0.6:1;
+  prog.supersets.forEach(function(ss,i){
+    var col=SS_COLORS[i%SS_COLORS.length];
+    var dk=SS_DARK[i%SS_DARK.length];
+    h+="<div style=\"border-radius:12px;border:1px solid #2e3347;margin-bottom:10px;overflow:hidden\">";
+    h+="<div style=\"background:"+dk+";padding:8px 12px;display:flex;justify-content:space-between;align-items:center\">"
+      +"<span style=\"font-size:11px;font-weight:700;color:"+col+";text-transform:uppercase;letter-spacing:.6px\">Superset "+ss.id+"</span>"
+      +"<span style=\"font-size:11px;color:"+col+";opacity:.8\">"+ss.restSec+"s rest</span>"
+      +"</div>";
+    ss.exercises.forEach(function(ex,ei){
+      var p=getProgressionForWeek(ex,week);
+      var sets=Math.max(1,Math.round(p.sets*scale));
+      var key="cp_"+ss.id+"_"+ex.key;
+      var prev=sg(key+".w")||"";
+      h+="<div style=\"background:#22273a;padding:10px 12px;"+(ei>0?"border-top:1px solid #2e3347;":"")+"display:flex;justify-content:space-between;align-items:center\">"
+        +"<div style=\"flex:1\">"
+        +"<div style=\"font-size:14px;font-weight:700;color:#e8eaf0\">"+ex.name+"</div>"
+        +"<div style=\"font-size:12px;color:#8a9bb0;margin-top:2px\">"+sets+" × "+p.reps+(prev?" &middot; prev: "+prev+"lb":"")+"</div>"
+        +"</div>"
+        +"<div style=\"display:flex;gap:5px;align-items:center\">"
+        +"<input type=\"number\" inputmode=\"decimal\" placeholder=\"lb\" data-cpkey=\""+key+"_w\" style=\"width:52px;background:#1e2435;border:1px solid #2e3347;border-radius:7px;color:#e8eaf0;font-size:13px;padding:5px 7px;text-align:center;font-family:inherit;outline:none\">";
+      for(var s=0;s<sets;s++){
+        var done=sg(key+".s"+(s+1));
+        h+=CHK(key+".s"+(s+1));
+      }
+      h+="</div></div>";
+    });
+    h+="</div>";
+  });
+  // Session notes
+  var existingNote=getSessionData(W,DAY)&&getSessionData(W,DAY).note||"";
+  h+="<div style=\"background:#22273a;border-radius:12px;border:1px solid #2e3347;padding:10px 12px;margin-bottom:10px\">"
+    +"<button id=\"notes-toggle\" style=\"width:100%;text-align:left;background:none;border:none;padding:0;cursor:pointer;font-family:inherit;display:flex;justify-content:space-between;align-items:center\">"
+    +"<span style=\"font-size:12px;font-weight:700;color:#e8eaf0\">&#128221; Session Notes"+(existingNote?" &#10003;":"")+"</span>"
+    +"<span style=\"font-size:11px;color:#8a9bb0\">"+(NOTES_OPEN?"&#9650;":"&#9660;")+"</span>"
+    +"</button>"
+    +(NOTES_OPEN?"<textarea id=\"session-note\" rows=\"3\" placeholder=\"How did it feel?\" style=\"width:100%;margin-top:8px;border:1.5px solid #2e3347;border-radius:8px;padding:8px;font-size:13px;font-family:inherit;color:#e8eaf0;background:#1e2435;resize:none;outline:none\">"+existingNote+"</textarea><button id=\"note-save-btn\" style=\"margin-top:6px;padding:7px 16px;border-radius:8px;border:none;background:#4da6e8;color:#0d1e2e;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit\">Save</button>":"")
+    +"</div>";
+  return h;
+}
+
+// ── IMPORT FUNCTION ────────────────────────────────────────────────────────
+function importProgramFromFile(file){
+  if(!file) return;
+  var key=getApiKey();
+  if(!key){showToast("Add API key in Progress → Advanced");return;}
+  IMPORTING_PROGRAM=true;IMPORT_ERROR="";
+  markDirty("progress");paint();
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var b64=e.target.result.split(",")[1];
+    var mt=file.type||"image/jpeg";
+    // For Excel files, ask user to screenshot — use image path
+    var isImage=(mt.indexOf("image")>=0||mt.indexOf("pdf")>=0);
+    var content=isImage
+      ?[{type:"image",source:{type:"base64",media_type:mt,data:b64}},
+        {type:"text",text:IMPORT_PROMPT}]
+      :[{type:"text",text:"Here is text extracted from a fitness program document:\n\n"
+          +"(Note: if this is garbled, please provide an image instead)\n\n"+atob(b64)+"\n\n"+IMPORT_PROMPT}];
+    fetch(getApiBase(),{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        model:"claude-sonnet-4-6",
+        max_tokens:4000,
+        messages:[{role:"user",content:content}]
+      })
+    })
+    .then(function(r){return r.json();})
+    .then(function(data){
+      IMPORTING_PROGRAM=false;
+      var raw=(data.content&&data.content[0]&&data.content[0].text)||"";
+      try{
+        var clean=raw.replace(/```json|```/g,"").trim();
+        var prog=JSON.parse(clean);
+        if(!prog.name||!prog.supersets||!prog.totalWeeks) throw new Error("bad");
+        prog.id="prog_"+Date.now();
+        var progs=getCustomPrograms();
+        progs.push(prog);
+        saveCustomPrograms(progs);
+        showToast("✓ "+prog.name+" imported — "+prog.totalWeeks+" weeks");
+        markDirty("progress");paint();
+      }catch(e){
+        IMPORT_ERROR="Could not parse program — try a clearer image or PDF";
+        showToast(IMPORT_ERROR);
+        markDirty("progress");paint();
+      }
+    })
+    .catch(function(){
+      IMPORTING_PROGRAM=false;
+      IMPORT_ERROR="Import failed — check your connection";
+      markDirty("progress");paint();
+    });
+  };
+  reader.readAsDataURL(file);
+}
+var IMPORT_PROMPT="Analyze this fitness program and return ONLY valid JSON with NO markdown, NO explanation:\n"
+  +"{\"name\":\"program name\",\"totalWeeks\":12,\"deloadWeeks\":[4,8,12],"
+  +"\"schedule\":[\"workout\",\"ruck\",\"workout\",\"ruck\",\"workout\",\"ruck\",\"rest\"],"
+  +"\"supersets\":[{\"id\":\"A\",\"restSec\":90,\"exercises\":["
+  +"{\"key\":\"a1\",\"name\":\"Exercise Name\",\"progressions\":["
+  +"{\"week\":1,\"sets\":3,\"reps\":\"8-10\"}]}]}]}\n"
+  +"Rules: schedule must be 7 items using only: workout ruck rest. "
+  +"If sets/reps missing generate logical progressions. "
+  +"If length missing derive from progressions. "
+  +"Max 4 supersets with 2 exercises each. "
+  +"Deload every 4 weeks approximately. "
+  +"Return ONLY the JSON.";
+
 function haversine(lat1,lon1,lat2,lon2){
   var R=3958.8; // miles
   var dLat=(lat2-lat1)*Math.PI/180;
@@ -3364,6 +3596,14 @@ document.addEventListener("click",function(e){
     AI_EQUIPMENT=["Bodyweight","Resistance bands"];
     AI_INTENSITY="easy";
     setTab("ai");return;
+  }
+  if(t.dataset&&t.dataset.setprog){
+    setActiveProgram(t.dataset.setprog==="builtin"?null:t.dataset.setprog);
+    return;
+  }
+  if(t.dataset&&t.dataset.delprog){
+    if(confirm("Delete this program?")) deleteCustomProgram(t.dataset.delprog);
+    return;
   }
   if(t.id==="notes-toggle"){NOTES_OPEN=!NOTES_OPEN;markDirty("workout");paint();return;}
   if(t.id==="note-save-btn"){
@@ -3681,6 +3921,12 @@ document.addEventListener("input",function(e){
   }
   // Catch-all: any input with data-key not handled above
   if(t.dataset&&t.dataset.key&&!t.classList.contains("bw-inp")){ss(t.dataset.key,t.value);}
+  if(t.dataset&&t.dataset.cpkey){
+    var data=getSessionData(W,DAY)||{};
+    data[t.dataset.cpkey.replace("_w","_weight")]=t.value;
+    saveSessionData(W,DAY,data);
+    return;
+  }
   if(t.classList&&t.classList.contains("bw-inp")&&t.dataset.day){var o=lg("bw_w"+W)||{};o[t.dataset.day]=parseFloat(t.value)||null;ls("bw_w"+W,o);showToast("✓ Weight saved");flash();}
 });
 
