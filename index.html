@@ -2628,11 +2628,13 @@ var EXERCISE_LIB=[
 
 function bLibrary(){
   var q=LIBRARY_SEARCH.toLowerCase().trim();
-  var filtered=q?EXERCISE_LIB.filter(function(e){
+  // Only show results when user has searched or filtered
+  var hasQuery=q.length>0;
+  var filtered=hasQuery?EXERCISE_LIB.filter(function(e){
     return e.name.toLowerCase().indexOf(q)>=0
       ||e.muscles.toLowerCase().indexOf(q)>=0
       ||e.type.toLowerCase().indexOf(q)>=0;
-  }):EXERCISE_LIB;
+  }):[];
 
   var h="<div style=\"background:#22273a;border-radius:14px;border:1px solid #2e3347;padding:14px;margin-bottom:10px;\">"
     +"<div style=\"font-size:13px;font-weight:700;color:#e8eaf0;margin-bottom:10px\">&#128218; Exercise Library</div>"
@@ -2644,8 +2646,10 @@ function bLibrary(){
     h+="<button data-libtype=\""+t+"\" style=\"padding:4px 10px;border-radius:6px;border:1px solid "+(active?"#4da6e8":"#2e3347")+";background:"+(active?"#4da6e8":"#1e2435")+";color:"+(active?"#0d1e2e":"#8a9bb0")+";font-size:11px;font-weight:700;cursor:pointer;font-family:inherit\">"+t+"</button>";
   });
   h+="</div>";
-  if(!filtered.length){
-    h+="<div style=\"font-size:12px;color:#8a9bb0;text-align:center;padding:12px\">No exercises match</div>";
+  if(!hasQuery){
+    h+="<div style=\"font-size:12px;color:#8a9bb0;text-align:center;padding:10px 0\">Search or tap a filter above</div>";
+  } else if(!filtered.length){
+    h+="<div style=\"font-size:12px;color:#8a9bb0;text-align:center;padding:10px 0\">No exercises match</div>";
   }
   filtered.forEach(function(ex){
     var typeCol=ex.type==="Push"?"#4da6e8":ex.type==="Pull"?"#3dd68c":ex.type==="Legs"||ex.type==="Hinge"?"#f5a623":ex.type==="Core"?"#e05c52":"#2dd4bf";
