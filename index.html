@@ -3197,8 +3197,8 @@ document.addEventListener("click",function(e){
     WEEK_REVIEW_DONE=false;
     DEBRIEF_STATE="idle";DEBRIEF_RESULT="";
     CHECKIN_DONE=false;
-    DAY=0;
-    FDATE=getDateForDay(W,0);
+    DAY=defaultDay();
+    FDATE=getDateForDay(W,DAY);
     markAllDirty();renderDayTabs();paint();
     return;
   }
