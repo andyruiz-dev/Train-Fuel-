@@ -940,12 +940,12 @@ function bDailySummary(){
     +"</div>"
     +"<div style=\"display:grid;grid-template-columns:1fr 1fr;gap:8px\">"
     +"<div style=\"background:rgba(255,255,255,.07);border-radius:10px;padding:10px 12px\">"
-    +"<div style=\"font-size:10px;color:rgba(255,255,255,.4);margin-bottom:4px\">Body weight</div>"
+    +"<div style=\"font-size:11px;color:rgba(255,255,255,.45);margin-bottom:4px\">Body weight</div>"
     +"<input type=\"number\" step=\"0.1\" placeholder=\"lb\" value=\""+todayWt+"\" data-bwday=\""+dayNames[DAY]+"\" data-bwwk=\""+W+"\" "
     +"style=\"width:100%;background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,.2);color:#fff;font-size:18px;font-weight:700;padding:0 0 2px;outline:none;font-family:inherit\">"
     +"</div>"
     +"<div style=\"background:rgba(255,255,255,.07);border-radius:10px;padding:10px 12px\">"
-    +"<div style=\"font-size:10px;color:rgba(255,255,255,.4);margin-bottom:4px\">Calories left</div>"
+    +"<div style=\"font-size:11px;color:rgba(255,255,255,.45);margin-bottom:4px\">Calories left</div>"
     +"<div style=\"font-size:18px;font-weight:700\">"+calRem.toLocaleString()+"<span style=\"font-size:11px;font-weight:400;color:rgba(255,255,255,.4)\"> cal</span></div>"
     +"<div style=\"margin-top:5px;height:3px;background:rgba(255,255,255,.1);border-radius:2px\">"
     +"<div style=\"height:100%;border-radius:2px;background:#4da6e8"+";width:"+Math.min(100,Math.round(tot.cal/m.cal*100))+"%\"></div>"
@@ -1225,7 +1225,7 @@ function bWorkoutPanel(){
   var behindBanner="";
   if(wkPts<2&&DAY>0){
     behindBanner="<div style=\"background:#1e1408;border:1.5px solid #3a2510;border-radius:12px;padding:10px 13px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center\">"
-      +"<div><div style=\"font-size:12px;font-weight:700;color:#f5a623\">Week "+W+" &mdash; behind pace</div>"
+      +"<div><div style=\"font-size:12px;font-weight:700;color:#ffffff\">Week "+W+" &mdash; behind pace</div>"
       +"<div style=\"font-size:11px;color:#6b7280;margin-top:2px\">"+Math.round(wkPts*10)/10+"/6 pts &middot; Consider repeating this week</div></div>"
       +"<button id=\"repeat-week-btn\" style=\"padding:7px 12px;border-radius:8px;border:none;background:#c0580a;color:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit\">Repeat</button>"
       +"</div>";
@@ -1426,7 +1426,7 @@ function bWorkout(){
         +"<span style=\"font-size:10px;color:"+hh.col+";font-weight:700\">"+hh.k+"</span>"
         +"<span style=\"font-size:11px;color:#6b6b6b\">"+hh.m+"</span></div>"
         +SI("push."+hh.k+".s"+(si+1),0,"")+CHK("push."+hh.k+".s"+(si+1))+"</div>";
-      pullB+="<div style=\"margin-bottom:8px\"><div style=\"font-size:10px;font-weight:700;color:#6b6b6b;margin-bottom:3px\">R"+(si+1)+"</div>"
+      pullB+="<div style=\"margin-bottom:8px\"><div style=\"font-size:12px;font-weight:700;color:#8a9bb0;margin-bottom:3px\">R"+(si+1)+"</div>"
         +"<div style=\"display:grid;grid-template-columns:1fr 1fr;gap:4px\">"
         +"<div><div style=\"font-size:11px;color:#6b6b6b\">Left</div>"+SI("pull.L"+(si+1),0,"")+"</div>"
         +"<div><div style=\"font-size:11px;color:#6b6b6b\">Right</div>"+SI("pull.R"+(si+1),0,"")+"</div>"
@@ -1721,11 +1721,6 @@ function bFood(){
       {label:"Fat",    value:Math.round(tot.fat)+"g",sub:"/"+Math.round(m.fat)+"g",bar:Math.min(100,Math.round(tot.fat/m.fat*100)),barCol:"#3dd68c"}
     ]
   });
-  h+="<div class=\"pc\">";
-  [["Calories","#c0392b",Math.round(tot.cal),m.cal,"cal"],["Protein","#1a6fa8",Math.round(tot.pro),m.pro,"g"],["Carbs","#1a7a44",Math.round(tot.carb),m.carb,"g"],["Fat","#c0580a",Math.round(tot.fat),m.fat,"g"]].forEach(function(b){
-    h+="<div class=\"pr\"><div class=\"ph\"><span class=\"pl\">"+b[0]+"</span><span class=\"pv\">"+b[2]+" / "+b[3]+b[4]+"</span></div><div class=\"pb\"><div class=\"pf\" style=\"width:"+pct(b[2],b[3])+"%;background:"+b[1]+"\"></div></div></div>";
-  });
-  h+="</div>";
 
   if(BUILDING){
     var cBtns=["palm","cupped","fist","thumb"].map(function(cat){var p=PN[cat],sel=PLATE_CAT===cat;return"<button data-plate-cat=\""+cat+"\" style=\"flex:1;padding:10px 4px;border-radius:10px;border:2px solid "+(sel?p.col:"#d1d5db")+";background:"+(sel?p.col+"22":"#e8eaed")+";display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;font-family:inherit\"><span style=\"font-size:22px;pointer-events:none\">"+p.emoji+"</span><span style=\"font-size:11px;font-weight:700;color:"+(sel?p.col:"#1c1c1e")+";pointer-events:none\">"+p.name+"</span><span style=\"font-size:11px;color:#8a9bb0;pointer-events:none\">"+p.hand+"</span></button>";}).join("");
@@ -1752,9 +1747,9 @@ function bFood(){
   }
 
   if(!BUILDING){
-      h+="<div style=\"margin-bottom:8px\"><div class=\"lbl\">Search food database</div>"
+      h+="<div class=\"card\" style=\"padding:10px 13px;margin-bottom:8px\"><div style=\"font-size:12px;font-weight:700;margin-bottom:8px\">Search food database</div>"
       +"<input type=\"text\" id=\"food-search\" class=\"inp\" placeholder=\"Search any food...\" autocomplete=\"off\" autocorrect=\"off\" oninput=\"updateSearchResults(this.value)\">"
-      +"<div id=\"search-results\" style=\"margin-top:6px\"></div></div>";
+      +"<div id=\"search-results\" style=\"margin-top:6px\"></div></div></div>";
     h+="<div class=\"card\"><div style=\"font-size:12px;font-weight:700;margin-bottom:10px\">Quick Log</div>"
       +"<input type=\"text\" id=\"qa-name\" class=\"inp\" placeholder=\"Name (optional)\" value=\""+QA_NAME+"\" autocomplete=\"off\" autocorrect=\"off\" autocapitalize=\"off\" style=\"margin-bottom:8px\">"
       +"<div style=\"display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px\">"
@@ -2523,7 +2518,7 @@ function bHeroCard(opts){
       +"<text x=\"27\" y=\"30\" text-anchor=\"middle\" fill=\"white\" font-size=\"11\" font-weight=\"700\">"+Math.round(opts.ring.val*10)/10+"</text>"
       +"<text x=\"27\" y=\"40\" text-anchor=\"middle\" fill=\"rgba(255,255,255,.4)\" font-size=\"8\">/"+opts.ring.max+"</text>"
       +"</svg>"
-      +(opts.ring.label?"<div style=\"font-size:10px;color:rgba(255,255,255,.4);margin-top:-2px\">"+opts.ring.label+"</div>":"")
+      +(opts.ring.label?"<div style=\"font-size:11px;color:rgba(255,255,255,.4);margin-top:-2px\">"+opts.ring.label+"</div>":"")
       +"</div>";
   }
   h+="</div>";
