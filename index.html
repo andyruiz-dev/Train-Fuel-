@@ -14,12 +14,12 @@
 <title>Train &amp; Fuel</title>
 <style>
 :root{
-  --blue:#1a6fa8;   --blt:#e8f3fb;  --bbd:#9fd0ef;
-  --green:#1a7a44;  --glt:#e6f7ed;  --gbd:#9fe0c0;
-  --orange:#c0580a; --olt:#fdf0e6;  --obd:#f5c89a;
-  --teal:#0f766e;   --tlt:#e6f5f4;
-  --red:#c0392b;    --rlt:#fdecea;
-  --purple:#6b21a8;
+  --blue:#4da6e8;   --blt:#0d1e2e;  --bbd:#1a3a52;
+  --green:#3dd68c;  --glt:#0a1e14;  --gbd:#1a3a28;
+  --orange:#f5a623; --olt:#1e1408;  --obd:#3a2510;
+  --teal:#2dd4bf;   --tlt:#0a1e1c;
+  --red:#e05c52;    --rlt:#2a1010;
+  --purple:#a855f7;
   --text:#e8eaf0;   --muted:#8a9bb0;
   --bdr:#2e3347;    --bg:#1a1e2a;   --card:#22273a;
   --shadow:0 2px 8px rgba(0,0,0,0.35);
@@ -36,34 +36,34 @@ input,select{font-family:inherit}
 body{background:var(--bg);font-family:-apple-system,"Helvetica Neue",sans-serif;max-width:480px;margin:0 auto;padding-bottom:20px;color:var(--text)}
 .app-hdr{background:var(--card);border-bottom:1px solid var(--bdr);padding:10px 14px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
 body.dark .app-hdr{background:#13161e;border-color:#252a36}
-.app-hdr-name{font-size:17px;font-weight:800;background:linear-gradient(135deg,#1a6fa8,#1a7a44);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.app-hdr-name{font-size:17px;font-weight:800;background:linear-gradient(135deg,#4da6e8,#3dd68c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .app-hdr-week{font-size:12px;font-weight:700;color:#4da6e8;background:#0d1e2e;border-radius:20px;padding:3px 10px;border:1px solid #1a3a52}
 .hdr{background:var(--card);border-bottom:1px solid var(--bdr);padding:8px 10px 0}
 body.dark .hdr{background:#13161e;border-color:#252a36}
 .hdr-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
 .wk-lbl{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;text-align:center}
 .wk-nav{display:flex;align-items:center;gap:8px}
-.wk-btn{background:#e8f3fb;border:1px solid #9fd0ef;border-radius:7px;color:#1a6fa8;font-size:16px;font-weight:700;width:30px;height:30px;cursor:pointer;font-family:inherit}
+.wk-btn{background:#e8f3fb;border:1px solid #9fd0ef;border-radius:7px;color:#4da6e8;font-size:16px;font-weight:700;width:30px;height:30px;cursor:pointer;font-family:inherit}
 .wk-num{font-size:20px;font-weight:800;color:var(--text);min-width:28px;text-align:center}
 .day-row{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
 .dt{background:none;border:none;border-bottom:3px solid transparent;padding:6px 2px 7px;cursor:pointer;font-family:inherit;text-align:center;color:var(--muted)}
-.dt.act{border-bottom-color:#1a6fa8}
+.dt.act{border-bottom-color:#4da6e8}
 .dn{font-size:10px;font-weight:700}.dl{font-size:8px;font-weight:600;margin-top:1px}
 .tabs{display:flex;background:var(--card);border-top:1px solid var(--bdr);position:sticky;bottom:0;z-index:100;box-shadow:0 -2px 8px rgba(0,0,0,0.08)}
 body.dark .tabs{background:#13161e;border-color:#252a36}
 .tab{flex:1;padding:8px 4px 10px;border:none;background:none;border-top:3px solid transparent;cursor:pointer;font-family:inherit;color:var(--muted);display:flex;flex-direction:column;align-items:center}
-.tab.act{color:#1a6fa8;border-top-color:#1a6fa8}
+.tab.act{color:#4da6e8;border-top-color:#4da6e8}
 .ti{font-size:20px;line-height:1;margin-bottom:2px}.tl{font-size:10px;font-weight:700}
 .content{padding:12px;overflow-y:auto;min-height:60vh;background:var(--bg)}
 .card{background:var(--card);border-radius:14px;border:1px solid var(--bdr);padding:13px;margin-bottom:12px;box-shadow:var(--shadow)}
 body.dark .card{background:#1a1e28;border-color:#252a36}
 .inp{width:100%;background:#1e2435;border:1.5px solid var(--bdr);border-radius:9px;padding:9px 11px;font-size:14px;color:var(--text);font-family:inherit;outline:none}
-.inp:focus{border-color:#1a6fa8}
+.inp:focus{border-color:#4da6e8}
 body.dark .inp{background:#252a36;color:#e8eaf0;border-color:#2a3040}
 select.inp{background:var(--bg)}
 .lbl{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;display:block}
 input.sml{width:52px;border:2px solid var(--bdr);border-radius:8px;padding:8px 4px;font-size:17px;font-weight:700;text-align:center;color:var(--text);background:var(--bg);font-family:inherit;outline:none}
-input.sml:focus{border-color:#1a6fa8}
+input.sml:focus{border-color:#4da6e8}
 input.ti{width:72px;border:1.5px solid var(--bdr);border-radius:7px;padding:7px 5px;font-size:12px;text-align:center;color:var(--text);background:var(--bg);font-family:inherit;outline:none}
 input.ni{border:1.5px solid var(--bdr);border-radius:8px;padding:8px 10px;font-size:13px;color:var(--text);background:var(--bg);font-family:inherit;outline:none}
 .pc{background:var(--card);border-radius:12px;padding:10px 12px;margin-bottom:10px;border:1px solid var(--bdr);box-shadow:var(--shadow)}
@@ -75,7 +75,7 @@ body.dark .pc{background:#1a1e28;border-color:#252a36}
 .fli{background:var(--card);border-radius:10px;padding:9px 12px;margin-bottom:8px;border:1px solid var(--bdr);display:flex;justify-content:space-between;align-items:center;box-shadow:var(--shadow)}
 body.dark .fli{background:#1a1e28;border-color:#252a36}
 .fli-m{flex:1}.fli-n{font-size:13px;font-weight:600}.fli-s{font-size:11px;color:var(--muted)}
-.fli-c{font-size:13px;font-weight:700;color:#1a6fa8}
+.fli-c{font-size:13px;font-weight:700;color:#4da6e8}
 .bw-inp{border:1.5px solid var(--bdr);border-radius:7px;padding:5px 3px;font-size:12px;text-align:center;background:var(--bg);color:var(--text);font-family:inherit;width:100%;outline:none}
 #rtimer{display:none;position:fixed;bottom:58px;left:50%;transform:translateX(-50%);width:calc(100% - 24px);max-width:456px;background:#1a6fa8;border-radius:14px;padding:10px 14px;z-index:200;box-shadow:0 4px 20px rgba(0,0,0,.25)}
 #rtimer.show{display:block}
@@ -92,7 +92,7 @@ body.dark .fli{background:#1a1e28;border-color:#252a36}
 .overlay-card{background:var(--card);border-radius:18px;padding:16px;width:100%;max-height:85vh;overflow-y:auto;box-shadow:0 -4px 24px rgba(0,0,0,.2)}
 body.dark .overlay-card{background:#1a1e28}
 .date-nav{display:flex;align-items:center;justify-content:space-between;padding:2px 0;margin-bottom:8px}
-.date-btn{background:#e8f3fb;border:1px solid #9fd0ef;border-radius:8px;color:#1a6fa8;font-size:18px;width:32px;height:32px;cursor:pointer;font-family:inherit}
+.date-btn{background:#e8f3fb;border:1px solid #9fd0ef;border-radius:8px;color:#4da6e8;font-size:18px;width:32px;height:32px;cursor:pointer;font-family:inherit}
 .date-lbl{font-size:13px;font-weight:700;color:var(--text)}
 .saved-chip{position:fixed;top:12px;left:50%;transform:translateX(-50%);background:#1a7a44;color:#fff;border-radius:20px;padding:6px 16px;font-size:13px;font-weight:700;opacity:0;transition:opacity .3s;z-index:500;pointer-events:none}
 @keyframes flash{0%{opacity:1}50%{opacity:.3}100%{opacity:1}}
@@ -106,7 +106,7 @@ body.dark .overlay-card{background:#1a1e28}
 <div class="app-hdr">
   <div class="app-hdr-name">Train &amp; Fuel</div>
   <div style="display:flex;align-items:center;gap:8px">
-    <button id="today-btn" style="font-size:11px;font-weight:700;color:#1a6fa8;background:#e8f3fb;border:1px solid #9fd0ef;border-radius:20px;padding:4px 10px;cursor:pointer;font-family:inherit;display:none">Today</button>
+    <button id="today-btn" style="font-size:11px;font-weight:700;color:#4da6e8;background:#e8f3fb;border:1px solid #9fd0ef;border-radius:20px;padding:4px 10px;cursor:pointer;font-family:inherit;display:none">Today</button>
     <div class="app-hdr-week" id="hdr-week">W1</div>
   </div>
 </div>
@@ -349,24 +349,24 @@ function bProgressionSummary(){
     +'</div>';
   if(ready.length>0){
     h+='<div style="padding:10px 13px;border-bottom:1px solid #d1d5db">'
-      +'<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#1a7a44;margin-bottom:6px">&#9989; Ready to Progress</div>';
+      +'<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#3dd68c;margin-bottom:6px">&#9989; Ready to Progress</div>';
     ready.forEach(function(k){
       var s=status[k];
       h+='<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid #f0f0f0">'
         +'<span style="font-size:13px;font-weight:600">'+s.label+'</span>'
-        +'<span style="font-size:11px;color:#1a7a44;font-weight:700">'+s.action+'</span>'
+        +'<span style="font-size:11px;color:#3dd68c;font-weight:700">'+s.action+'</span>'
         +'</div>';
     });
     h+='</div>';
   }
   if(hitting.length>0){
     h+='<div style="padding:10px 13px">'
-      +'<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#c0580a;margin-bottom:6px">&#128293; Hit Top Last Session — 1 more to go</div>';
+      +'<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#f5a623;margin-bottom:6px">&#128293; Hit Top Last Session — 1 more to go</div>';
     hitting.forEach(function(k){
       var s=status[k];
       h+='<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid #f0f0f0">'
         +'<span style="font-size:13px;font-weight:600">'+s.label+'</span>'
-        +'<span style="font-size:11px;color:#c0580a;font-weight:700">Hit top again → '+s.action+'</span>'
+        +'<span style="font-size:11px;color:#f5a623;font-weight:700">Hit top again → '+s.action+'</span>'
         +'</div>';
     });
     h+='</div>';
@@ -381,7 +381,7 @@ function progBadge(exKey, repRange, numSets){
     return '<div style="display:inline-block;background:#1a7a44;color:#fff;border-radius:6px;padding:2px 8px;font-size:10px;font-weight:700;margin-bottom:4px">&#9989; Ready to progress!</div>';
   }
   if(check.hitTop){
-    return '<div style="display:inline-block;background:#fdf0e6;border:1px solid #f5c89a;color:#c0580a;border-radius:6px;padding:2px 8px;font-size:10px;font-weight:700;margin-bottom:4px">&#128293; Hit top last session — 1 more!</div>';
+    return '<div style="display:inline-block;background:#fdf0e6;border:1px solid #f5c89a;color:#f5a623;border-radius:6px;padding:2px 8px;font-size:10px;font-weight:700;margin-bottom:4px">&#128293; Hit top last session — 1 more!</div>';
   }
   return "";
 }
@@ -405,7 +405,7 @@ function lastExLabel(exKey){
   var d=getLastExData(exKey);
   if(!d) return "";
   var label=d.reps.join(", ")+" reps"+(d.wt?" @ "+d.wt+"lb":"");
-  return "<div style=\"font-size:10px;color:#1a6fa8;margin-bottom:4px\">Last W"+d.week+": "+label+"</div>";
+  return "<div style=\"font-size:10px;color:#4da6e8;margin-bottom:4px\">Last W"+d.week+": "+label+"</div>";
 }
 
 // SAVED WORKOUTS
@@ -449,16 +449,16 @@ function formatAIResult(text){
     if(!trimmed){html+="<div style=\"height:6px\"></div>";continue;}
     // Bold headers: **text** or lines ending in : that look like headers
     if(trimmed.match(/^\*\*(.+)\*\*$/)){
-      html+="<div style=\"font-size:13px;font-weight:800;color:#1a6fa8;margin-top:10px;margin-bottom:4px\">"+trimmed.replace(/\*\*/g,"")+"</div>";
+      html+="<div style=\"font-size:13px;font-weight:800;color:#4da6e8;margin-top:10px;margin-bottom:4px\">"+trimmed.replace(/\*\*/g,"")+"</div>";
     } else if(trimmed.match(/^#{1,3} /)){
-      html+="<div style=\"font-size:13px;font-weight:800;color:#1a6fa8;margin-top:10px;margin-bottom:4px\">"+trimmed.replace(/^#{1,3} /,"")+"</div>";
+      html+="<div style=\"font-size:13px;font-weight:800;color:#4da6e8;margin-top:10px;margin-bottom:4px\">"+trimmed.replace(/^#{1,3} /,"")+"</div>";
     } else if(trimmed.match(/^(Superset|SUPERSET)/)){
-      html+="<div style=\"font-size:13px;font-weight:800;color:#1a6fa8;background:#e8f3fb;border-radius:7px;padding:6px 10px;margin-top:10px;margin-bottom:4px\">"+trimmed+"</div>";
+      html+="<div style=\"font-size:13px;font-weight:800;color:#4da6e8;background:#e8f3fb;border-radius:7px;padding:6px 10px;margin-top:10px;margin-bottom:4px\">"+trimmed+"</div>";
     } else if(trimmed.match(/^[-•*] /)){
       var item=trimmed.replace(/^[-•*] /,"");
       // Bold any **text** within
       item=item.replace(/\*\*([^*]+)\*\*/g,"<b>$1</b>");
-      html+="<div style=\"display:flex;gap:8px;margin-bottom:3px\"><span style=\"color:#1a6fa8;flex-shrink:0\">&#8226;</span><span style=\"font-size:13px;line-height:1.5\">"+item+"</span></div>";
+      html+="<div style=\"display:flex;gap:8px;margin-bottom:3px\"><span style=\"color:#4da6e8;flex-shrink:0\">&#8226;</span><span style=\"font-size:13px;line-height:1.5\">"+item+"</span></div>";
     } else if(trimmed.match(/^\d+\. /)){
       var item2=trimmed.replace(/^\d+\. /,"");
       item2=item2.replace(/\*\*([^*]+)\*\*/g,"<b>$1</b>");
@@ -1227,7 +1227,7 @@ function bWorkoutPanel(){
   var behindBanner="";
   if(wkPts<2&&DAY>0){
     behindBanner="<div style=\"background:#fdf0e6;border:1.5px solid #f5c89a;border-radius:12px;padding:10px 13px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center\">"
-      +"<div><div style=\"font-size:12px;font-weight:700;color:#c0580a\">Week "+W+" &mdash; behind pace</div>"
+      +"<div><div style=\"font-size:12px;font-weight:700;color:#f5a623\">Week "+W+" &mdash; behind pace</div>"
       +"<div style=\"font-size:11px;color:#6b7280;margin-top:2px\">"+Math.round(wkPts*10)/10+"/6 pts &middot; Consider repeating this week</div></div>"
       +"<button id=\"repeat-week-btn\" style=\"padding:7px 12px;border-radius:8px;border:none;background:#c0580a;color:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit\">Repeat</button>"
       +"</div>";
@@ -1238,7 +1238,7 @@ function bWorkoutPanel(){
     var best=getBestStreak();
     var motiveMsgs=["Every champion was once a contender who refused to quit.","Progress, not perfection.","The comeback is always stronger than the setback.","One session at a time.","You showed up. That is the hardest part."];
     var msg=motiveMsgs[Math.floor(gap/2)%motiveMsgs.length];
-    var welcomeBack="<div style=\"background:linear-gradient(135deg,#1a6fa8,#1a7a44);border-radius:14px;padding:18px 16px;margin-bottom:12px;color:#fff;text-align:center\">"
+    var welcomeBack="<div style=\"background:linear-gradient(135deg,#4da6e8,#3dd68c);border-radius:14px;padding:18px 16px;margin-bottom:12px;color:#fff;text-align:center\">"
       +"<div style=\"font-size:28px;margin-bottom:8px\">&#128293;</div>"
       +"<div style=\"font-size:18px;font-weight:800;margin-bottom:4px\">Welcome back, Andy</div>"
       +"<div style=\"font-size:13px;opacity:.9;margin-bottom:12px\">"+gap+" days away &mdash; it happens. You are here now.</div>"
@@ -1285,12 +1285,12 @@ function bScheduleEditor(){
   }
   h+="</div>"
     +"<div style=\"display:flex;gap:8px;margin-bottom:12px;font-size:11px\">"
-    +"<span style=\"background:#e8f3fb;color:#1a6fa8;border-radius:6px;padding:3px 8px;font-weight:700\">"+wkCount+" Workouts</span>"
+    +"<span style=\"background:#e8f3fb;color:#4da6e8;border-radius:6px;padding:3px 8px;font-weight:700\">"+wkCount+" Workouts</span>"
     +"<span style=\"background:#0a1e14;color:#3dd68c;border-radius:6px;padding:3px 8px;font-weight:700\">"+rkCount+" Rucks</span>"
     +"<span style=\"background:#e8eaed;color:#6b6b6b;border-radius:6px;padding:3px 8px;font-weight:700\">"+restCount+" Rest</span>"
     +"</div>"
-    +(wkCount>3?"<div style=\"background:#fdecea;border:1px solid #f5c6c2;border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:12px;color:#c0392b\">&#9888; Max 3 workouts recommended for recovery</div>":"")
-    +(restCount<1?"<div style=\"background:#fdecea;border:1px solid #f5c6c2;border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:12px;color:#c0392b\">&#9888; At least 1 rest day recommended</div>":"")
+    +(wkCount>3?"<div style=\"background:#fdecea;border:1px solid #f5c6c2;border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:12px;color:#e05c52\">&#9888; Max 3 workouts recommended for recovery</div>":"")
+    +(restCount<1?"<div style=\"background:#fdecea;border:1px solid #f5c6c2;border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:12px;color:#e05c52\">&#9888; At least 1 rest day recommended</div>":"")
     +"<button id=\"sched-done\" style=\"width:100%;padding:13px;border-radius:10px;border:none;background:#1a7a44;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit\">Done &#10003;</button>"
     +"</div>";
   return h;
@@ -1332,7 +1332,7 @@ function bWorkout(){
       +"<div style=\"font-size:12px;color:rgba(255,255,255,.9);margin-top:2px\">"+(W===1||W===0?"Log your baseline before training - Goals tab":"Log progress measurements before training - Goals tab")+"</div></div></div>"
     :"";
   var h=bProgressionSummary()+measBanner;
-  if(W===0)h+="<div style=\"background:#fff8e1;border:2px dashed #c0580a;border-radius:10px;padding:10px 13px;margin-bottom:9px;text-align:center\"><div style=\"font-size:14px;font-weight:700;color:#c0580a\">&#128295; Test Week</div><div style=\"font-size:12px;color:#8a9bb0;margin-top:2px\">Testing mode. Real program starts Monday Aug 10.</div></div>";
+  if(W===0)h+="<div style=\"background:#fff8e1;border:2px dashed #c0580a;border-radius:10px;padding:10px 13px;margin-bottom:9px;text-align:center\"><div style=\"font-size:14px;font-weight:700;color:#f5a623\">&#128295; Test Week</div><div style=\"font-size:12px;color:#8a9bb0;margin-top:2px\">Testing mode. Real program starts Monday Aug 10.</div></div>";
   h+="<div style=\"display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:2px\">"+bModeBar()+bTimeSelector()+"</div>";
 
   // Week 20 reminder banner
@@ -1347,14 +1347,14 @@ function bWorkout(){
   if(p.deload){
     var dietBreak=W===12||W===20;
     h+="<div style=\"background:#e8f3fb;border:2px solid #9fd0ef;border-radius:10px;padding:10px 13px;margin-bottom:9px;text-align:center\">"
-      +"<div style=\"font-size:14px;font-weight:700;color:#1a6fa8\">&#128513; Deload Week"+(dietBreak?" + Diet Break":"")+"</div>"
+      +"<div style=\"font-size:14px;font-weight:700;color:#4da6e8\">&#128513; Deload Week"+(dietBreak?" + Diet Break":"")+"</div>"
       +"<div style=\"font-size:12px;color:#8a9bb0;margin-top:2px\">Half the sets, same weight."+(dietBreak?" <b>Eat at 2,750 cal this week.</b> Your body needs the reset.":"")+"</div></div>";
   }
   if(!p.deload&&p.ph===3)h+="<div class=\"alert-o\"><b>Phase 3:</b> Controlled movement, full range. Quality beats quantity.</div>";
   h+="<div style=\"display:flex;gap:6px;margin-bottom:8px\">"
     +"<button id=\"travel-btn\" style=\"flex:1;font-size:11px;background:#1a1a2e;color:#fff;border:none;border-radius:8px;padding:7px 6px;cursor:pointer;font-family:inherit;font-weight:700\">&#9992;&#65039; Hotel</button>"
     +"<button id=\"recovery-btn\" style=\"flex:1;font-size:11px;background:#7c3aed;color:#fff;border:none;border-radius:8px;padding:7px 6px;cursor:pointer;font-family:inherit;font-weight:700\">&#128149; Recovery</button>"
-    +"<button id=\"rearrange-btn\" style=\"flex:1;font-size:11px;background:#e8f3fb;color:#1a6fa8;border:1.5px solid #9fd0ef;border-radius:8px;padding:7px 6px;cursor:pointer;font-family:inherit;font-weight:700\">&#128260; Rearrange</button>"
+    +"<button id=\"rearrange-btn\" style=\"flex:1;font-size:11px;background:#e8f3fb;color:#4da6e8;border:1.5px solid #9fd0ef;border-radius:8px;padding:7px 6px;cursor:pointer;font-family:inherit;font-weight:700\">&#128260; Rearrange</button>"
     +"</div>";
   // WORKOUT NOTES
   var existingNote=getSessionData(W,DAY)&&getSessionData(W,DAY).note||"";
@@ -1377,7 +1377,7 @@ function bWorkout(){
   // SCALED MODE upgrade prompt
   if(WORKOUT_MODE==="scaled"){
     h+="<div style=\"background:#1e1408;border-radius:12px;border:1.5px solid #f5c89a;padding:12px 14px;margin-bottom:10px;text-align:center\">"
-      +"<div style=\"font-size:13px;font-weight:800;color:#c0580a;margin-bottom:4px\">Scaled session complete! &#127881;</div>"
+      +"<div style=\"font-size:13px;font-weight:800;color:#f5a623;margin-bottom:4px\">Scaled session complete! &#127881;</div>"
       +"<div style=\"font-size:11px;color:#6b7280;margin-bottom:10px\">Feeling strong? Go for the full sets.</div>"
       +"<button id=\"mode-go-full\" style=\"padding:9px 20px;border-radius:9px;border:none;background:#1a7a44;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit\">&#128170; Go Full</button>"
       +"</div>";
@@ -1407,7 +1407,7 @@ function bWorkout(){
     +"<option value=\"ruck\""+(sg("walk")==="ruck"?" selected":"")+">Ruck + Workout (double day &#128170;)</option>"
     +"<option value=\"skipped\""+(sg("walk")==="skipped"?" selected":"")+">Skipped</option>"
     +"</select>"
-    +(sg("walk")==="ruck"?"<div style=\"background:#fdecea;border:1px solid #f5c6c2;border-radius:9px;padding:8px 12px;margin-top:6px;font-size:12px;color:#c0392b;font-weight:600\">&#128170; Double day logged</div>":"")
+    +(sg("walk")==="ruck"?"<div style=\"background:#fdecea;border:1px solid #f5c6c2;border-radius:9px;padding:8px 12px;margin-top:6px;font-size:12px;color:#e05c52;font-weight:600\">&#128170; Double day logged</div>":"")
     +"</div>";
 
   var PNAME={1:"Push Board",2:"Incline Push-Ups",3:"Ring Dips"};
@@ -1510,16 +1510,16 @@ function bRuck(){
   var isDeloadWk=W===4||W===8||W===12||W===16||W===20||W===24;
   var ruckDetails=isDeloadWk
     ?"<div style=\"background:#e8f3fb;border:2px solid #9fd0ef;border-radius:10px;padding:10px 13px;margin-bottom:9px\">"
-      +"<div style=\"font-size:14px;font-weight:700;color:#1a6fa8\">&#128098; Deload Ruck</div>"
+      +"<div style=\"font-size:14px;font-weight:700;color:#4da6e8\">&#128098; Deload Ruck</div>"
       +"<div style=\"font-size:12px;color:#8a9bb0;margin-top:3px\"><b>No vest today</b> &middot; 20-30 min &middot; easy pace</div>"
-      +"<div style=\"font-size:11px;color:#1a6fa8;margin-top:4px\">Deload week — let your joints recover. Keep moving, drop the load.</div></div>"
+      +"<div style=\"font-size:11px;color:#4da6e8;margin-top:4px\">Deload week — let your joints recover. Keep moving, drop the load.</div></div>"
     :"<div class=\"card\">"
       +"<div style=\"font-size:12px;color:#8a9bb0\">20 lb vest &middot; 30-40 min &middot; steady pace</div></div>";
   var ruckDist=lg("ruck.dist")||"";
   var ruckTime=lg("ruck.time")||"";
   var ruckNote="";
   var gpsPanel=RUCK_TRACKING
-    ?"<div style=\"background:linear-gradient(135deg,#1a6fa8,#1a7a44);border-radius:14px;padding:18px;margin-bottom:12px;text-align:center;color:#fff\">"
+    ?"<div style=\"background:linear-gradient(135deg,#4da6e8,#3dd68c);border-radius:14px;padding:18px;margin-bottom:12px;text-align:center;color:#fff\">"
       +"<div style=\"font-size:12px;font-weight:700;opacity:.85;margin-bottom:12px;letter-spacing:1px\">&#128205; GPS TRACKING</div>"
       +"<div style=\"display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px\">"
       +"<div><div id=\"ruck-live-dist\" style=\"font-size:22px;font-weight:800\">0.00</div><div style=\"font-size:10px;opacity:.8\">miles</div></div>"
@@ -1529,7 +1529,7 @@ function bRuck(){
       +"<button id=\"ruck-stop-btn\" style=\"width:100%;padding:13px;border-radius:11px;border:2px solid rgba(255,255,255,.6);background:rgba(255,255,255,.15);color:#fff;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit\">&#9632; Stop &amp; Log</button>"
       +"</div>"
     :"<div style=\"background:#0d1e2e;border-radius:12px;padding:11px 13px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between\">"
-      +"<div><div style=\"font-size:12px;font-weight:700;color:#1a6fa8\">&#128205; GPS Ruck Tracker</div>"
+      +"<div><div style=\"font-size:12px;font-weight:700;color:#4da6e8\">&#128205; GPS Ruck Tracker</div>"
       +"<div style=\"font-size:11px;color:#6b7280\">Auto-logs distance, time &amp; pace</div></div>"
       +"<button id=\"ruck-start-btn\" style=\"padding:9px 16px;border-radius:9px;border:none;background:#1a6fa8;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit\">&#9654; Start</button>"
       +"</div>";
@@ -1601,9 +1601,9 @@ function bRest(){
       +"<div style=\"background:"+(eligible?"#1a7a44":"#c0580a")+";height:10px;border-radius:6px;width:"+Math.round(Math.min(pts/6,1)*100)+"%\"></div></div>"
       +"<div style=\"font-size:13px;font-weight:700;color:"+(eligible?"#1a7a44":"#c0580a")+"\">"+(isNaN(pts)?"0":pts)+"/6 pts</div></div>";
     if(eligible){
-      h+="<div style=\"font-size:12px;color:#1a7a44;font-weight:700;margin-bottom:8px\">&#10003; Week complete! You will advance to Week "+(W+1)+" on Monday.</div>";
+      h+="<div style=\"font-size:12px;color:#3dd68c;font-weight:700;margin-bottom:8px\">&#10003; Week complete! You will advance to Week "+(W+1)+" on Monday.</div>";
     } else {
-      h+="<div style=\"font-size:12px;color:#c0580a;font-weight:700;margin-bottom:8px\">Need 4+ pts to advance.</div>"
+      h+="<div style=\"font-size:12px;color:#f5a623;font-weight:700;margin-bottom:8px\">Need 4+ pts to advance.</div>"
         +"<div style=\"display:flex;gap:8px;margin-bottom:8px\">"
         +"<button id=\"week-stay\" style=\"flex:1;padding:10px;border-radius:9px;border:none;background:#c0580a;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit\">Repeat Week "+W+"</button>"
         +"<button id=\"week-advance-yes\" style=\"flex:1;padding:10px;border-radius:9px;border:1.5px solid #d1d5db;background:#fff;color:#6b7280;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit\">Advance Anyway</button>"
@@ -1621,7 +1621,7 @@ function bRest(){
       });
       h+="</div></div>";
     } else {
-      h+="<div style=\"background:#e6f7ed;border-radius:10px;padding:10px 12px;margin-bottom:10px;font-size:12px;color:#1a7a44;font-weight:700\">&#10003; Review saved: "+review+"</div>";
+      h+="<div style=\"background:#e6f7ed;border-radius:10px;padding:10px 12px;margin-bottom:10px;font-size:12px;color:#3dd68c;font-weight:700\">&#10003; Review saved: "+review+"</div>";
     }
     // AI Weekly Debrief
     h+="<div style=\"background:#22273a;border-radius:14px;border:1px solid #2e3347;padding:14px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,.08)\">";
@@ -1762,7 +1762,7 @@ function bFood(){
       +"<div><div class=\"lbl\">Carbs (g)</div><input type=\"number\" inputmode=\"decimal\" id=\"qa-carb\" class=\"inp\" placeholder=\"0\" value=\""+QA_CARB+"\" style=\"font-size:20px;font-weight:700\"></div>"
       +"<div><div class=\"lbl\">Fat (g)</div><input type=\"number\" inputmode=\"decimal\" id=\"qa-fat\" class=\"inp\" placeholder=\"0\" value=\""+QA_FAT+"\" style=\"font-size:20px;font-weight:700\"></div>"
       +"</div><button id=\"qa-submit\" style=\"width:100%;padding:13px;border-radius:10px;border:none;background:#1a7a44;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit\">Add to Log</button></div>"
-      +"<button id=\"build-plate-btn\" style=\"width:100%;padding:13px;border-radius:10px;background:#e8f3fb;border:1.5px solid #9fd0ef;color:#1a6fa8;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:9px\">&#129385; Hand Log - Plate Portions</button>"
+      +"<button id=\"build-plate-btn\" style=\"width:100%;padding:13px;border-radius:10px;background:#e8f3fb;border:1.5px solid #9fd0ef;color:#4da6e8;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:9px\">&#129385; Hand Log - Plate Portions</button>"
       +"<button id=\"manual-entry-btn\" style=\"width:100%;padding:12px;border-radius:10px;background:#fff;border:1.5px solid #d1d5db;color:#6b6b6b;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:9px\">&#9999; Manual Entry</button>"
       +"<button id=\"meal-suggest-btn\" style=\"width:100%;padding:13px;border-radius:10px;background:linear-gradient(135deg,#7c3aed,#1a6fa8);color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;border:none;margin-bottom:9px\">&#10024; Suggest a Meal</button>";
     if(MEAL_STATE==="loading"){
@@ -1778,7 +1778,7 @@ function bFood(){
         +"</div>";
     }
     if(MEAL_STATE==="error"){
-      h+="<div class=\"card\" style=\"text-align:center;padding:14px;margin-bottom:9px\"><div style=\"font-size:12px;color:#c0392b;margin-bottom:8px\">Could not generate suggestions right now.</div><button id=\"meal-clear-btn\" style=\"padding:8px 16px;border-radius:8px;border:none;background:#1a6fa8;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit\">Try Again</button></div>";
+      h+="<div class=\"card\" style=\"text-align:center;padding:14px;margin-bottom:9px\"><div style=\"font-size:12px;color:#e05c52;margin-bottom:8px\">Could not generate suggestions right now.</div><button id=\"meal-clear-btn\" style=\"padding:8px 16px;border-radius:8px;border:none;background:#1a6fa8;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit\">Try Again</button></div>";
     }
       h+="<div style=\"margin-bottom:8px\"><div class=\"lbl\">Search food database</div>"
       +"<input type=\"text\" id=\"food-search\" class=\"inp\" placeholder=\"Search any food...\" autocomplete=\"off\" autocorrect=\"off\" oninput=\"updateSearchResults(this.value)\">"
@@ -1798,14 +1798,14 @@ function bAIWorkout(){
   if(!ex||!ex.length) return "";
   var wid=AI_WORKOUT_ID;
   var h="";
-  h+="<div style=\"background:linear-gradient(135deg,#1a6fa8,#1a7a44);border-radius:13px;padding:13px 14px;margin-bottom:10px;color:#fff\">";
+  h+="<div style=\"background:linear-gradient(135deg,#4da6e8,#3dd68c);border-radius:13px;padding:13px 14px;margin-bottom:10px;color:#fff\">";
   h+="<div style=\"font-size:11px;opacity:.8;margin-bottom:2px\">AI Generated &middot; "+AI_DURATION+"min</div>";
   h+="<div style=\"font-size:17px;font-weight:800\">"+(AI_WORKOUT_DATA.title||"Custom Workout")+"</div>";
   h+="</div>";
   ex.forEach(function(e,idx){
     var exKey="ai_"+wid+"_"+idx;
     var last=getLastAIExData(wid,idx);
-    var lastLbl=last?"<div style=\"font-size:10px;color:#1a6fa8;margin-bottom:6px\">Last W"+last.week+": "+last.reps.join(", ")+" reps"+(last.wt?" @ "+last.wt+"lb":"")+"</div>":"";
+    var lastLbl=last?"<div style=\"font-size:10px;color:#4da6e8;margin-bottom:6px\">Last W"+last.week+": "+last.reps.join(", ")+" reps"+(last.wt?" @ "+last.wt+"lb":"")+"</div>":"";
     h+="<div style=\"background:#fff;border-radius:13px;border:1px solid #d1d5db;margin-bottom:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.06)\">";
     h+="<div style=\"background:#1a6fa8;padding:10px 13px\">";
     h+="<div style=\"font-size:14px;font-weight:800;color:#fff\">"+e.name+"</div>";
@@ -1831,7 +1831,7 @@ function bAIWorkout(){
       h+="<span style=\"font-size:11px;color:#8a9bb0\">reps</span>";
       h+="</div>";
     }
-    if(e.rest>0){h+="<button data-rest=\""+e.rest+"\" data-rname=\""+e.name+"\" style=\"width:100%;margin-top:4px;background:#e8f3fb;border:1px solid #9fd0ef;border-radius:9px;padding:9px;font-size:12px;font-weight:700;color:#1a6fa8;cursor:pointer;font-family:inherit\">&#9203; Rest "+e.rest+"s</button>";}
+    if(e.rest>0){h+="<button data-rest=\""+e.rest+"\" data-rname=\""+e.name+"\" style=\"width:100%;margin-top:4px;background:#e8f3fb;border:1px solid #9fd0ef;border-radius:9px;padding:9px;font-size:12px;font-weight:700;color:#4da6e8;cursor:pointer;font-family:inherit\">&#9203; Rest "+e.rest+"s</button>";}
     h+="</div></div>";
   });
   h+="<button id=\"ai-track-done\" style=\"width:100%;padding:14px;border-radius:10px;border:none;background:#1a7a44;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:10px\">&#10003; Finish Workout</button>";
@@ -1890,7 +1890,7 @@ function bAI(){
     h+='</div>';
 
     if(AI_EQUIPMENT.length===0){
-      h+='<div style="background:#fdf0e6;border:1px solid #f5c89a;border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:12px;color:#c0580a">Select at least one equipment option</div>';
+      h+='<div style="background:#fdf0e6;border:1px solid #f5c89a;border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:12px;color:#f5a623">Select at least one equipment option</div>';
     }
 
     h+='<button id="ai-generate-btn" '+(AI_EQUIPMENT.length===0?'disabled style="opacity:.5;cursor:not-allowed;"':'')+' style="width:100%;padding:14px;border-radius:10px;border:none;background:#1a6fa8;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit">&#9889; Generate Workout</button></div>';
@@ -1928,7 +1928,7 @@ function bAI(){
 
   if(AI_STATE==="error"){
     h+='<div class="card" style="text-align:center;padding:20px">'
-      +'<div style="font-size:13px;color:#c0392b;margin-bottom:10px">Something went wrong.</div>'
+      +'<div style="font-size:13px;color:#e05c52;margin-bottom:10px">Something went wrong.</div>'
       +(AI_ERROR?'<div style="font-size:11px;color:#6b7280;margin-bottom:10px">'+AI_ERROR+'</div>':'')
       +'<button id="ai-reset-btn" style="padding:10px 20px;border-radius:9px;border:none;background:#1a6fa8;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit">Try Again</button>'
       +'</div>';
@@ -1945,7 +1945,7 @@ function bAI(){
         +'<div style="font-size:10px;color:#8a9bb0">'+w.equipment.join(", ")+' &middot; '+w.intensity+'</div></div>'
         +'<div style="display:flex;gap:6px;flex-shrink:0;margin-left:8px">'
         +'<button data-run-workout="'+w.id+'" style="padding:6px 10px;border-radius:7px;border:none;background:#1a6fa8;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">&#9654; Run</button>'
-        +'<button data-del-workout="'+w.id+'" style="padding:6px 10px;border-radius:7px;border:none;background:#fdecea;color:#c0392b;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">&#10005;</button>'
+        +'<button data-del-workout="'+w.id+'" style="padding:6px 10px;border-radius:7px;border:none;background:#fdecea;color:#e05c52;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">&#10005;</button>'
         +'</div></div>';
     });
     h+='</div>';
@@ -2013,7 +2013,7 @@ function weightChart(){
   return"<div style=\"background:#22273a;border-radius:12px;border:1px solid #2e3347;padding:12px 13px;margin-bottom:10px\">"
     +"<div style=\"display:flex;justify-content:space-between;align-items:center;margin-bottom:8px\">"
     +"<div style=\"font-size:13px;font-weight:700\">Weight Trend</div>"
-    +(diff>0?"<div style=\"font-size:12px;color:#1a7a44;font-weight:700\">-"+diff+" lb lost</div>":diff<0?"<div style=\"font-size:12px;color:#c0580a;font-weight:700\">+"+Math.abs(diff)+" lb</div>":"<div style=\"font-size:12px;color:#8a9bb0\">Tracking...</div>")
+    +(diff>0?"<div style=\"font-size:12px;color:#3dd68c;font-weight:700\">-"+diff+" lb lost</div>":diff<0?"<div style=\"font-size:12px;color:#f5a623;font-weight:700\">+"+Math.abs(diff)+" lb</div>":"<div style=\"font-size:12px;color:#8a9bb0\">Tracking...</div>")
     +"</div>"
     +svg
     +"</div>";
@@ -2027,7 +2027,7 @@ function bWeigh(){
   var bwAvg=bwVals.length?Math.round(bwVals.reduce(function(a,b){return a+b;},0)/bwVals.length*10)/10:null;
   var h=weightChart()+"<div class=\"card\"><div style=\"display:flex;justify-content:space-between;align-items:center;margin-bottom:10px\">"
     +"<div style=\"font-size:13px;font-weight:700\">Week "+W+" Daily Weigh-In</div>"
-    +(bwAvg?"<div style=\"text-align:right\"><div style=\"font-size:20px;font-weight:700;color:#1a6fa8\">"+bwAvg+"</div><div style=\"font-size:9px;color:#6b6b6b\">LB AVG</div></div>":"")
+    +(bwAvg?"<div style=\"text-align:right\"><div style=\"font-size:20px;font-weight:700;color:#4da6e8\">"+bwAvg+"</div><div style=\"font-size:9px;color:#6b6b6b\">LB AVG</div></div>":"")
     +"</div>"
     +"<div style=\"font-size:11px;color:#8a9bb0;margin-bottom:12px\">Morning, before eating.</div>"
     +"<div style=\"display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:6px\">";
@@ -2177,13 +2177,13 @@ function bProgress(){
     +"<div style=\"background:#1a6fa8;height:10px;border-radius:6px;width:"+pct+"%\"></div></div>"
     +"<div style=\"display:grid;grid-template-columns:repeat(3,1fr);gap:6px\">"
     +"<div style=\"text-align:center;background:#0d1e2e;border-radius:8px;padding:8px 4px\">"
-    +"<div style=\"font-size:18px;font-weight:700;color:#1a6fa8\">"+deloadsHit+"</div>"
+    +"<div style=\"font-size:18px;font-weight:700;color:#4da6e8\">"+deloadsHit+"</div>"
     +"<div style=\"font-size:10px;color:#8a9bb0\">Deloads done</div></div>"
     +"<div style=\"text-align:center;background:#0a1e14;border-radius:8px;padding:8px 4px\">"
-    +"<div style=\"font-size:18px;font-weight:700;color:#1a7a44\">Ph "+phase+"</div>"
+    +"<div style=\"font-size:18px;font-weight:700;color:#3dd68c\">Ph "+phase+"</div>"
     +"<div style=\"font-size:10px;color:#8a9bb0\">Current phase</div></div>"
     +"<div style=\"text-align:center;background:#1e1408;border-radius:8px;padding:8px 4px\">"
-    +"<div style=\"font-size:16px;font-weight:700;color:#c0580a\">"+endStr+"</div>"
+    +"<div style=\"font-size:16px;font-weight:700;color:#f5a623\">"+endStr+"</div>"
     +"<div style=\"font-size:10px;color:#8a9bb0\">Finish date</div></div>"
     +"</div></div>";
 
@@ -2212,7 +2212,7 @@ function bProgress(){
   h+="<div style=\"background:#22273a;border-radius:12px;border:1px solid #2e3347;padding:12px 13px;margin-bottom:10px\">"
     +"<div style=\"display:flex;justify-content:space-between;align-items:center;margin-bottom:10px\">"
     +"<div style=\"font-size:13px;font-weight:700\">This Week</div>"
-    +(bwAvg2?"<div style=\"font-size:13px;font-weight:700;color:#1a6fa8\">Avg: "+bwAvg2+" lb</div>":"")
+    +(bwAvg2?"<div style=\"font-size:13px;font-weight:700;color:#4da6e8\">Avg: "+bwAvg2+" lb</div>":"")
     +"</div>"
     +"<div style=\"display:grid;grid-template-columns:repeat(7,1fr);gap:3px\">";
   BWD.forEach(function(d){
@@ -2302,7 +2302,7 @@ function bProgress(){
     var mFields2=["weight","chest","waist","hips","neck","arm"];
     var mLabels2={"weight":"Weight (lb)","chest":"Chest (in)","waist":"Waist (in)","hips":"Hips (in)","neck":"Neck (in)","arm":"Arm (in)"};
     h+="<div style=\"background:#fdf0e6;border:1px solid #f5c89a;border-radius:12px;padding:12px 13px;margin-bottom:10px\">"
-      +"<div style=\"font-size:13px;font-weight:700;color:#c0580a;margin-bottom:4px\">&#128207; Log Measurements</div>"
+      +"<div style=\"font-size:13px;font-weight:700;color:#f5a623;margin-bottom:4px\">&#128207; Log Measurements</div>"
       +"<div style=\"font-size:11px;color:#8a9bb0;margin-bottom:10px\">Monday morning before training</div>"
       +"<div style=\"display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px\">";
     mFields2.forEach(function(f){
@@ -2314,7 +2314,7 @@ function bProgress(){
   // ── Hand size settings ────────────────────────────────────────────────
   h+="<div style=\"background:#22273a;border-radius:12px;border:1px solid #2e3347;padding:12px 13px;margin-bottom:10px\">"
     +"<div style=\"display:flex;justify-content:space-between;align-items:center;margin-bottom:8px\">"+"<div style=\"font-size:12px;font-weight:700\">&#9881;&#65039; Settings</div>"+"<button id=\"dark-toggle\" style=\"font-size:12px;padding:5px 12px;border-radius:8px;border:1.5px solid #d1d5db;background:#fff;color:#e8eaf0;cursor:pointer;font-family:inherit;font-weight:700\">"+(DARK_MODE?"&#9728;&#65039; Light":"&#127763; Dark")+"</button>"+"</div>"
-    +"<button id=\"api-toggle\" style=\"width:100%;text-align:left;background:none;border:none;padding:8px 0;cursor:pointer;font-family:inherit;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #d1d5db;margin-bottom:"+(API_SETTINGS_OPEN?"10px":"0")+"\">"+"<span style=\"font-size:12px;font-weight:700\">&#9881;&#65039; API Key: "+(getApiKey()?"<span style=\"color:#1a7a44\">saved &#10003;</span>":"<span style=\"color:#c0580a\">not set</span>")+"</span>"+"<span style=\"font-size:11px;color:#6b7280\">"+(API_SETTINGS_OPEN?"&#9650;":"&#9660;")+"</span>"+"</button>"+(API_SETTINGS_OPEN?"<div style=\"margin-bottom:8px\">"
+    +"<button id=\"api-toggle\" style=\"width:100%;text-align:left;background:none;border:none;padding:8px 0;cursor:pointer;font-family:inherit;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #d1d5db;margin-bottom:"+(API_SETTINGS_OPEN?"10px":"0")+"\">"+"<span style=\"font-size:12px;font-weight:700\">&#9881;&#65039; API Key: "+(getApiKey()?"<span style=\"color:#3dd68c\">saved &#10003;</span>":"<span style=\"color:#f5a623\">not set</span>")+"</span>"+"<span style=\"font-size:11px;color:#6b7280\">"+(API_SETTINGS_OPEN?"&#9650;":"&#9660;")+"</span>"+"</button>"+(API_SETTINGS_OPEN?"<div style=\"margin-bottom:8px\">"
 +"<div style=\"font-size:11px;color:#6b7280;margin-bottom:6px\">Free at console.anthropic.com</div>"
 +"<input type=\"password\" id=\"api-key-inp\" class=\"inp\" placeholder=\"sk-ant-...\" value=\""+getApiKey()+"\" style=\"font-family:monospace;font-size:12px;margin-bottom:6px\">"
 +"<button id=\"api-key-save\" style=\"width:100%;padding:9px;border-radius:8px;border:none;background:#1a6fa8;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit\">Save API Key</button>"
@@ -2373,7 +2373,7 @@ function bGoals(){
   rows.forEach(function(r){h+="<div class=\"nut-row\"><div><div style=\"font-size:13px;font-weight:600\">"+r[0]+"</div><div style=\"font-size:11px;color:#8a9bb0\">"+r[2]+"</div></div><div style=\"font-size:14px;font-weight:700;color:"+r[3]+"\">"+r[1]+"</div></div>";});
   h+="</div>";
   h+="<div class=\"card\" style=\"margin-bottom:10px\"><div style=\"font-size:13px;font-weight:700;margin-bottom:8px\">Weekly Schedule</div>"
-    +"<div style=\"font-size:13px;line-height:2\"><b>Mon/Wed/Fri:</b> Workout + walk<br><b>Tue/Thu/Sat:</b> Ruck, 20 lb vest, 30-40 min<br><b>Sun:</b> Rest<br><span style=\"color:#1a6fa8\"><b>Wks 4,8,12,16,20,24:</b> Deload - half sets, same weight</span></div></div>";
+    +"<div style=\"font-size:13px;line-height:2\"><b>Mon/Wed/Fri:</b> Workout + walk<br><b>Tue/Thu/Sat:</b> Ruck, 20 lb vest, 30-40 min<br><b>Sun:</b> Rest<br><span style=\"color:#4da6e8\"><b>Wks 4,8,12,16,20,24:</b> Deload - half sets, same weight</span></div></div>";
   var hz=getHandSizes();
   h+="<div class=\"card\" style=\"margin-bottom:10px\"><div style=\"font-size:13px;font-weight:700;margin-bottom:10px\">Hand Sizes (for food portions)</div>"
     +"<div style=\"display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px\">"
@@ -2394,10 +2394,10 @@ function bGoals(){
   }
   h+="<div style=\"background:#fff;border-radius:12px;padding:14px;margin-bottom:10px;border:1px solid #d1d5db\">"+"<div style=\"font-size:12px;font-weight:700;margin-bottom:10px\">Start &amp; Goal Weights</div>"+"<div style=\"display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px\">"+"<div><div class=\"lbl\">Start (lb)</div><input type=\"number\" inputmode=\"decimal\" id=\"sw-inp\" class=\"inp\" value=\""+sw+"\" style=\"font-size:18px;font-weight:700\"></div>"+"<div><div class=\"lbl\">Goal (lb)</div><input type=\"number\" inputmode=\"decimal\" id=\"gw-inp\" class=\"inp\" value=\""+gw+"\" style=\"font-size:18px;font-weight:700\"></div>"+"</div><button id=\"wt-save-btn\" style=\"width:100%;padding:11px;border-radius:9px;border:none;background:#1a6fa8;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit\">Update</button></div>";
   h+="<div style=\"background:#fdecea;border:1px solid #f5c6c2;border-radius:10px;padding:10px 13px;margin-bottom:10px\">"+"<div style=\"display:grid;grid-template-columns:repeat(3,1fr);gap:6px\">";
-  h+="<div style=\"text-align:center\"><div style=\"font-size:18px;font-weight:700;color:#c0392b\">"+sw+"</div><div style=\"font-size:9px;color:#6b6b6b\">LB START</div></div>";
-  h+="<div style=\"text-align:center\"><div style=\"font-size:18px;font-weight:700;color:#1a6fa8\">"+gw+"</div><div style=\"font-size:9px;color:#6b6b6b\">LB GOAL</div></div>";
+  h+="<div style=\"text-align:center\"><div style=\"font-size:18px;font-weight:700;color:#e05c52\">"+sw+"</div><div style=\"font-size:9px;color:#6b6b6b\">LB START</div></div>";
+  h+="<div style=\"text-align:center\"><div style=\"font-size:18px;font-weight:700;color:#4da6e8\">"+gw+"</div><div style=\"font-size:9px;color:#6b6b6b\">LB GOAL</div></div>";
   var lost=Math.round((sw-curW)*10)/10;
-  h+="<div style=\"text-align:center\"><div style=\"font-size:18px;font-weight:700;color:#1a7a44\">"+lost+"</div><div style=\"font-size:9px;color:#6b6b6b\">LB LOST</div></div>";
+  h+="<div style=\"text-align:center\"><div style=\"font-size:18px;font-weight:700;color:#3dd68c\">"+lost+"</div><div style=\"font-size:9px;color:#6b6b6b\">LB LOST</div></div>";
   h+="</div></div>";
   if(isMeasWeek){
     h+="<div class=\"card\" style=\"margin-bottom:10px\"><div style=\"font-size:12px;font-weight:700;margin-bottom:10px\">Log Measurements</div>"
@@ -2416,11 +2416,11 @@ function bGoals(){
   if(mdata.length){
     h+="<div class=\"card\"><div class=\"lbl\" style=\"margin-bottom:8px\">Progress</div>"
       +"<div style=\"display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px\">"
-      +"<div style=\"text-align:center;background:#0a1e14;border-radius:8px;padding:8px 3px\"><div style=\"font-size:18px;font-weight:700;color:#1a7a44\">"+(lost>=0?"-":"")+lost+"</div><div style=\"font-size:9px;color:#6b6b6b\">LB LOST</div></div>"
+      +"<div style=\"text-align:center;background:#0a1e14;border-radius:8px;padding:8px 3px\"><div style=\"font-size:18px;font-weight:700;color:#3dd68c\">"+(lost>=0?"-":"")+lost+"</div><div style=\"font-size:9px;color:#6b6b6b\">LB LOST</div></div>"
       +"<div style=\"text-align:center;background:#dde0e5;border-radius:8px;padding:8px 3px\"><div style=\"font-size:18px;font-weight:700\">"+curW+"</div><div style=\"font-size:9px;color:#6b6b6b\">CURRENT</div></div>"
-      +"<div style=\"text-align:center;background:#0d1e2e;border-radius:8px;padding:8px 3px\"><div style=\"font-size:18px;font-weight:700;color:#1a6fa8\">"+(gw0-curW>0?Math.round((gw0-curW)*10)/10:0)+"</div><div style=\"font-size:9px;color:#6b6b6b\">TO GO</div></div>"
+      +"<div style=\"text-align:center;background:#0d1e2e;border-radius:8px;padding:8px 3px\"><div style=\"font-size:18px;font-weight:700;color:#4da6e8\">"+(gw0-curW>0?Math.round((gw0-curW)*10)/10:0)+"</div><div style=\"font-size:9px;color:#6b6b6b\">TO GO</div></div>"
       +"</div>";
-    for(var mi=mdata.length-1;mi>=Math.max(0,mdata.length-5);mi--){var me=mdata[mi];h+="<div style=\"display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #e8eaed\"><div><div style=\"font-size:12px;font-weight:600\">"+me.date+"</div>"+(me.note?"<div style=\"font-size:10px;color:#8a9bb0\">"+me.note+"</div>":"")+"</div><div style=\"display:flex;align-items:center;gap:8px\"><div style=\"text-align:right;font-size:11px;color:#8a9bb0\">"+(me.weight?"<span style=\"font-size:13px;font-weight:700;color:#e8eaf0\">"+me.weight+"lb</span> ":"")+(me.chest?" Ch:"+me.chest+"\"":"")+(me.waist?" W:"+me.waist+"\"":"")+(me.rightArm?" Arm:"+me.rightArm+"\"":"")+"</div><button data-del-meas=\""+mi+"\" style=\"color:#c0392b;background:#fdecea;border:1px solid #f5c6c2;border-radius:6px;padding:4px 8px;font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0\">&#10005;</button></div></div>";}
+    for(var mi=mdata.length-1;mi>=Math.max(0,mdata.length-5);mi--){var me=mdata[mi];h+="<div style=\"display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #e8eaed\"><div><div style=\"font-size:12px;font-weight:600\">"+me.date+"</div>"+(me.note?"<div style=\"font-size:10px;color:#8a9bb0\">"+me.note+"</div>":"")+"</div><div style=\"display:flex;align-items:center;gap:8px\"><div style=\"text-align:right;font-size:11px;color:#8a9bb0\">"+(me.weight?"<span style=\"font-size:13px;font-weight:700;color:#e8eaf0\">"+me.weight+"lb</span> ":"")+(me.chest?" Ch:"+me.chest+"\"":"")+(me.waist?" W:"+me.waist+"\"":"")+(me.rightArm?" Arm:"+me.rightArm+"\"":"")+"</div><button data-del-meas=\""+mi+"\" style=\"color:#e05c52;background:#fdecea;border:1px solid #f5c6c2;border-radius:6px;padding:4px 8px;font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0\">&#10005;</button></div></div>";}
     h+="</div>";
   }
   h+="</div>";
