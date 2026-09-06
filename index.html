@@ -554,6 +554,8 @@ var WEEK_REVIEW_DONE=false;
 var DEBRIEF_STATE="idle";
 var RUCK_TRACKING=false;
 var NOTES_OPEN=false;
+var TOAST_MSG="";
+var TOAST_TIMER=null;
 var FOOD_SEARCH_TIMER=null;
 var FOOD_SEARCHING=false;
 var RUCK_WATCH_ID=null;
@@ -1138,6 +1140,17 @@ function setTab(t){
   });
   if(DIRTY[t]){DIRTY[t]=false;var fn={workout:bWorkoutPanel,food:bFood,progress:bProgress,ai:bAI}[t];if(fn)document.getElementById("panel-"+t).innerHTML=fn();}
 }
+function showToast(msg){
+  TOAST_MSG=msg;
+  if(TOAST_TIMER) clearTimeout(TOAST_TIMER);
+  var el=document.getElementById("toast");
+  if(el){el.textContent=msg;el.style.opacity="1";el.style.transform="translateY(0)";}
+  TOAST_TIMER=setTimeout(function(){
+    var el2=document.getElementById("toast");
+    if(el2){el2.style.opacity="0";el2.style.transform="translateY(12px)";}
+    TOAST_MSG="";
+  },2500);
+}
 function paint(){
   var hw=document.getElementById("hdr-week");
   if(hw)hw.textContent=W===0?"Test":"W"+W;
@@ -1447,6 +1460,17 @@ function setTab(t){
     document.getElementById("tab-"+x).className="tab"+(x===t?" act":"");
   });
   if(DIRTY[t]){DIRTY[t]=false;var fn={workout:bWorkoutPanel,food:bFood,progress:bProgress,ai:bAI}[t];if(fn)document.getElementById("panel-"+t).innerHTML=fn();}
+}
+function showToast(msg){
+  TOAST_MSG=msg;
+  if(TOAST_TIMER) clearTimeout(TOAST_TIMER);
+  var el=document.getElementById("toast");
+  if(el){el.textContent=msg;el.style.opacity="1";el.style.transform="translateY(0)";}
+  TOAST_TIMER=setTimeout(function(){
+    var el2=document.getElementById("toast");
+    if(el2){el2.style.opacity="0";el2.style.transform="translateY(12px)";}
+    TOAST_MSG="";
+  },2500);
 }
 function paint(){
   var hw=document.getElementById("hdr-week");
@@ -3200,6 +3224,7 @@ document.addEventListener("click",function(e){
     DAY=defaultDay();
     FDATE=getDateForDay(W,DAY);
     markAllDirty();renderDayTabs();paint();
+    showToast("✓ Week "+W+" restarted — go again");
     return;
   }
   if(t.id==="sched-done"){SCHED_EDIT=false;renderDayTabs();markDirty("workout");paint();return;}
@@ -3428,5 +3453,6 @@ renderDayTabs();
 document.getElementById("panel-workout").innerHTML=bWorkoutPanel();
 DIRTY.workout=false;
 </script>
+<div id="toast" style="position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(12px);background:#22273a;border:1px solid #2e3347;color:#e8eaf0;font-size:13px;font-weight:700;padding:10px 20px;border-radius:10px;opacity:0;transition:opacity .25s,transform .25s;z-index:9999;pointer-events:none;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.4)"></div>
 </body>
 </html>
