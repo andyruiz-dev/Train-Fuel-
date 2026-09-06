@@ -758,7 +758,7 @@ var MEAL_RESULT=""; // idle | loading | result | error
 var AI_RESULT="";
 var AI_EQUIPMENT=[];
 var AI_INTENSITY="moderate";
-var PENDING=null,PENDING_SRV=100,BUILDING=false,PLATE_CAT=null,PLATE_QTY=1,PLATE_NAME="";
+var PENDING=null,PENDING_SRV=100,BUILDING=false,PHOTO_SCANNING=false,PLATE_CAT=null,PLATE_QTY=1,PLATE_NAME="";
 var QA_NAME="",QA_CAL="",QA_PRO="",QA_CARB="",QA_FAT="";
 var SRESULTS=[];
 var DIRTY={workout:true,food:true,progress:true,ai:true};
@@ -961,7 +961,7 @@ var MEAL_RESULT=""; // idle | loading | result | error
 var AI_RESULT="";
 var AI_EQUIPMENT=[];
 var AI_INTENSITY="moderate";
-var PENDING=null,PENDING_SRV=100,BUILDING=false,PLATE_CAT=null,PLATE_QTY=1,PLATE_NAME="";
+var PENDING=null,PENDING_SRV=100,BUILDING=false,PHOTO_SCANNING=false,PLATE_CAT=null,PLATE_QTY=1,PLATE_NAME="";
 var QA_NAME="",QA_CAL="",QA_PRO="",QA_CARB="",QA_FAT="";
 var SRESULTS=[];
 var DIRTY={workout:true,food:true,progress:true,ai:true};
@@ -1098,6 +1098,67 @@ function searchUSDA(q,el){
     });
 }
 function searchFoods(q){return[];}
+
+// ── PHOTO FOOD SCANNER ────────────────────────────────────────────────────
+function triggerFoodCamera(){
+  var inp=document.getElementById("food-camera-inp");
+  if(inp) inp.click();
+}
+function onFoodPhoto(inp){
+  var file=inp.files&&inp.files[0];
+  if(!file) return;
+  var key=getApiKey();
+  if(!key){showToast("Add your API key in Progress → Advanced");return;}
+  PHOTO_SCANNING=true;PENDING=null;
+  markDirty("food");paint();
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var b64=e.target.result.split(",")[1];
+    var mt=file.type||"image/jpeg";
+    fetch(getApiBase(),{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        model:"claude-sonnet-4-6",
+        max_tokens:400,
+        messages:[{
+          role:"user",
+          content:[
+            {type:"image",source:{type:"base64",media_type:mt,data:b64}},
+            {type:"text",text:"Analyze the food in this image. Return ONLY a JSON object, no markdown, no explanation:\n{\"name\":\"food name (be specific)\",\"cal100\":calories_per_100g,\"pro100\":protein_g_per_100g,\"carb100\":carbs_g_per_100g,\"fat100\":fat_g_per_100g,\"defServing\":typical_serving_size_in_grams}\nIf multiple foods are visible, focus on the main item. Use accurate USDA-level nutrition data."}
+          ]
+        }]
+      })
+    })
+    .then(function(r){return r.json();})
+    .then(function(data){
+      PHOTO_SCANNING=false;
+      var raw=(data.content&&data.content[0]&&data.content[0].text)||"";
+      try{
+        var clean=raw.replace(/```json|```/g,"").trim();
+        var food=JSON.parse(clean);
+        if(!food.name||!food.cal100) throw new Error("bad");
+        PENDING=food;
+        PENDING_SRV=food.defServing||100;
+        showToast("✓ Food identified — adjust serving and log");
+      }catch(e){
+        showToast("Could not read food — try a clearer photo");
+      }
+      inp.value="";
+      markDirty("food");paint();
+    })
+    .catch(function(){
+      PHOTO_SCANNING=false;
+      showToast("Scan failed — check connection");
+      inp.value="";
+      markDirty("food");paint();
+    });
+  };
+  reader.readAsDataURL(file);
+}
+function getApiBase(){
+  return"https://restless-lake-653e.andy-p-ruiz.workers.dev/";
+}
 
 function submitQuickAdd(){
   var cal=Math.round(parseFloat(QA_CAL)||0);
@@ -1322,7 +1383,7 @@ var MEAL_RESULT=""; // idle | loading | result | error
 var AI_RESULT="";
 var AI_EQUIPMENT=[];
 var AI_INTENSITY="moderate";
-var PENDING=null,PENDING_SRV=100,BUILDING=false,PLATE_CAT=null,PLATE_QTY=1,PLATE_NAME="";
+var PENDING=null,PENDING_SRV=100,BUILDING=false,PHOTO_SCANNING=false,PLATE_CAT=null,PLATE_QTY=1,PLATE_NAME="";
 var QA_NAME="",QA_CAL="",QA_PRO="",QA_CARB="",QA_FAT="";
 var SRESULTS=[];
 var DIRTY={workout:true,food:true,progress:true,ai:true};
@@ -1422,6 +1483,67 @@ function updateSearchResults(q){
   if(!SRESULTS.length){el.innerHTML="<div style=\"font-size:12px;color:#8a9bb0;padding:8px 0\">No results</div>";return;}
   el.innerHTML=SRESULTS.map(function(r,i){return"<div class=\"sri\" data-result=\""+i+"\"><div class=\"sri-n\">"+r.name+"</div><div class=\"sri-c\">"+r.cal100+" cal per 100g</div></div>";}).join("");
 }
+// ── PHOTO FOOD SCANNER ────────────────────────────────────────────────────
+function triggerFoodCamera(){
+  var inp=document.getElementById("food-camera-inp");
+  if(inp) inp.click();
+}
+function onFoodPhoto(inp){
+  var file=inp.files&&inp.files[0];
+  if(!file) return;
+  var key=getApiKey();
+  if(!key){showToast("Add your API key in Progress → Advanced");return;}
+  PHOTO_SCANNING=true;PENDING=null;
+  markDirty("food");paint();
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var b64=e.target.result.split(",")[1];
+    var mt=file.type||"image/jpeg";
+    fetch(getApiBase(),{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        model:"claude-sonnet-4-6",
+        max_tokens:400,
+        messages:[{
+          role:"user",
+          content:[
+            {type:"image",source:{type:"base64",media_type:mt,data:b64}},
+            {type:"text",text:"Analyze the food in this image. Return ONLY a JSON object, no markdown, no explanation:\n{\"name\":\"food name (be specific)\",\"cal100\":calories_per_100g,\"pro100\":protein_g_per_100g,\"carb100\":carbs_g_per_100g,\"fat100\":fat_g_per_100g,\"defServing\":typical_serving_size_in_grams}\nIf multiple foods are visible, focus on the main item. Use accurate USDA-level nutrition data."}
+          ]
+        }]
+      })
+    })
+    .then(function(r){return r.json();})
+    .then(function(data){
+      PHOTO_SCANNING=false;
+      var raw=(data.content&&data.content[0]&&data.content[0].text)||"";
+      try{
+        var clean=raw.replace(/```json|```/g,"").trim();
+        var food=JSON.parse(clean);
+        if(!food.name||!food.cal100) throw new Error("bad");
+        PENDING=food;
+        PENDING_SRV=food.defServing||100;
+        showToast("✓ Food identified — adjust serving and log");
+      }catch(e){
+        showToast("Could not read food — try a clearer photo");
+      }
+      inp.value="";
+      markDirty("food");paint();
+    })
+    .catch(function(){
+      PHOTO_SCANNING=false;
+      showToast("Scan failed — check connection");
+      inp.value="";
+      markDirty("food");paint();
+    });
+  };
+  reader.readAsDataURL(file);
+}
+function getApiBase(){
+  return"https://restless-lake-653e.andy-p-ruiz.workers.dev/";
+}
+
 function submitQuickAdd(){
   var cal=Math.round(parseFloat(QA_CAL)||0);
   if(!cal){alert("Enter at least calories");return;}
@@ -2069,6 +2191,15 @@ function bFood(){
       +"<div><div class=\"lbl\">Carbs (g)</div><input type=\"number\" inputmode=\"decimal\" id=\"qa-carb\" class=\"inp\" placeholder=\"0\" value=\""+QA_CARB+"\" style=\"font-size:20px;font-weight:700\"></div>"
       +"<div><div class=\"lbl\">Fat (g)</div><input type=\"number\" inputmode=\"decimal\" id=\"qa-fat\" class=\"inp\" placeholder=\"0\" value=\""+QA_FAT+"\" style=\"font-size:20px;font-weight:700\"></div>"
       +"</div><button id=\"qa-submit\" style=\"width:100%;padding:13px;border-radius:10px;border:none;background:#1a7a44;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit\">Add to Log</button></div>"
+      // Photo scanner
+      +(PHOTO_SCANNING
+        ?"<div style=\"background:#22273a;border-radius:12px;border:1px solid #2e3347;padding:16px;margin-bottom:10px;text-align:center\">"
+          +"<div style=\"font-size:22px;margin-bottom:6px\">📷</div>"
+          +"<div style=\"font-size:13px;font-weight:700;color:#e8eaf0;margin-bottom:4px\">Analyzing photo...</div>"
+          +"<div style=\"font-size:11px;color:#4da6e8\">Claude is identifying your food</div>"
+          +"</div>"
+        :"<button onclick=\"triggerFoodCamera()\" style=\"width:100%;padding:13px;border-radius:10px;border:none;background:#3dd68c;color:#0a1e14;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:10px\">📷 Scan Food</button>"
+          +"<input type=\"file\" id=\"food-camera-inp\" accept=\"image/*\" capture=\"environment\" style=\"display:none\" onchange=\"onFoodPhoto(this)\">")
       +"<button id=\"build-plate-btn\" style=\"width:100%;padding:11px;border-radius:9px;background:#1e2435;border:1px solid #2e3347;color:#8a9bb0;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:9px\">&#129385; Hand Log - Plate Portions</button>"
       +"<button id=\"manual-entry-btn\" style=\"width:100%;padding:11px;border-radius:9px;background:#1e2435;border:1px solid #2e3347;color:#8a9bb0;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:9px\">&#9999; Manual Entry</button>"
       +"<button id=\"meal-suggest-btn\" style=\"width:100%;padding:13px;border-radius:10px;border:none;background:#4da6e8;color:#0d1e2e;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;border:none;margin-bottom:9px\">&#10024; Suggest a Meal</button>";
