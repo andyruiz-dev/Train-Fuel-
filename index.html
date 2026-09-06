@@ -637,7 +637,7 @@ function bModeBar(){
     {id:"full",   label:"Full", col:"#1a7a44",bg:"#e6f7ed",bdr:"#9fe0c0"}
   ];
   var h="<div style=\"background:#22273a;border-radius:12px;border:1px solid #2e3347;padding:10px 12px;\">"
-    +"<div style=\"font-size:10px;color:#6b7280;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px\">Mode</div>"
+    +"<div style=\"font-size:12px;color:#8a9bb0;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px\">Mode</div>"
     +"<div style=\"display:flex;gap:5px\">";
   modes.forEach(function(m){
     var isAct=WORKOUT_MODE===m.id;
@@ -649,7 +649,7 @@ function bModeBar(){
 function bTimeSelector(){
   var opts=[{v:0,l:"∞"},{v:20,l:"20"},{v:30,l:"30"},{v:45,l:"45"}];
   var h="<div style=\"background:#22273a;border-radius:12px;border:1px solid #2e3347;padding:10px 12px;\">"
-    +"<div style=\"font-size:10px;color:#6b7280;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px\">Time limit</div>"
+    +"<div style=\"font-size:12px;color:#8a9bb0;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px\">Time limit</div>"
     +"<div style=\"display:flex;gap:5px\">";
   opts.forEach(function(o){
     var sel=TIME_LIMIT===o.v;
@@ -1306,12 +1306,12 @@ function ssCard(label,restSec,col,bg,left,right){
     +"<span style=\"font-size:11px;font-weight:700;color:"+col+";text-transform:uppercase;letter-spacing:.6px\">"+label+"</span>"
     +"<span style=\"font-size:10px;color:"+col+";opacity:.7\">"+restSec+"s rest</span>"
     +"</div>"
-    +"<div style=\"font-size:10px;color:#8a9bb0;margin-bottom:6px;line-height:1.3\">"+left.note+"</div>"
+    +"<div style=\"font-size:11px;color:#8a9bb0;margin-bottom:6px;line-height:1.3\">"+left.note+"</div>"
     +"<div style=\"display:inline-block;background:"+left.col+";color:#fff;border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700;margin-bottom:8px\">"+left.badge+"</div>"
     +left.body+"</div>"
     +"<div style=\"padding:10px 12px 10px 8px\">"
     +"<div style=\"font-size:12px;font-weight:700;color:"+right.col+";margin-bottom:2px\">"+right.title+"</div>"
-    +"<div style=\"font-size:10px;color:#8a9bb0;margin-bottom:6px;line-height:1.3\">"+right.note+"</div>"
+    +"<div style=\"font-size:11px;color:#8a9bb0;margin-bottom:6px;line-height:1.3\">"+right.note+"</div>"
     +"<div style=\"display:inline-block;background:"+right.col+";color:#fff;border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700;margin-bottom:8px\">"+right.badge+"</div>"
     +right.body+"</div></div>"
     +"<div style=\"border-top:1px solid #d1d5db;padding:8px 12px;background:"+bg+";display:flex;justify-content:space-between;align-items:center\">"
@@ -1375,7 +1375,7 @@ function bWorkout(){
   // SCALED MODE upgrade prompt
   if(WORKOUT_MODE==="scaled"){
     h+="<div style=\"background:#1e1408;border-radius:12px;border:1.5px solid #f5c89a;padding:12px 14px;margin-bottom:10px;text-align:center\">"
-      +"<div style=\"font-size:13px;font-weight:800;color:#f5a623;margin-bottom:4px\">Scaled session complete! &#127881;</div>"
+      +"<div style=\"font-size:13px;font-weight:800;color:#3dd68c;margin-bottom:4px\">Scaled session complete! &#127881;</div>"
       +"<div style=\"font-size:11px;color:#6b7280;margin-bottom:10px\">Feeling strong? Go for the full sets.</div>"
       +"<button id=\"mode-go-full\" style=\"padding:9px 20px;border-radius:9px;border:none;background:#1a7a44;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit\">&#128170; Go Full</button>"
       +"</div>";
@@ -1417,7 +1417,7 @@ function bWorkout(){
   var pushB="",pullB="";
   if(p.ph===1){
     pushB=lastExLabel("push")+progBadge("push",p.pr,p.ps)+"<div style=\"font-size:11px;color:#6b6b6b;margin-bottom:6px\">One handle per round</div>";
-    pullB=lastExLabel("pull")+progBadge("pull",p.rr,p.rs)+"<div style=\"font-size:10px;color:#8a9bb0;margin-bottom:4px\">Wt: <input type=\"number\" inputmode=\"decimal\" class=\"inp\" data-key=\"pull.wt\" style=\"width:55px;display:inline-block;padding:4px 6px;font-size:12px\" placeholder=\"35\" value=\""+(sg("pull.wt")||"")+"\"> lb</div>";
+    pullB=lastExLabel("pull")+progBadge("pull",p.rr,p.rs)+"<div style=\"font-size:11px;color:#8a9bb0;margin-bottom:4px\">Wt: <input type=\"number\" inputmode=\"decimal\" class=\"inp\" data-key=\"pull.wt\" style=\"width:55px;display:inline-block;padding:4px 6px;font-size:12px\" placeholder=\"35\" value=\""+(sg("pull.wt")||"")+"\"> lb</div>";
     for(var si=0;si<p.ps;si++){
       var hh=HANDLES[si%HANDLES.length];
       pushB+="<div style=\"margin-bottom:8px\"><div style=\"display:flex;align-items:center;gap:4px;margin-bottom:3px\">"
@@ -1433,8 +1433,8 @@ function bWorkout(){
         +"</div></div>";
     }
   } else {
-    for(var si=0;si<p.ps;si++)pushB+="<div style=\"margin-bottom:5px\"><div style=\"font-size:10px;color:#8a9bb0\">S"+(si+1)+"</div>"+SI("push.s"+(si+1),0,"")+CHK("push.s"+(si+1))+TI("push.x"+(si+1),p.ph===2?"Height":"Type")+"</div>";
-    for(var si=0;si<p.rs;si++)pullB+="<div style=\"margin-bottom:5px\"><div style=\"font-size:10px;color:#8a9bb0\">S"+(si+1)+"</div>"+SI("pull.s"+(si+1),0,"")+CHK("pull.s"+(si+1))+TI("pull.x"+(si+1),"Type")+"</div>";
+    for(var si=0;si<p.ps;si++)pushB+="<div style=\"margin-bottom:5px\"><div style=\"font-size:12px;color:#8a9bb0\">S"+(si+1)+"</div>"+SI("push.s"+(si+1),0,"")+CHK("push.s"+(si+1))+TI("push.x"+(si+1),p.ph===2?"Height":"Type")+"</div>";
+    for(var si=0;si<p.rs;si++)pullB+="<div style=\"margin-bottom:5px\"><div style=\"font-size:12px;color:#8a9bb0\">S"+(si+1)+"</div>"+SI("pull.s"+(si+1),0,"")+CHK("pull.s"+(si+1))+TI("pull.x"+(si+1),"Type")+"</div>";
   }
   h+=ssCard("SUPERSET A - PUSH + PULL",90,"#1a6fa8","#e8f3fb",
     {col:"#c0392b",  title:PNAME[p.ph],note:PNOTE[p.ph],badge:p.ps+"x"+p.pr,body:pushB},
@@ -1464,9 +1464,9 @@ function bWorkout(){
 
   // SUPERSET B
   var decB="",curlB="";
-  for(var si=0;si<p.ds;si++)decB+="<div style=\"display:flex;align-items:center;gap:4px;margin-bottom:5px\"><span style=\"font-size:10px;color:#8a9bb0;width:22px\">S"+(si+1)+"</span>"+SI("dec.s"+(si+1),0,"")+CHK("dec.s"+(si+1))+"</div>";
-  curlB=lastExLabel("curl")+progBadge("curl",p.cr,p.cs)+"<div style=\"font-size:10px;color:#8a9bb0;margin-bottom:4px\">Wt: <input type=\"number\" inputmode=\"decimal\" class=\"inp\" data-key=\"curl.wt\" style=\"width:55px;display:inline-block;padding:4px 6px;font-size:12px\" placeholder=\"20\" value=\""+(sg("curl.wt")||"")+"\"> lb</div>";
-  for(var si=0;si<p.cs;si++)curlB+="<div style=\"display:flex;align-items:center;gap:4px;margin-bottom:5px\"><span style=\"font-size:10px;color:#8a9bb0;width:22px\">S"+(si+1)+"</span>"+SI("curl.s"+(si+1),0,"")+CHK("curl.s"+(si+1))+"</div>";
+  for(var si=0;si<p.ds;si++)decB+="<div style=\"display:flex;align-items:center;gap:4px;margin-bottom:5px\"><span style=\"font-size:11px;color:#8a9bb0;width:22px\">S"+(si+1)+"</span>"+SI("dec.s"+(si+1),0,"")+CHK("dec.s"+(si+1))+"</div>";
+  curlB=lastExLabel("curl")+progBadge("curl",p.cr,p.cs)+"<div style=\"font-size:11px;color:#8a9bb0;margin-bottom:4px\">Wt: <input type=\"number\" inputmode=\"decimal\" class=\"inp\" data-key=\"curl.wt\" style=\"width:55px;display:inline-block;padding:4px 6px;font-size:12px\" placeholder=\"20\" value=\""+(sg("curl.wt")||"")+"\"> lb</div>";
+  for(var si=0;si<p.cs;si++)curlB+="<div style=\"display:flex;align-items:center;gap:4px;margin-bottom:5px\"><span style=\"font-size:11px;color:#8a9bb0;width:22px\">S"+(si+1)+"</span>"+SI("curl.s"+(si+1),0,"")+CHK("curl.s"+(si+1))+"</div>";
   h+=ssCard("SUPERSET B - DECLINE + CURLS",60,"#c0580a","#fdf0e6",
     {col:"#c0580a",title:"Decline Push-Ups",note:"Feet elevated. Start: 1 stair step. Progress each block. Brace core.",badge:p.ds+"x"+p.dr,body:decB},
     {col:"#c0580a",title:"DB Curls",note:"Supinate at top, squeeze the peak",badge:p.cs+"x"+p.cr,body:curlB});
@@ -1475,8 +1475,8 @@ function bWorkout(){
 
   // SUPERSET C
   var fpB="",hbB="";
-  for(var si=0;si<p.fs;si++)fpB+="<div style=\"display:flex;align-items:center;gap:4px;margin-bottom:5px\"><span style=\"font-size:10px;color:#8a9bb0;width:22px\">S"+(si+1)+"</span>"+SI("fp.s"+(si+1),0,"")+CHK("fp.s"+(si+1))+"</div>";
-  for(var si=0;si<p.hs;si++)hbB+="<div style=\"display:flex;align-items:center;gap:4px;margin-bottom:5px\"><span style=\"font-size:10px;color:#8a9bb0;width:22px\">S"+(si+1)+"</span>"+SI("hb.s"+(si+1),0,"")+CHK("hb.s"+(si+1))+"</div>";
+  for(var si=0;si<p.fs;si++)fpB+="<div style=\"display:flex;align-items:center;gap:4px;margin-bottom:5px\"><span style=\"font-size:11px;color:#8a9bb0;width:22px\">S"+(si+1)+"</span>"+SI("fp.s"+(si+1),0,"")+CHK("fp.s"+(si+1))+"</div>";
+  for(var si=0;si<p.hs;si++)hbB+="<div style=\"display:flex;align-items:center;gap:4px;margin-bottom:5px\"><span style=\"font-size:11px;color:#8a9bb0;width:22px\">S"+(si+1)+"</span>"+SI("hb.s"+(si+1),0,"")+CHK("hb.s"+(si+1))+"</div>";
   h+=ssCard("SUPERSET C - FACE PULLS + CORE",45,"#1a7a44","#e6f7ed",
     {col:"#1a7a44",title:"Ring Face Pulls",note:"Rear delts - pull to ears, elbows high",badge:p.fs+"x"+p.fr,body:fpB},
     {col:"#1a7a44",title:"Hollow Body Hold",note:"Arms overhead, lower back flat, legs low",badge:p.hs+"x"+p.ht+"s",body:hbB});
@@ -1485,9 +1485,9 @@ function bWorkout(){
 
   // SUPERSET D: Bulgarian Split Squats + KB Swings
   var ssB="",kbB="";
-  for(var si=0;si<p.ss;si++) ssB+="<div style=\"display:flex;align-items:center;gap:4px;margin-bottom:5px\"><span style=\"font-size:10px;color:#8a9bb0;width:22px\">S"+(si+1)+"</span>"+SI("ss.s"+(si+1),0,"")+CHK("ss.s"+(si+1))+"</div>";
-  kbB=lastExLabel("kb")+progBadge("kb",p.kr,p.ks)+"<div style=\"font-size:10px;color:#8a9bb0;margin-bottom:4px\">Wt: <input type=\"number\" inputmode=\"decimal\" class=\"inp\" data-key=\"kb.wt\" style=\"width:55px;display:inline-block;padding:4px 6px;font-size:12px\" placeholder=\"35\" value=\""+(sg("kb.wt")||"")+"\"> lb</div>";
-  for(var si=0;si<p.ks;si++) kbB+="<div style=\"display:flex;align-items:center;gap:4px;margin-bottom:5px\"><span style=\"font-size:10px;color:#8a9bb0;width:22px\">S"+(si+1)+"</span>"+SI("kb.s"+(si+1),(si===p.ks-1?60:0),(si===p.ks-1?"Superset D rest":""))+CHK("kb.s"+(si+1))+"</div>";
+  for(var si=0;si<p.ss;si++) ssB+="<div style=\"display:flex;align-items:center;gap:4px;margin-bottom:5px\"><span style=\"font-size:11px;color:#8a9bb0;width:22px\">S"+(si+1)+"</span>"+SI("ss.s"+(si+1),0,"")+CHK("ss.s"+(si+1))+"</div>";
+  kbB=lastExLabel("kb")+progBadge("kb",p.kr,p.ks)+"<div style=\"font-size:11px;color:#8a9bb0;margin-bottom:4px\">Wt: <input type=\"number\" inputmode=\"decimal\" class=\"inp\" data-key=\"kb.wt\" style=\"width:55px;display:inline-block;padding:4px 6px;font-size:12px\" placeholder=\"35\" value=\""+(sg("kb.wt")||"")+"\"> lb</div>";
+  for(var si=0;si<p.ks;si++) kbB+="<div style=\"display:flex;align-items:center;gap:4px;margin-bottom:5px\"><span style=\"font-size:11px;color:#8a9bb0;width:22px\">S"+(si+1)+"</span>"+SI("kb.s"+(si+1),(si===p.ks-1?60:0),(si===p.ks-1?"Superset D rest":""))+CHK("kb.s"+(si+1))+"</div>";
   h+=ssCard("SUPERSET D - LEGS + HINGE",60,"#0f766e","#e6f5f4",
     {col:"#6b21a8",title:"Bulgarian Split Squats",note:"Rear foot elevated on couch/stair. Bodyweight to start. Each leg.",badge:p.ss+"x"+p.sr+" each",body:ssB},
     {col:"#6b21a8",title:"KB Swings",note:"Hip hinge — power from glutes, not arms. Keep back flat.",badge:p.ks+"x"+p.kr,body:kbB});
@@ -1571,10 +1571,10 @@ function bWeeklySummary(){
     +"<span style=\"font-size:16px\">&#128203;</span>"
     +"<span style=\"font-size:13px;font-weight:700;color:#fff\">Week "+W+" Summary</span></div>"
     +"<div style=\"display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#2e3347\">"
-    +"<div style=\"background:#22273a;padding:14px;text-align:center\"><div style=\"font-size:24px;font-weight:700;color:"+(wOk?"#1a7a44":"#c0580a")+"\">"+workoutsDone+"/"+workoutDays.length+"</div><div style=\"font-size:11px;color:#8a9bb0\">WORKOUTS</div></div>"
-    +"<div style=\"background:#22273a;padding:14px;text-align:center\"><div style=\"font-size:24px;font-weight:700;color:"+(rOk?"#1a7a44":"#c0580a")+"\">"+rucksDone+"/"+ruckDays.length+"</div><div style=\"font-size:11px;color:#8a9bb0\">RUCKS</div></div>"
-    +(bwAvg?"<div style=\"background:#22273a;padding:14px;text-align:center;border-top:1px solid #2e3347\"><div style=\"font-size:24px;font-weight:700;color:#e8eaf0\">"+bwAvg+"</div><div style=\"font-size:11px;color:#8a9bb0\">AVG WEIGHT (lb)</div></div>":"")
-    +(calAvg?"<div style=\"background:#22273a;padding:14px;text-align:center;border-top:1px solid #2e3347\"><div style=\"font-size:24px;font-weight:700;color:"+(Math.abs(calAvg-getCalTarget())<150?"#1a7a44":"#c0580a")+"\">"+calAvg+"</div><div style=\"font-size:11px;color:#8a9bb0\">AVG CALORIES</div></div>":"")
+    +"<div style=\"background:#22273a;padding:14px;text-align:center\"><div style=\"font-size:24px;font-weight:700;color:"+(wOk?"#1a7a44":"#c0580a")+"\">"+workoutsDone+"/"+workoutDays.length+"</div><div style=\"font-size:12px;color:#8a9bb0\">WORKOUTS</div></div>"
+    +"<div style=\"background:#22273a;padding:14px;text-align:center\"><div style=\"font-size:24px;font-weight:700;color:"+(rOk?"#1a7a44":"#c0580a")+"\">"+rucksDone+"/"+ruckDays.length+"</div><div style=\"font-size:12px;color:#8a9bb0\">RUCKS</div></div>"
+    +(bwAvg?"<div style=\"background:#22273a;padding:14px;text-align:center;border-top:1px solid #2e3347\"><div style=\"font-size:24px;font-weight:700;color:#e8eaf0\">"+bwAvg+"</div><div style=\"font-size:12px;color:#8a9bb0\">AVG WEIGHT (lb)</div></div>":"")
+    +(calAvg?"<div style=\"background:#22273a;padding:14px;text-align:center;border-top:1px solid #2e3347\"><div style=\"font-size:24px;font-weight:700;color:"+(Math.abs(calAvg-getCalTarget())<150?"#1a7a44":"#c0580a")+"\">"+calAvg+"</div><div style=\"font-size:12px;color:#8a9bb0\">AVG CALORIES</div></div>":"")
     +"<div style=\"padding:10px 13px;text-align:center;border-top:1px solid #d1d5db;font-size:13px;font-weight:700;color:"+gradCol+"\">"+grade+"</div>"
     +"</div>";
 }
@@ -1601,7 +1601,7 @@ function bRest(){
     if(eligible){
       h+="<div style=\"font-size:12px;color:#3dd68c;font-weight:700;margin-bottom:8px\">&#10003; Week complete! You will advance to Week "+(W+1)+" on Monday.</div>";
     } else {
-      h+="<div style=\"font-size:12px;color:#f5a623;font-weight:700;margin-bottom:8px\">Need 4+ pts to advance.</div>"
+      h+="<div style=\"font-size:12px;color:#8a9bb0;font-weight:600;margin-bottom:8px\">Need 4+ pts to advance.</div>"
         +"<div style=\"display:flex;gap:8px;margin-bottom:8px\">"
         +"<button id=\"week-stay\" style=\"flex:1;padding:10px;border-radius:9px;border:none;background:#c0580a;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit\">Repeat Week "+W+"</button>"
         +"<button id=\"week-advance-yes\" style=\"flex:1;padding:10px;border-radius:9px;border:1px solid #2e3347;background:#22273a;color:#6b7280;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit\">Advance Anyway</button>"
@@ -1728,7 +1728,7 @@ function bFood(){
   h+="</div>";
 
   if(BUILDING){
-    var cBtns=["palm","cupped","fist","thumb"].map(function(cat){var p=PN[cat],sel=PLATE_CAT===cat;return"<button data-plate-cat=\""+cat+"\" style=\"flex:1;padding:10px 4px;border-radius:10px;border:2px solid "+(sel?p.col:"#d1d5db")+";background:"+(sel?p.col+"22":"#e8eaed")+";display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;font-family:inherit\"><span style=\"font-size:22px;pointer-events:none\">"+p.emoji+"</span><span style=\"font-size:11px;font-weight:700;color:"+(sel?p.col:"#1c1c1e")+";pointer-events:none\">"+p.name+"</span><span style=\"font-size:10px;color:#8a9bb0;pointer-events:none\">"+p.hand+"</span></button>";}).join("");
+    var cBtns=["palm","cupped","fist","thumb"].map(function(cat){var p=PN[cat],sel=PLATE_CAT===cat;return"<button data-plate-cat=\""+cat+"\" style=\"flex:1;padding:10px 4px;border-radius:10px;border:2px solid "+(sel?p.col:"#d1d5db")+";background:"+(sel?p.col+"22":"#e8eaed")+";display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;font-family:inherit\"><span style=\"font-size:22px;pointer-events:none\">"+p.emoji+"</span><span style=\"font-size:11px;font-weight:700;color:"+(sel?p.col:"#1c1c1e")+";pointer-events:none\">"+p.name+"</span><span style=\"font-size:11px;color:#8a9bb0;pointer-events:none\">"+p.hand+"</span></button>";}).join("");
     var det="";
     if(PLATE_CAT){
       var pp=PN[PLATE_CAT];
@@ -1736,7 +1736,7 @@ function bFood(){
         +"<div class=\"lbl\" style=\"margin-bottom:4px\">Name (optional)</div><input type=\"text\" class=\"inp\" id=\"plate-name\" placeholder=\"e.g. Chicken\" value=\""+PLATE_NAME+"\" style=\"margin-bottom:8px\">"
         +"<div style=\"display:flex;align-items:center;gap:10px;margin-bottom:8px\">"
         +"<button id=\"plate-minus\" style=\"width:44px;height:44px;border-radius:9px;background:#e8eaed;border:1.5px solid #d1d5db;font-size:24px;font-weight:700;cursor:pointer;font-family:inherit\">&#8722;</button>"
-        +"<div style=\"text-align:center;flex:1\"><div id=\"plate-qty\" style=\"font-size:28px;font-weight:700\">"+PLATE_QTY+"</div><div style=\"font-size:11px;color:#8a9bb0\">"+pp.hand+(PLATE_QTY!==1?"s":"")+"</div></div>"
+        +"<div style=\"text-align:center;flex:1\"><div id=\"plate-qty\" style=\"font-size:28px;font-weight:700\">"+PLATE_QTY+"</div><div style=\"font-size:12px;color:#8a9bb0\">"+pp.hand+(PLATE_QTY!==1?"s":"")+"</div></div>"
         +"<button id=\"plate-plus\" style=\"width:44px;height:44px;border-radius:9px;background:#e8eaed;border:1.5px solid #d1d5db;font-size:24px;font-weight:700;cursor:pointer;font-family:inherit\">+</button></div>"
         +"<div style=\"display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px\">"
         +"<div style=\"text-align:center;background:"+pp.col+"22;border-radius:8px;padding:9px 3px\"><div id=\"plate-mac-cal\" style=\"font-size:18px;font-weight:700;color:"+pp.col+"\">"+Math.round(pp.cal*PLATE_QTY)+"</div><div style=\"font-size:11px;color:#6b6b6b\">cal</div></div>"
@@ -1752,6 +1752,9 @@ function bFood(){
   }
 
   if(!BUILDING){
+      h+="<div style=\"margin-bottom:8px\"><div class=\"lbl\">Search food database</div>"
+      +"<input type=\"text\" id=\"food-search\" class=\"inp\" placeholder=\"Search any food...\" autocomplete=\"off\" autocorrect=\"off\" oninput=\"updateSearchResults(this.value)\">"
+      +"<div id=\"search-results\" style=\"margin-top:6px\"></div></div>";
     h+="<div class=\"card\"><div style=\"font-size:12px;font-weight:700;margin-bottom:10px\">Quick Log</div>"
       +"<input type=\"text\" id=\"qa-name\" class=\"inp\" placeholder=\"Name (optional)\" value=\""+QA_NAME+"\" autocomplete=\"off\" autocorrect=\"off\" autocapitalize=\"off\" style=\"margin-bottom:8px\">"
       +"<div style=\"display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px\">"
@@ -1778,9 +1781,6 @@ function bFood(){
     if(MEAL_STATE==="error"){
       h+="<div class=\"card\" style=\"text-align:center;padding:14px;margin-bottom:9px\"><div style=\"font-size:12px;color:#e05c52;margin-bottom:8px\">Could not generate suggestions right now.</div><button id=\"meal-clear-btn\" style=\"padding:8px 16px;border-radius:8px;border:none;background:#1a6fa8;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit\">Try Again</button></div>";
     }
-      h+="<div style=\"margin-bottom:8px\"><div class=\"lbl\">Search food database</div>"
-      +"<input type=\"text\" id=\"food-search\" class=\"inp\" placeholder=\"Search any food...\" autocomplete=\"off\" autocorrect=\"off\" oninput=\"updateSearchResults(this.value)\">"
-      +"<div id=\"search-results\" style=\"margin-top:6px\"></div></div>";
     var lH="";
     if(log.length){log.forEach(function(it,li){lH+="<div class=\"fli\"><div class=\"fli-m\"><div class=\"fli-n\">"+it.name+"</div><div class=\"fli-s\">P:"+it.pro+"g C:"+it.carb+"g F:"+it.fat+"g</div></div><div class=\"fli-c\">"+it.cal+" cal</div><button class=\"fli-x\" data-del=\""+li+"\">&#10005;</button></div>";});}
     else lH="<div style=\"text-align:center;color:#6b6b6b;font-size:13px;padding:16px\">No food logged yet</div>";
@@ -1826,7 +1826,7 @@ function bAIWorkout(){
       h+=CHK(setKey);
       h+="<span style=\"font-size:11px;color:#8a9bb0;width:28px;font-weight:700\">S"+s+"</span>";
       h+="<input type=\"number\" inputmode=\"numeric\" class=\"sml\" data-ai-set=\""+setKey+"\" placeholder=\""+e.reps+"\" value=\""+sVal+"\">";
-      h+="<span style=\"font-size:11px;color:#8a9bb0\">reps</span>";
+      h+="<span style=\"font-size:12px;color:#8a9bb0\">reps</span>";
       h+="</div>";
     }
     if(e.rest>0){h+="<button data-rest=\""+e.rest+"\" data-rname=\""+e.name+"\" style=\"width:100%;margin-top:4px;background:#e8f3fb;border:1px solid #9fd0ef;border-radius:9px;padding:9px;font-size:12px;font-weight:700;color:#4da6e8;cursor:pointer;font-family:inherit\">&#9203; Rest "+e.rest+"s</button>";}
@@ -1940,7 +1940,7 @@ function bAI(){
     saved.forEach(function(w){
       h+='<div style="padding:10px 13px;border-bottom:1px solid #d1d5db;display:flex;justify-content:space-between;align-items:center">'
         +'<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700;margin-bottom:2px">'+w.name+'</div>'
-        +'<div style="font-size:10px;color:#8a9bb0">'+w.equipment.join(", ")+' &middot; '+w.intensity+'</div></div>'
+        +'<div style="font-size:11px;color:#8a9bb0">'+w.equipment.join(", ")+' &middot; '+w.intensity+'</div></div>'
         +'<div style="display:flex;gap:6px;flex-shrink:0;margin-left:8px">'
         +'<button data-run-workout="'+w.id+'" style="padding:6px 10px;border-radius:7px;border:none;background:#1a6fa8;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">&#9654; Run</button>'
         +'<button data-del-workout="'+w.id+'" style="padding:6px 10px;border-radius:7px;border:none;background:#fdecea;color:#e05c52;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">&#10005;</button>'
@@ -2176,13 +2176,13 @@ function bProgress(){
     +"<div style=\"display:grid;grid-template-columns:repeat(3,1fr);gap:6px\">"
     +"<div style=\"text-align:center;background:#0d1e2e;border-radius:8px;padding:8px 4px\">"
     +"<div style=\"font-size:18px;font-weight:700;color:#4da6e8\">"+deloadsHit+"</div>"
-    +"<div style=\"font-size:10px;color:#8a9bb0\">Deloads done</div></div>"
+    +"<div style=\"font-size:12px;color:#8a9bb0\">Deloads done</div></div>"
     +"<div style=\"text-align:center;background:#0a1e14;border-radius:8px;padding:8px 4px\">"
     +"<div style=\"font-size:18px;font-weight:700;color:#3dd68c\">Ph "+phase+"</div>"
-    +"<div style=\"font-size:10px;color:#8a9bb0\">Current phase</div></div>"
+    +"<div style=\"font-size:12px;color:#8a9bb0\">Current phase</div></div>"
     +"<div style=\"text-align:center;background:#1e1408;border-radius:8px;padding:8px 4px\">"
-    +"<div style=\"font-size:16px;font-weight:700;color:#f5a623\">"+endStr+"</div>"
-    +"<div style=\"font-size:10px;color:#8a9bb0\">Finish date</div></div>"
+    +"<div style=\"font-size:16px;font-weight:700;color:#e8eaf0\">"+endStr+"</div>"
+    +"<div style=\"font-size:12px;color:#8a9bb0\">Finish date</div></div>"
     +"</div></div>";
 
   // ── Start & Goal weights (moved from Goals) ──────────────────────────
@@ -2242,7 +2242,7 @@ function bProgress(){
     h+="<div style=\"background:#22273a;border-radius:12px;border:1px solid #2e3347;padding:12px 13px;margin-bottom:10px\">"
       +"<div style=\"font-size:13px;font-weight:700;margin-bottom:8px\">&#128098; Ruck Pace (min/mi)</div>"
       +svgBarChart(ruckData,"#1a7a44","min/mi",function(v){return v+"";})
-      +"<div style=\"font-size:10px;color:#8a9bb0;margin-top:4px\">Lower = faster</div>"
+      +"<div style=\"font-size:11px;color:#8a9bb0;margin-top:4px\">Lower = faster</div>"
       +"</div>";
   }
 
@@ -2285,7 +2285,7 @@ function bProgress(){
       var good=(f==="weight"||f==="waist"||f==="hips")?diff<0:diff>0;
       var col=diff===0?"#6b6b6b":good?"#1a7a44":"#c0580a";
       h+="<div style=\"background:#1e2435;border-radius:8px;padding:8px 10px\">"
-        +"<div style=\"font-size:10px;color:#8a9bb0;margin-bottom:2px\">"+mLabelsM[f]+"</div>"
+        +"<div style=\"font-size:11px;color:#8a9bb0;margin-bottom:2px\">"+mLabelsM[f]+"</div>"
         +"<div style=\"display:flex;justify-content:space-between;align-items:baseline\">"
         +"<span style=\"font-size:15px;font-weight:700\">"+lv+"</span>"
         +"<span style=\"font-size:11px;font-weight:700;color:"+col+"\">"+(diff>0?"+":"")+diff+"</span>"
@@ -2319,12 +2319,12 @@ function bProgress(){
   h+="<div style=\"background:#22273a;border-radius:12px;border:1px solid #2e3347;margin-bottom:10px;overflow:hidden\">";
   h+="<button id=\"api-toggle\" style=\"width:100%;text-align:left;background:none;border:none;padding:10px 13px;cursor:pointer;font-family:inherit;display:flex;justify-content:space-between;align-items:center\">"
     +"<span style=\"font-size:12px;font-weight:700;color:#e8eaf0\">&#128274; Advanced &mdash; API Key &amp; Portions</span>"
-    +"<span style=\"font-size:11px;color:#8a9bb0\">"+(API_SETTINGS_OPEN?"&#9650;":"&#9660;")+"</span>"
+    +"<span style=\"font-size:12px;color:#8a9bb0\">"+(API_SETTINGS_OPEN?"&#9650;":"&#9660;")+"</span>"
     +"</button>";
   if(API_SETTINGS_OPEN){
     h+="<div style=\"padding:0 13px 13px\">";
     h+="<div style=\"font-size:11px;font-weight:700;color:#8a9bb0;margin-bottom:4px\">Anthropic API Key</div>";
-    h+="<div style=\"font-size:10px;color:#8a9bb0;margin-bottom:8px\">Free at console.anthropic.com</div>";
+    h+="<div style=\"font-size:11px;color:#8a9bb0;margin-bottom:8px\">Free at console.anthropic.com</div>";
     h+="<input type=\"password\" id=\"api-key-inp\" class=\"inp\" placeholder=\"sk-ant-...\" value=\""+getApiKey()+"\" style=\"font-family:monospace;font-size:12px;margin-bottom:8px\">";
     h+="<button id=\"api-key-save\" style=\"width:100%;padding:9px;border-radius:8px;border:none;background:#4da6e8;color:#0d1e2e;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:14px\">Save API Key</button>";
     h+="<div style=\"font-size:11px;font-weight:700;color:#8a9bb0;margin-bottom:8px\">Hand Portion Sizes</div>";
@@ -2378,10 +2378,10 @@ function bGoals(){
     +"</div>";
   h+="<div class=\"card\"><div style=\"font-size:13px;font-weight:700;margin-bottom:10px\">Goal</div>"
     +"<div style=\"font-size:13px;margin-bottom:4px\">"+sw+" lb &#8594; "+gw+" lb &middot; ~14% BF &middot; ~1 lb/week</div>"
-    +"<div style=\"font-size:11px;color:#8a9bb0\">26 weeks + 6 deload weeks</div></div>";
+    +"<div style=\"font-size:12px;color:#8a9bb0\">26 weeks + 6 deload weeks</div></div>";
   var rows=[["Daily Calories","~"+m.cal+" cal","~750 cal deficit","#c0392b"],["Protein (30%)","~150g","600 cal - preserve muscle","#1a6fa8"],["Carbs (40%)","~"+m.carb+"g",m.carb*4+" cal","#1a7a44"],["Fat (30%)","~"+m.fat+"g",m.fat*9+" cal","#c0580a"]];
   h+="<div style=\"margin-bottom:10px\">";
-  rows.forEach(function(r){h+="<div class=\"nut-row\"><div><div style=\"font-size:13px;font-weight:600\">"+r[0]+"</div><div style=\"font-size:11px;color:#8a9bb0\">"+r[2]+"</div></div><div style=\"font-size:14px;font-weight:700;color:"+r[3]+"\">"+r[1]+"</div></div>";});
+  rows.forEach(function(r){h+="<div class=\"nut-row\"><div><div style=\"font-size:13px;font-weight:600\">"+r[0]+"</div><div style=\"font-size:12px;color:#8a9bb0\">"+r[2]+"</div></div><div style=\"font-size:14px;font-weight:700;color:"+r[3]+"\">"+r[1]+"</div></div>";});
   h+="</div>";
   h+="<div class=\"card\" style=\"margin-bottom:10px\"><div style=\"font-size:13px;font-weight:700;margin-bottom:8px\">Weekly Schedule</div>"
     +"<div style=\"font-size:13px;line-height:2\"><b>Mon/Wed/Fri:</b> Workout + walk<br><b>Tue/Thu/Sat:</b> Ruck, 20 lb vest, 30-40 min<br><b>Sun:</b> Rest<br><span style=\"color:#4da6e8\"><b>Wks 4,8,12,16,20,24:</b> Deload - half sets, same weight</span></div></div>";
@@ -2431,7 +2431,7 @@ function bGoals(){
       +"<div style=\"text-align:center;background:#dde0e5;border-radius:8px;padding:8px 3px\"><div style=\"font-size:18px;font-weight:700\">"+curW+"</div><div style=\"font-size:11px;color:#6b6b6b\">CURRENT</div></div>"
       +"<div style=\"text-align:center;background:#0d1e2e;border-radius:8px;padding:8px 3px\"><div style=\"font-size:18px;font-weight:700;color:#4da6e8\">"+(gw0-curW>0?Math.round((gw0-curW)*10)/10:0)+"</div><div style=\"font-size:11px;color:#6b6b6b\">TO GO</div></div>"
       +"</div>";
-    for(var mi=mdata.length-1;mi>=Math.max(0,mdata.length-5);mi--){var me=mdata[mi];h+="<div style=\"display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #e8eaed\"><div><div style=\"font-size:12px;font-weight:600\">"+me.date+"</div>"+(me.note?"<div style=\"font-size:10px;color:#8a9bb0\">"+me.note+"</div>":"")+"</div><div style=\"display:flex;align-items:center;gap:8px\"><div style=\"text-align:right;font-size:11px;color:#8a9bb0\">"+(me.weight?"<span style=\"font-size:13px;font-weight:700;color:#e8eaf0\">"+me.weight+"lb</span> ":"")+(me.chest?" Ch:"+me.chest+"\"":"")+(me.waist?" W:"+me.waist+"\"":"")+(me.rightArm?" Arm:"+me.rightArm+"\"":"")+"</div><button data-del-meas=\""+mi+"\" style=\"color:#e05c52;background:#fdecea;border:1px solid #f5c6c2;border-radius:6px;padding:4px 8px;font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0\">&#10005;</button></div></div>";}
+    for(var mi=mdata.length-1;mi>=Math.max(0,mdata.length-5);mi--){var me=mdata[mi];h+="<div style=\"display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #e8eaed\"><div><div style=\"font-size:12px;font-weight:600\">"+me.date+"</div>"+(me.note?"<div style=\"font-size:12px;color:#8a9bb0\">"+me.note+"</div>":"")+"</div><div style=\"display:flex;align-items:center;gap:8px\"><div style=\"text-align:right;font-size:11px;color:#8a9bb0\">"+(me.weight?"<span style=\"font-size:13px;font-weight:700;color:#e8eaf0\">"+me.weight+"lb</span> ":"")+(me.chest?" Ch:"+me.chest+"\"":"")+(me.waist?" W:"+me.waist+"\"":"")+(me.rightArm?" Arm:"+me.rightArm+"\"":"")+"</div><button data-del-meas=\""+mi+"\" style=\"color:#e05c52;background:#fdecea;border:1px solid #f5c6c2;border-radius:6px;padding:4px 8px;font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0\">&#10005;</button></div></div>";}
     h+="</div>";
   }
   h+="</div>";
@@ -2531,7 +2531,7 @@ function bHeroCard(opts){
     h+="<div style=\"display:grid;grid-template-columns:repeat("+Math.min(opts.stats.length,3)+",1fr);gap:8px\">";
     opts.stats.forEach(function(s){
       h+="<div style=\"background:rgba(255,255,255,.07);border-radius:10px;padding:9px 11px\">"
-        +"<div style=\"font-size:10px;color:rgba(255,255,255,.4);margin-bottom:3px\">"+s.label+"</div>"
+        +"<div style=\"font-size:11px;color:rgba(255,255,255,.4);margin-bottom:3px\">"+s.label+"</div>"
         +"<div style=\"font-size:17px;font-weight:700;line-height:1\">"+s.value+(s.sub?"<span style=\"font-size:10px;font-weight:400;color:rgba(255,255,255,.4)\"> "+s.sub+"</span>":"")+"</div>"
         +(s.bar?"<div style=\"margin-top:5px;height:3px;background:rgba(255,255,255,.1);border-radius:2px\"><div style=\"height:100%;border-radius:2px;background:"+s.barCol+";width:"+s.bar+"%\"></div></div>":"")
         +"</div>";
