@@ -756,7 +756,7 @@ var MEAL_RESULT=""; // idle | loading | result | error
 var AI_RESULT="";
 var AI_EQUIPMENT=[];
 var AI_INTENSITY="moderate";
-var PENDING=null,BUILDING=false,PLATE_CAT=null,PLATE_QTY=1,PLATE_NAME="";
+var PENDING=null,PENDING_SRV=100,BUILDING=false,PLATE_CAT=null,PLATE_QTY=1,PLATE_NAME="";
 var QA_NAME="",QA_CAL="",QA_PRO="",QA_CARB="",QA_FAT="";
 var SRESULTS=[];
 var DIRTY={workout:true,food:true,progress:true,ai:true};
@@ -959,7 +959,7 @@ var MEAL_RESULT=""; // idle | loading | result | error
 var AI_RESULT="";
 var AI_EQUIPMENT=[];
 var AI_INTENSITY="moderate";
-var PENDING=null,BUILDING=false,PLATE_CAT=null,PLATE_QTY=1,PLATE_NAME="";
+var PENDING=null,PENDING_SRV=100,BUILDING=false,PLATE_CAT=null,PLATE_QTY=1,PLATE_NAME="";
 var QA_NAME="",QA_CAL="",QA_PRO="",QA_CARB="",QA_FAT="";
 var SRESULTS=[];
 var DIRTY={workout:true,food:true,progress:true,ai:true};
@@ -1307,7 +1307,7 @@ var MEAL_RESULT=""; // idle | loading | result | error
 var AI_RESULT="";
 var AI_EQUIPMENT=[];
 var AI_INTENSITY="moderate";
-var PENDING=null,BUILDING=false,PLATE_CAT=null,PLATE_QTY=1,PLATE_NAME="";
+var PENDING=null,PENDING_SRV=100,BUILDING=false,PLATE_CAT=null,PLATE_QTY=1,PLATE_NAME="";
 var QA_NAME="",QA_CAL="",QA_PRO="",QA_CARB="",QA_FAT="";
 var SRESULTS=[];
 var DIRTY={workout:true,food:true,progress:true,ai:true};
@@ -1992,6 +1992,45 @@ function bFood(){
       h+="<div class=\"card\" style=\"padding:10px 13px;margin-bottom:8px\"><div style=\"font-size:12px;font-weight:700;margin-bottom:8px\">Search food database</div>"
       +"<input type=\"text\" id=\"food-search\" class=\"inp\" placeholder=\"Search any food...\" autocomplete=\"off\" autocorrect=\"off\" oninput=\"updateSearchResults(this.value)\">"
       +"<div id=\"search-results\" style=\"margin-top:6px\"></div></div></div>";
+
+  // ── PENDING food card — shown when user taps a search result ─────────────
+  if(PENDING){
+    var srv=parseFloat(document.getElementById&&document.getElementById("srv-inp")&&document.getElementById("srv-inp").value||PENDING.defServing)||PENDING.defServing;
+    var mult=srv/100;
+    var pCal=Math.round(PENDING.cal100*mult);
+    var pPro=Math.round(PENDING.pro100*mult*10)/10;
+    var pCarb=Math.round(PENDING.carb100*mult*10)/10;
+    var pFat=Math.round(PENDING.fat100*mult*10)/10;
+    h+="<div style=\"background:#0d1e2e;border-radius:14px;border:1px solid #1a3a52;padding:14px;margin-bottom:10px;\">"
+      +"<div style=\"font-size:11px;color:#4da6e8;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px\">Add to log</div>"
+      +"<div style=\"font-size:15px;font-weight:700;color:#e8eaf0;margin-bottom:10px\">"+PENDING.name+"</div>"
+      +"<div style=\"display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px\">"
+      +"<div style=\"background:rgba(255,255,255,.07);border-radius:9px;padding:9px 11px\">"
+      +"<div style=\"font-size:11px;color:rgba(255,255,255,.4);margin-bottom:4px\">Serving (g)</div>"
+      +"<input id=\"srv-inp\" type=\"number\" inputmode=\"decimal\" value=\""+PENDING.defServing+"\" min=\"1\" "
+      +"style=\"width:100%;background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,.2);"
+      +"color:#fff;font-size:18px;font-weight:700;padding:0 0 2px;outline:none;font-family:inherit\" oninput=\"PENDING_SRV=parseFloat(this.value)||100;markDirty('food');paint()\">"
+      +"</div>"
+      +"<div style=\"background:rgba(255,255,255,.07);border-radius:9px;padding:9px 11px\">"
+      +"<div style=\"font-size:11px;color:rgba(255,255,255,.4);margin-bottom:4px\">Calories</div>"
+      +"<div style=\"font-size:18px;font-weight:700;color:#e8eaf0\">"+pCal+"</div>"
+      +"</div>"
+      +"</div>"
+      +"<div style=\"display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px\">"
+      +"<div style=\"text-align:center;background:rgba(255,255,255,.05);border-radius:8px;padding:7px 4px\">"
+      +"<div style=\"font-size:14px;font-weight:700;color:#4da6e8\">"+pPro+"g</div><div style=\"font-size:10px;color:rgba(255,255,255,.4)\">Protein</div></div>"
+      +"<div style=\"text-align:center;background:rgba(255,255,255,.05);border-radius:8px;padding:7px 4px\">"
+      +"<div style=\"font-size:14px;font-weight:700;color:#f5a623\">"+pCarb+"g</div><div style=\"font-size:10px;color:rgba(255,255,255,.4)\">Carbs</div></div>"
+      +"<div style=\"text-align:center;background:rgba(255,255,255,.05);border-radius:8px;padding:7px 4px\">"
+      +"<div style=\"font-size:14px;font-weight:700;color:#3dd68c\">"+pFat+"g</div><div style=\"font-size:10px;color:rgba(255,255,255,.4)\">Fat</div></div>"
+      +"</div>"
+      +"<div style=\"display:grid;grid-template-columns:1fr 1fr;gap:8px\">"
+      +"<button id=\"pending-cancel\" style=\"padding:11px;border-radius:9px;border:1px solid #2e3347;background:#1e2435;color:#8a9bb0;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit\">Cancel</button>"
+      +"<button id=\"pending-add\" style=\"padding:11px;border-radius:9px;border:none;background:#4da6e8;color:#0d1e2e;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit\">Add to Log</button>"
+      +"</div>"
+      +"</div>";
+  }
+
     h+="<div class=\"card\"><div style=\"font-size:12px;font-weight:700;margin-bottom:10px\">Quick Log</div>"
       +"<input type=\"text\" id=\"qa-name\" class=\"inp\" placeholder=\"Name (optional)\" value=\""+QA_NAME+"\" autocomplete=\"off\" autocorrect=\"off\" autocapitalize=\"off\" style=\"margin-bottom:8px\">"
       +"<div style=\"display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px\">"
@@ -3225,7 +3264,30 @@ document.addEventListener("click",function(e){
     PLATE_CAT=null;PLATE_NAME="";PLATE_QTY=1;markDirty("food");paint();return;
   }
   if(t.dataset&&t.dataset.del!==undefined){var l2=getLog();l2.splice(parseInt(t.dataset.del),1);saveLog(l2);markDirty("food");paint();return;}
-  if(t.dataset&&t.dataset.result!==undefined&&SRESULTS[parseInt(t.dataset.result)]){PENDING=SRESULTS[parseInt(t.dataset.result)];markDirty("food");paint();return;}
+  if(t.id==="pending-cancel"){PENDING=null;PENDING_SRV=100;markDirty("food");paint();return;}
+  if(t.id==="pending-add"&&PENDING){
+    var srvEl=document.getElementById("srv-inp");
+    var srv=srvEl?parseFloat(srvEl.value)||100:PENDING_SRV;
+    var mult=srv/100;
+    var l=getLog();
+    l.push({
+      name:PENDING.name+(srv!==100?" ("+srv+"g)":""),
+      serving:srv,
+      cal:Math.round(PENDING.cal100*mult),
+      pro:Math.round(PENDING.pro100*mult*10)/10,
+      carb:Math.round(PENDING.carb100*mult*10)/10,
+      fat:Math.round(PENDING.fat100*mult*10)/10
+    });
+    saveLog(l);
+    PENDING=null;PENDING_SRV=100;
+    var el=document.getElementById("food-search");
+    if(el){el.value="";}
+    var sr=document.getElementById("search-results");
+    if(sr){sr.innerHTML="";}
+    SRESULTS=[];
+    markDirty("food");paint();return;
+  }
+  if(t.dataset&&t.dataset.result!==undefined&&SRESULTS[parseInt(t.dataset.result)]){PENDING=SRESULTS[parseInt(t.dataset.result)];PENDING_SRV=PENDING.defServing||100;markDirty("food");paint();return;}
   if(t.id==="dark-toggle"){
     DARK_MODE=!DARK_MODE;
     localStorage.setItem("dark_mode",DARK_MODE?"1":"0");
