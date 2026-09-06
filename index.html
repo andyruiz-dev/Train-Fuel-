@@ -2282,7 +2282,7 @@ function bAIWorkout(){
     var lastLbl=last?"<div style=\"font-size:10px;color:#4da6e8;margin-bottom:6px\">Last W"+last.week+": "+last.reps.join(", ")+" reps"+(last.wt?" @ "+last.wt+"lb":"")+"</div>":"";
     h+="<div style=\"background:#fff;border-radius:13px;border:1px solid #d1d5db;margin-bottom:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.06)\">";
     h+="<div style=\"background:#1a6fa8;padding:10px 13px\">";
-    h+="<div style=\"font-size:14px;font-weight:800;color:#fff\">"+e.name+"</div>";
+    h+="<div style=\"font-size:14px;font-weight:800;color:#fff\">"+exLink(e.name)+"</div>";
     if(e.note) h+="<div style=\"font-size:11px;color:rgba(255,255,255,.7);margin-top:2px\">"+e.note+"</div>";
     h+="<div style=\"font-size:11px;color:rgba(255,255,255,.6);margin-top:3px\">"+e.sets+"x"+e.reps+" reps"+(e.rest?" &middot; "+e.rest+"s rest":"")+"</div></div>";
     h+="<div style=\"padding:10px 13px\">"+lastLbl;
@@ -3797,7 +3797,7 @@ function generateAIWorkout(){
   var soreParts=[];for(var di=0;di<7;di++){try{var sp=JSON.parse(localStorage.getItem("sore_w"+W+"_d"+di)||"[]");if(sp.length)soreParts=soreParts.concat(sp);}catch(e){}}
   var soreUniq=soreParts.filter(function(v,i,a){return a.indexOf(v)===i;});
   var AI_SORE_CTX=soreUniq.length>0?" Currently sore areas: "+soreUniq.join(", ")+". Avoid these areas.":"";
-  var prompt="You are a personal trainer. Generate a complete workout for the following context:\n\n"
+  var prompt="You are a personal trainer who favors these exercises — Push: Push-Up, Pike Push-Up, Diamond Push-Up, Archer Push-Up. Pull: DB Row, Ring Row, Pull-Up, Band Pull-Apart, Face Pull. Legs: Goblet Squat, Romanian Deadlift, Hip Hinge, Lunge. Core: Dead Bug, Hollow Hold, Plank, Ab Wheel. Generate a complete workout for the following context:\n\n"
     +"Program: 26-week body recomposition for a 46-year-old male, 6ft, targeting fat loss and muscle building\n"
     +"Current week: "+W+" of 26\n"
     +"Current phase: "+phaseMap[p.ph]+"\n"
