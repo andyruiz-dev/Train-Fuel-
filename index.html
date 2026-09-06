@@ -3189,8 +3189,19 @@ document.addEventListener("click",function(e){
   }
   if(t.id==="week-advance-yes"){advanceProgramWeek();W=calcCurrentWeekGated();
     FDATE=getDateForDay(W,DAY);CHECKIN_DONE=false;markAllDirty();renderDayTabs();paint();return;}
-  if(t.id==="week-stay"){localStorage.setItem("tf_prog_week",W);
-    CHECKIN_DONE=false;markAllDirty();paint();return;}
+  if(t.id==="week-stay"){
+    // Repeat current week — reset review state and go to Monday
+    localStorage.setItem("tf_prog_week",W);
+    localStorage.removeItem("review_w"+W);
+    localStorage.removeItem("checkin_done_"+W);
+    WEEK_REVIEW_DONE=false;
+    DEBRIEF_STATE="idle";DEBRIEF_RESULT="";
+    CHECKIN_DONE=false;
+    DAY=0;
+    FDATE=getDateForDay(W,0);
+    markAllDirty();renderDayTabs();paint();
+    return;
+  }
   if(t.id==="sched-done"){SCHED_EDIT=false;renderDayTabs();markDirty("workout");paint();return;}
   if(t.id==="ai-track-done"){
     AI_STATE="idle";AI_WORKOUT_DATA=null;markDirty("ai");paint();return;
