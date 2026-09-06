@@ -3435,7 +3435,7 @@ document.addEventListener("input",function(e){
   }
   // Catch-all: any input with data-key not handled above
   if(t.dataset&&t.dataset.key&&!t.classList.contains("bw-inp")){ss(t.dataset.key,t.value);}
-  if(t.classList&&t.classList.contains("bw-inp")&&t.dataset.day){var o=lg("bw_w"+W)||{};o[t.dataset.day]=parseFloat(t.value)||null;ls("bw_w"+W,o);flash();}
+  if(t.classList&&t.classList.contains("bw-inp")&&t.dataset.day){var o=lg("bw_w"+W)||{};o[t.dataset.day]=parseFloat(t.value)||null;ls("bw_w"+W,o);showToast("✓ Weight saved");flash();}
 });
 
 document.addEventListener("change",function(e){
