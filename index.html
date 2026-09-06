@@ -105,9 +105,14 @@ if('serviceWorker' in navigator){
       const nw = reg.installing;
       nw.addEventListener('statechange', () => {
         if(nw.state === 'installed' && navigator.serviceWorker.controller){
-          // New version ready — show banner
-          var b = document.getElementById('update-banner');
-          if(b) b.style.display='flex';
+          // New version ready — show banner only if no files staged
+          if(typeof STAGED_FILES==='undefined'||STAGED_FILES.length===0){
+            var b = document.getElementById('update-banner');
+            if(b) b.style.display='flex';
+          } else {
+            // Queue the banner for after import
+            window._updatePending=true;
+          }
         }
       });
     });
@@ -3357,6 +3362,7 @@ function sendImportRequest(fileBlocks){
       saveCustomPrograms(progs);
       STAGED_FILES=[];
       showToast("✓ "+prog.name+" imported — "+prog.totalWeeks+" weeks");
+      if(window._updatePending){var b=document.getElementById('update-banner');if(b)b.style.display='flex';}
       markDirty("progress");paint();
     }catch(e){
       IMPORT_ERROR="Could not parse program — try clearer files";
@@ -4053,7 +4059,7 @@ document.getElementById("panel-workout").innerHTML=bWorkoutPanel();
 DIRTY.workout=false;
 </script>
 <div id="update-banner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:10000;background:#4da6e8;color:#0d1e2e;padding:10px 16px;font-size:13px;font-weight:700;align-items:center;justify-content:space-between;">
-  <span>Update available</span>
+  <span id="update-banner-msg">Update available</span>
   <button onclick="navigator.serviceWorker.getRegistration().then(r=>r&&r.waiting&&r.waiting.postMessage('SKIP_WAITING'))" style="background:#0d1e2e;color:#4da6e8;border:none;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">Refresh</button>
 </div>
 <div id="toast" style="position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(12px);background:#22273a;border:1px solid #2e3347;color:#e8eaf0;font-size:13px;font-weight:700;padding:10px 20px;border-radius:10px;opacity:0;transition:opacity .25s,transform .25s;z-index:9999;pointer-events:none;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.4)"></div>
