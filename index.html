@@ -2036,7 +2036,7 @@ function bRest(){
     } else {
       h+="<div style=\"font-size:12px;color:#8a9bb0;font-weight:600;margin-bottom:8px\">Need 4+ pts to advance.</div>"
         +"<div style=\"display:flex;gap:8px;margin-bottom:8px\">"
-        +"<button id=\"week-stay\" style=\"flex:1;padding:10px;border-radius:9px;border:none;background:#c0580a;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit\">Repeat Week "+W+"</button>"
+        +"<button onclick=\"shareWeek()\" style=\"width:100%;padding:10px;border-radius:9px;border:1px solid #2e3347;background:#1e2435;color:#8a9bb0;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:8px\">&#128279; Share Week "+W+"</button>"+"<div style=\"display:flex;gap:8px\">"+"<button id=\"week-stay\" style=\"flex:1;padding:10px;border-radius:9px;border:none;background:#c0580a;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit\">Repeat Week "+W+"</button>"
         +"<button id=\"week-advance-yes\" style=\"flex:1;padding:10px;border-radius:9px;border:1px solid #2e3347;background:#22273a;color:#6b7280;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit\">Advance Anyway</button>"
         +"</div>";
     }
@@ -2591,8 +2591,199 @@ function svgBarChart(data,color,yLabel,formatVal){
     +"</svg>";
 }
 
+
+// ── CHARTS ────────────────────────────────────────────────────────────────
+
+// ── EXERCISE LIBRARY ──────────────────────────────────────────────────────
+var LIBRARY_SEARCH="";
+var EXERCISE_LIB=[
+  // Push board
+  {name:"Push-Up",muscles:"Chest, Shoulders, Triceps",type:"Push",desc:"Standard push-up. Elbows at 45°, full range of motion. Scale with knee push-ups or elevate hands."},
+  {name:"Pike Push-Up",muscles:"Shoulders, Triceps",type:"Push",desc:"Hips high, head between arms. Targets shoulders more than chest. Progress toward handstand push-up."},
+  {name:"Diamond Push-Up",muscles:"Triceps, Chest",type:"Push",desc:"Hands form a diamond under your chest. High tricep activation."},
+  {name:"Archer Push-Up",muscles:"Chest, Shoulders",type:"Push",desc:"Extend one arm wide while the other bends. Unilateral loading without equipment."},
+  {name:"Incline Push-Up",muscles:"Lower Chest, Shoulders",type:"Push",desc:"Feet elevated. Increases difficulty and shifts focus to lower chest."},
+  // Rows / pull
+  {name:"DB Row",muscles:"Back, Biceps",type:"Pull",desc:"Brace on bench or knee. Pull elbow to hip, not up to shoulder. Full stretch at bottom."},
+  {name:"Ring Row",muscles:"Back, Biceps, Core",type:"Pull",desc:"Adjust difficulty by changing body angle. Horizontal is easier, vertical is harder."},
+  {name:"Pull-Up",muscles:"Lats, Biceps, Core",type:"Pull",desc:"Full dead hang to chin over bar. Avoid kipping. Scale with band or negatives."},
+  {name:"Band Pull-Apart",muscles:"Rear Delts, Rotator Cuff",type:"Pull",desc:"Arms straight, pull band to chest. High rep. Bulletproofs the shoulder joint."},
+  {name:"Face Pull",muscles:"Rear Delts, External Rotators",type:"Pull",desc:"Pull to face level, thumbs back. Counters internal rotation from pressing."},
+  // Legs / hinge
+  {name:"Goblet Squat",muscles:"Quads, Glutes, Core",type:"Legs",desc:"Hold weight at chest. Elbows inside knees at bottom. Excellent for mobility."},
+  {name:"Romanian Deadlift",muscles:"Hamstrings, Glutes, Lower Back",type:"Hinge",desc:"Hinge at hips, soft knee bend. Bar stays close to legs. Feel hamstring stretch."},
+  {name:"Hip Hinge",muscles:"Hamstrings, Glutes",type:"Hinge",desc:"Own your hinge pattern. Wall drill: stand a foot away, push hips back to wall."},
+  {name:"Lunge",muscles:"Quads, Glutes, Balance",type:"Legs",desc:"Step out, both knees 90°. Keep torso upright. Front foot flat, back heel up."},
+  {name:"Step-Up",muscles:"Quads, Glutes",type:"Legs",desc:"Drive through heel on the box. Don't push off the trailing foot."},
+  // Core
+  {name:"Dead Bug",muscles:"Core, Hip Flexors",type:"Core",desc:"Lower back pressed to floor throughout. Opposite arm/leg extend slowly. Never rush."},
+  {name:"Hollow Hold",muscles:"Core",type:"Core",desc:"Lower back flat, legs and shoulders off floor. Scale by bending knees."},
+  {name:"Plank",muscles:"Core, Shoulders",type:"Core",desc:"Neutral spine, hips level. Squeeze glutes. Don't let hips sag or pike."},
+  {name:"Ab Wheel",muscles:"Core, Lats",type:"Core",desc:"Start on knees. Brace hard and roll out only as far as you can return. Never arch."},
+  // Ruck / conditioning
+  {name:"Rucking",muscles:"Full Body, Cardiovascular",type:"Ruck",desc:"Weighted carry for distance. 10-15% bodyweight to start. Chest up, arms swing."},
+  {name:"Farmer Carry",muscles:"Grip, Traps, Core",type:"Carry",desc:"Heavy dumbbells or handles. Walk tall. Builds grip and chassis integrity."},
+];
+
+function bLibrary(){
+  var q=LIBRARY_SEARCH.toLowerCase().trim();
+  var filtered=q?EXERCISE_LIB.filter(function(e){
+    return e.name.toLowerCase().indexOf(q)>=0
+      ||e.muscles.toLowerCase().indexOf(q)>=0
+      ||e.type.toLowerCase().indexOf(q)>=0;
+  }):EXERCISE_LIB;
+
+  var h="<div style=\"background:#22273a;border-radius:14px;border:1px solid #2e3347;padding:14px;margin-bottom:10px;\">"
+    +"<div style=\"font-size:13px;font-weight:700;color:#e8eaf0;margin-bottom:10px\">&#128218; Exercise Library</div>"
+    +"<input id=\"lib-search\" type=\"text\" placeholder=\"Search by name or muscle...\" value=\""+LIBRARY_SEARCH+"\" "
+    +"style=\"width:100%;background:#1e2435;border:1px solid #2e3347;border-radius:8px;color:#e8eaf0;font-size:13px;padding:8px 10px;font-family:inherit;outline:none;box-sizing:border-box;margin-bottom:10px\">"
+    +"<div style=\"display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px\">";
+  ["All","Push","Pull","Legs","Hinge","Core","Ruck"].forEach(function(t){
+    var active=q===t.toLowerCase()||(t==="All"&&!q);
+    h+="<button data-libtype=\""+t+"\" style=\"padding:4px 10px;border-radius:6px;border:1px solid "+(active?"#4da6e8":"#2e3347")+";background:"+(active?"#4da6e8":"#1e2435")+";color:"+(active?"#0d1e2e":"#8a9bb0")+";font-size:11px;font-weight:700;cursor:pointer;font-family:inherit\">"+t+"</button>";
+  });
+  h+="</div>";
+  if(!filtered.length){
+    h+="<div style=\"font-size:12px;color:#8a9bb0;text-align:center;padding:12px\">No exercises match</div>";
+  }
+  filtered.forEach(function(ex){
+    var typeCol=ex.type==="Push"?"#4da6e8":ex.type==="Pull"?"#3dd68c":ex.type==="Legs"||ex.type==="Hinge"?"#f5a623":ex.type==="Core"?"#e05c52":"#2dd4bf";
+    h+="<div style=\"border-top:1px solid #2e3347;padding:10px 0;\">"
+      +"<div style=\"display:flex;justify-content:space-between;align-items:center;margin-bottom:4px\">"
+      +"<div style=\"font-size:13px;font-weight:700;color:#e8eaf0\">"+ex.name+"</div>"
+      +"<span style=\"font-size:10px;font-weight:700;color:"+typeCol+";background:"+typeCol+"22;border-radius:4px;padding:2px 7px\">"+ex.type+"</span>"
+      +"</div>"
+      +"<div style=\"font-size:11px;color:#4da6e8;margin-bottom:3px\">"+ex.muscles+"</div>"
+      +"<div style=\"font-size:12px;color:#8a9bb0;line-height:1.4\">"+ex.desc+"</div>"
+      +"</div>";
+  });
+  h+="</div>";
+  return h;
+}
+
+
+// ── SHARE WEEK ────────────────────────────────────────────────────────────
+function shareWeek(){
+  var wkPts=getWeekPoints(W)||0;
+  // Weight change this week
+  var bwObj=null;try{bwObj=JSON.parse(localStorage.getItem("bw_w"+W)||"{}");}catch(e){}
+  var bwVals=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].map(function(d){return parseFloat(bwObj[d]);}).filter(function(v){return!isNaN(v)&&v>0;});
+  var bwAvg=bwVals.length?Math.round(bwVals.reduce(function(a,b){return a+b;},0)/bwVals.length*10)/10:null;
+  // Ruck miles this week
+  var ruckMi=0;
+  for(var d=0;d<7;d++){var sd=getSessionData(W,d);if(sd&&sd.ruck&&sd.ruck.dist)ruckMi+=parseFloat(sd.ruck.dist)||0;}
+  ruckMi=Math.round(ruckMi*100)/100;
+  // Build share text
+  var lines=["&#127977; Train+Fuel — Week "+W+" Complete",""];
+  lines.push("&#128170; Workouts: "+Math.round(wkPts)+" / 6 pts");
+  if(ruckMi>0) lines.push("&#129406; Ruck: "+ruckMi+" mi");
+  if(bwAvg) lines.push("&#9881; Avg weight: "+bwAvg+" lb");
+  lines.push("");
+  lines.push("Week "+W+" of 26 · 26-Week Recomp");
+  lines.push("#TrainAndFuel #Fitness #Recomp");
+  var text=lines.join("\n");
+  if(navigator.share){
+    navigator.share({title:"Train+Fuel Week "+W,text:text}).catch(function(){});
+  } else {
+    navigator.clipboard&&navigator.clipboard.writeText(text).then(function(){showToast("✓ Copied to clipboard");}).catch(function(){showToast("Copied!");});
+  }
+}
+
+function bCharts(){
+  // Collect weight data across all weeks
+  var weights=[], volumes=[], labels=[];
+  for(var w=1;w<=W;w++){
+    var bwObj=null;
+    try{bwObj=JSON.parse(localStorage.getItem("bw_w"+w)||"{}");}catch(e){}
+    var vals=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].map(function(d){return parseFloat(bwObj[d]);}).filter(function(v){return!isNaN(v)&&v>0;});
+    var avg=vals.length?vals.reduce(function(a,b){return a+b;},0)/vals.length:null;
+    weights.push(avg);
+    // Count sets completed this week
+    var sets=0;
+    for(var d=0;d<7;d++){
+      var sd=getSessionData(w,d);
+      if(sd){Object.keys(sd).forEach(function(k){if(k.indexOf(".s")>0&&sd[k]===true)sets++;});}
+    }
+    volumes.push(sets);
+    labels.push("W"+w);
+  }
+  var hasWeight=weights.some(function(v){return v!==null;});
+  var hasVol=volumes.some(function(v){return v>0;});
+  if(!hasWeight&&!hasVol) return "";
+
+  var h="<div style=\"background:#22273a;border-radius:14px;border:1px solid #2e3347;padding:14px;margin-bottom:10px;\">"
+    +"<div style=\"font-size:13px;font-weight:700;color:#e8eaf0;margin-bottom:12px\">&#128200; Progress Charts</div>";
+
+  // Weight chart
+  if(hasWeight){
+    var wVals=weights.filter(function(v){return v!==null;});
+    var wMin=Math.floor(Math.min.apply(null,wVals)-2);
+    var wMax=Math.ceil(Math.max.apply(null,wVals)+2);
+    var W_=300,H_=80,pad=24;
+    h+="<div style=\"font-size:11px;color:#8a9bb0;margin-bottom:4px\">Weight (lb)</div>";
+    h+="<svg viewBox=\"0 0 "+(W_+pad)+" "+(H_+pad)+"\" style=\"width:100%;display:block;margin-bottom:10px\">";
+    // Grid lines
+    for(var gi=0;gi<=4;gi++){
+      var gy=pad/2+H_/4*gi;
+      var gv=Math.round(wMax-(wMax-wMin)/4*gi);
+      h+="<line x1=\""+(pad-2)+"\" y1=\""+gy+"\" x2=\""+(W_+pad)+"\" y2=\""+gy+"\" stroke=\"#2e3347\" stroke-width=\"1\"/>";
+      h+="<text x=\"0\" y=\""+(gy+4)+"\" font-size=\"9\" fill=\"#8a9bb0\">"+gv+"</text>";
+    }
+    // Plot points & polyline
+    var pts=[];
+    weights.forEach(function(v,i){
+      if(v===null) return;
+      var x=pad+(W_/(Math.max(weights.length-1,1)))*i;
+      var y=pad/2+H_*(wMax-v)/(wMax-wMin);
+      pts.push(x+","+y);
+    });
+    if(pts.length>1) h+="<polyline points=\""+pts.join(" ")+"\" fill=\"none\" stroke=\"#4da6e8\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>";
+    // Dots
+    weights.forEach(function(v,i){
+      if(v===null) return;
+      var x=pad+(W_/(Math.max(weights.length-1,1)))*i;
+      var y=pad/2+H_*(wMax-v)/(wMax-wMin);
+      h+="<circle cx=\""+x+"\" cy=\""+y+"\" r=\"3\" fill=\"#4da6e8\"/>";
+    });
+    // X labels (show every 2nd week if many)
+    var step=weights.length>10?2:1;
+    labels.forEach(function(l,i){
+      if(i%step!==0) return;
+      var x=pad+(W_/(Math.max(weights.length-1,1)))*i;
+      h+="<text x=\""+x+"\" y=\""+(H_+pad)+"\" font-size=\"8\" fill=\"#8a9bb0\" text-anchor=\"middle\">"+l+"</text>";
+    });
+    h+="</svg>";
+  }
+
+  // Volume chart (bar)
+  if(hasVol){
+    var vMax=Math.max.apply(null,volumes)||1;
+    var bW=300,bH=60,bPad=16;
+    var barW=Math.max(4,(bW-bPad*2)/Math.max(volumes.length,1)-2);
+    h+="<div style=\"font-size:11px;color:#8a9bb0;margin-bottom:4px\">Sets completed / week</div>";
+    h+="<svg viewBox=\"0 0 "+(bW+bPad)+" "+(bH+bPad)+"\" style=\"width:100%;display:block\">";
+    volumes.forEach(function(v,i){
+      var x=bPad+(bW/Math.max(volumes.length,1))*i+2;
+      var barH=bH*(v/vMax);
+      var y=bH-barH;
+      h+="<rect x=\""+x+"\" y=\""+y+"\" width=\""+barW+"\" height=\""+barH+"\" rx=\"2\" fill=\""+( v===Math.max.apply(null,volumes)?"#3dd68c":"#1a3a52")+"\"/>";
+    });
+    labels.forEach(function(l,i){
+      if(i%Math.max(1,Math.floor(volumes.length/6))!==0) return;
+      var x=bPad+(bW/Math.max(volumes.length,1))*i+barW/2+2;
+      h+="<text x=\""+x+"\" y=\""+(bH+bPad)+"\" font-size=\"8\" fill=\"#8a9bb0\" text-anchor=\"middle\">"+l+"</text>";
+    });
+    h+="</svg>";
+  }
+
+  h+="</div>";
+  return h;
+}
+
 function bProgress(){
   var h="";
+  h+=bCharts();
+  h+=bLibrary();
   var BWD=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
 
   // ── Streak + start/goal (moved from Goals) ──────────────────────────
@@ -3202,6 +3393,7 @@ var IMPORTING_PROGRAM=false;
 var IMPORT_ERROR="";
 var STAGED_FILES=[];
 var PREVIEW_PROGRAM_ID=null;
+var LIBRARY_SEARCH="";
 
 function getCustomPrograms(){
   try{return JSON.parse(localStorage.getItem("custom_programs")||"[]");}
@@ -3704,6 +3896,10 @@ document.addEventListener("click",function(e){
     if(confirm("Delete this program?")) deleteCustomProgram(t.dataset.delprog);
     return;
   }
+  if(t.dataset&&t.dataset.libtype!==undefined){
+    LIBRARY_SEARCH=t.dataset.libtype==="All"?"":t.dataset.libtype.toLowerCase();
+    markDirty("progress");paint();return;
+  }
   if(t.id==="notes-toggle"){NOTES_OPEN=!NOTES_OPEN;markDirty("workout");paint();return;}
   if(t.id==="note-save-btn"){
     var noteEl=document.getElementById("session-note");
@@ -4003,6 +4199,10 @@ document.addEventListener("click",function(e){
 });
 
 document.addEventListener("input",function(e){
+  if(e.target&&e.target.id==="lib-search"){
+    LIBRARY_SEARCH=e.target.value;
+    markDirty("progress");paint();return;
+  }
   var t=e.target;
   if(t.id==="qa-name"){QA_NAME=t.value;return;}
   if(t.id==="qa-cal"){QA_CAL=t.value;return;}
