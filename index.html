@@ -103,43 +103,41 @@ body.dark .overlay-card{background:#1a1e28}
 <input type="file" id="photo-input" accept="image/*" capture="environment" style="display:none">
 <div class="saved-chip" id="saved-chip">Saved &#10003;</div>
 
-<div class="app-hdr">
-  <div style="display:flex;align-items:center;gap:8px">
-    <div class="app-hdr-week" id="hdr-week">W1</div>
-    <button id="today-btn" style="font-size:11px;font-weight:700;color:#4da6e8;background:#0d1e2e;border:1px solid #1a3a52;border-radius:20px;padding:4px 10px;cursor:pointer;font-family:inherit;display:none">Today</button>
-  </div>
-</div>
+<!-- app-hdr removed: week shown in hero card -->
+
+
+
+
+
 
 
 <div class="hdr">
   <div class="hdr-top">
-    <div class="hdr-left">
-      <div class="sub">Train &amp; Fuel</div>
-      <div class="title">6-Month Program</div>
-      <div class="phase" id="ph-el"></div>
-    </div>
-    <div>
+    <div class="wk-nav">
       <div class="wk-lbl">WEEK</div>
-      <div class="wk-nav">
-        <button class="wk-btn" onclick="chWk(-1)">&#8249;</button>
-        <div class="wk-num" id="wk-el">1</div>
-        <button class="wk-btn" onclick="chWk(1)">&#8250;</button>
-      </div>
+      <button class="wk-btn" onclick="chWk(-1)">&#8249;</button>
+      <div class="wk-num" id="wk-el">2</div>
+      <button class="wk-btn" onclick="chWk(1)">&#8250;</button>
     </div>
+    <button id="today-btn" style="font-size:11px;font-weight:700;color:#4da6e8;background:#0d1e2e;border:1px solid #1a3a52;border-radius:20px;padding:4px 12px;cursor:pointer;font-family:inherit;display:none">Today</button>
   </div>
   <div class="day-row" id="day-row"></div>
-  <div class="tabs">
-    <button class="tab act" id="tab-workout" onclick="setTab('workout')"><span class="ti">&#127968;</span><span class="tl">Today</span></button>
-    <button class="tab" id="tab-food" onclick="setTab('food')"><span class="ti">&#127822;</span><span class="tl">Food</span></button>
-    <button class="tab" id="tab-progress" onclick="setTab('progress')"><span class="ti">&#128200;</span><span class="tl">Progress</span></button>
-    <button class="tab" id="tab-ai" onclick="setTab('ai')"><span class="ti">&#9889;</span><span class="tl">AI</span></button>
-  </div>
 </div>
+
 
 <div id="panel-workout"  class="content"></div>
 <div id="panel-food"     class="content" style="display:none"></div>
 <div id="panel-progress" class="content" style="display:none"></div>
 <div id="panel-ai"       class="content" style="display:none"></div>
+
+<div class="tabs">
+    <button class="tab act" id="tab-workout" onclick="setTab('workout')"><span class="ti">&#127968;</span><span class="tl">Today</span></button>
+    <button class="tab" id="tab-food" onclick="setTab('food')"><span class="ti">&#127822;</span><span class="tl">Food</span></button>
+    <button class="tab" id="tab-progress" onclick="setTab('progress')"><span class="ti">&#128200;</span><span class="tl">Progress</span></button>
+    <button class="tab" id="tab-ai" onclick="setTab('ai')"><span class="ti">&#9889;</span><span class="tl">AI</span></button>
+  </div>
+
+
 
 <div id="rtimer">
   <div id="rt-bar" style="width:100%"></div>
@@ -937,7 +935,7 @@ function bDailySummary(){
     +" stroke-dasharray=\""+C+"\" stroke-dashoffset=\""+offset+"\"  stroke-linecap=\"round\" transform=\"rotate(-90 27 27)\"/>"
     +"<text x=\"27\" y=\"32\" text-anchor=\"middle\" fill=\"white\" font-size=\"13\" font-weight=\"700\">"+Math.round(pts*10)/10+"/6</text>"
     +"</svg>"
-    +"<div style=\"font-size:9px;color:rgba(255,255,255,.4);margin-top:-2px\">this week</div>"
+    +"<div style=\"font-size:10px;color:rgba(255,255,255,.4);margin-top:-2px\">this week</div>"
     +"</div>"
     +"</div>"
     +"<div style=\"display:grid;grid-template-columns:1fr 1fr;gap:8px\">"
@@ -1418,7 +1416,7 @@ function bWorkout(){
   // SUPERSET A
   var pushB="",pullB="";
   if(p.ph===1){
-    pushB=lastExLabel("push")+progBadge("push",p.pr,p.ps)+"<div style=\"font-size:9px;color:#6b6b6b;margin-bottom:6px\">One handle per round</div>";
+    pushB=lastExLabel("push")+progBadge("push",p.pr,p.ps)+"<div style=\"font-size:11px;color:#6b6b6b;margin-bottom:6px\">One handle per round</div>";
     pullB=lastExLabel("pull")+progBadge("pull",p.rr,p.rs)+"<div style=\"font-size:10px;color:#8a9bb0;margin-bottom:4px\">Wt: <input type=\"number\" inputmode=\"decimal\" class=\"inp\" data-key=\"pull.wt\" style=\"width:55px;display:inline-block;padding:4px 6px;font-size:12px\" placeholder=\"35\" value=\""+(sg("pull.wt")||"")+"\"> lb</div>";
     for(var si=0;si<p.ps;si++){
       var hh=HANDLES[si%HANDLES.length];
@@ -1426,12 +1424,12 @@ function bWorkout(){
         +"<span style=\"background:"+hh.col+";color:#fff;border-radius:5px;padding:1px 7px;font-size:10px;font-weight:700\">R"+(si+1)+"</span>"
         +"<span style=\"width:7px;height:7px;border-radius:50%;background:"+hh.col+";display:inline-block\"></span>"
         +"<span style=\"font-size:10px;color:"+hh.col+";font-weight:700\">"+hh.k+"</span>"
-        +"<span style=\"font-size:9px;color:#6b6b6b\">"+hh.m+"</span></div>"
+        +"<span style=\"font-size:11px;color:#6b6b6b\">"+hh.m+"</span></div>"
         +SI("push."+hh.k+".s"+(si+1),0,"")+CHK("push."+hh.k+".s"+(si+1))+"</div>";
       pullB+="<div style=\"margin-bottom:8px\"><div style=\"font-size:10px;font-weight:700;color:#6b6b6b;margin-bottom:3px\">R"+(si+1)+"</div>"
         +"<div style=\"display:grid;grid-template-columns:1fr 1fr;gap:4px\">"
-        +"<div><div style=\"font-size:9px;color:#6b6b6b\">Left</div>"+SI("pull.L"+(si+1),0,"")+"</div>"
-        +"<div><div style=\"font-size:9px;color:#6b6b6b\">Right</div>"+SI("pull.R"+(si+1),0,"")+"</div>"
+        +"<div><div style=\"font-size:11px;color:#6b6b6b\">Left</div>"+SI("pull.L"+(si+1),0,"")+"</div>"
+        +"<div><div style=\"font-size:11px;color:#6b6b6b\">Right</div>"+SI("pull.R"+(si+1),0,"")+"</div>"
         +"</div></div>";
     }
   } else {
@@ -1459,7 +1457,7 @@ function bWorkout(){
       +"<div style=\"font-size:12px;color:#6b7280;margin-bottom:14px\">How do you feel? No pressure either way.</div>"
       +"<div style=\"display:flex;gap:8px\">"
       +"<button id=\"mode-keep-going\" style=\"flex:1;padding:11px;border-radius:10px;border:none;background:#1a7a44;color:#fff;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit\">&#128293; Keep going!</button>"
-      +"<button id=\"mode-thats-enough\" style=\"flex:1;padding:11px;border-radius:10px;border:1.5px solid #d1d5db;background:#fff;color:#6b7280;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit\">&#10003; That&rsquo;s enough</button>"
+      +"<button id=\"mode-thats-enough\" style=\"flex:1;padding:11px;border-radius:10px;border:1px solid #2e3347;background:#22273a;color:#6b7280;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit\">&#10003; That&rsquo;s enough</button>"
       +"</div></div>";
     return h;
   }
@@ -1606,7 +1604,7 @@ function bRest(){
       h+="<div style=\"font-size:12px;color:#f5a623;font-weight:700;margin-bottom:8px\">Need 4+ pts to advance.</div>"
         +"<div style=\"display:flex;gap:8px;margin-bottom:8px\">"
         +"<button id=\"week-stay\" style=\"flex:1;padding:10px;border-radius:9px;border:none;background:#c0580a;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit\">Repeat Week "+W+"</button>"
-        +"<button id=\"week-advance-yes\" style=\"flex:1;padding:10px;border-radius:9px;border:1.5px solid #d1d5db;background:#fff;color:#6b7280;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit\">Advance Anyway</button>"
+        +"<button id=\"week-advance-yes\" style=\"flex:1;padding:10px;border-radius:9px;border:1px solid #2e3347;background:#22273a;color:#6b7280;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit\">Advance Anyway</button>"
         +"</div>";
     }
     h+="</div>";
@@ -1617,7 +1615,7 @@ function bRest(){
       [["time","&#128336; Time"],["energy","&#128564; Low energy"],
        ["motivation","&#129300; Motivation"],["life","&#127768; Life happened"],
        ["nothing","&#127881; Nailed it"]].forEach(function(opt){
-        h+="<button data-review=\""+opt[0]+"\" style=\"padding:10px 12px;border-radius:9px;border:1.5px solid #d1d5db;background:#fff;color:#e8eaf0;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;text-align:left\">"+opt[1]+"</button>";
+        h+="<button data-review=\""+opt[0]+"\" style=\"padding:10px 12px;border-radius:9px;border:1px solid #2e3347;background:#22273a;color:#e8eaf0;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;text-align:left\">"+opt[1]+"</button>";
       });
       h+="</div></div>";
     } else {
@@ -1629,7 +1627,7 @@ function bRest(){
     h+="<div style=\"font-size:13px;font-weight:800\">&#9889; AI Coach Debrief</div>";
     // Share week summary button
     h+="<div style=\"display:flex;gap:8px;margin-bottom:10px\">"
-      +"<button id=\"share-week-btn\" style=\"flex:1;padding:9px;border-radius:9px;border:1.5px solid #d1d5db;background:#fff;color:#e8eaf0;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit\">&#128257; Share Week</button>"
+      +"<button id=\"share-week-btn\" style=\"flex:1;padding:9px;border-radius:9px;border:1px solid #2e3347;background:#22273a;color:#e8eaf0;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit\">&#128257; Share Week</button>"
       +"</div>";
     if(DEBRIEF_STATE==="idle"){
       h+="<button id=\"debrief-btn\" style=\"padding:7px 14px;border-radius:8px;border:none;background:#1a6fa8;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit\">Generate</button>";
@@ -1685,7 +1683,7 @@ function macroRing(pro,carb,fat,proT,carbT,fatT,calT,calLogged){
   return"<div style=\"display:flex;align-items:center;gap:12px;padding:10px 0\">"
     +"<svg viewBox=\"0 0 120 120\" width=\"90\" height=\"90\" style=\"flex-shrink:0\">"+bg+proArc+carbArc+fatArc
     +"<text x=\"60\" y=\"56\" text-anchor=\"middle\" style=\"font-size:17px;font-weight:700;fill:#222\">"+calRem+"</text>"
-    +"<text x=\"60\" y=\"70\" text-anchor=\"middle\" style=\"font-size:9px;fill:#999\">cal left</text>"
+    +"<text x=\"60\" y=\"70\" text-anchor=\"middle\" style=\"font-size:11px;fill:#999\">cal left</text>"
     +"</svg>"
     +"<div style=\"flex:1\">"
     +"<div style=\"display:flex;align-items:center;gap:5px;margin-bottom:4px\"><div style=\"width:10px;height:10px;border-radius:50%;background:#1a6fa8;flex-shrink:0\"></div><span style=\"font-size:11px\">Protein <b>"+Math.round(pro)+"</b>/"+proT+"g</span></div>"
@@ -1741,10 +1739,10 @@ function bFood(){
         +"<div style=\"text-align:center;flex:1\"><div id=\"plate-qty\" style=\"font-size:28px;font-weight:700\">"+PLATE_QTY+"</div><div style=\"font-size:11px;color:#8a9bb0\">"+pp.hand+(PLATE_QTY!==1?"s":"")+"</div></div>"
         +"<button id=\"plate-plus\" style=\"width:44px;height:44px;border-radius:9px;background:#e8eaed;border:1.5px solid #d1d5db;font-size:24px;font-weight:700;cursor:pointer;font-family:inherit\">+</button></div>"
         +"<div style=\"display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px\">"
-        +"<div style=\"text-align:center;background:"+pp.col+"22;border-radius:8px;padding:9px 3px\"><div id=\"plate-mac-cal\" style=\"font-size:18px;font-weight:700;color:"+pp.col+"\">"+Math.round(pp.cal*PLATE_QTY)+"</div><div style=\"font-size:9px;color:#6b6b6b\">cal</div></div>"
-        +"<div style=\"text-align:center;background:#dde0e5;border-radius:8px;padding:9px 3px\"><div id=\"plate-mac-pro\" style=\"font-size:18px;font-weight:700\">"+(pp.pro*PLATE_QTY).toFixed(1)+"</div><div style=\"font-size:9px;color:#6b6b6b\">prot</div></div>"
-        +"<div style=\"text-align:center;background:#dde0e5;border-radius:8px;padding:9px 3px\"><div id=\"plate-mac-carb\" style=\"font-size:18px;font-weight:700\">"+(pp.carb*PLATE_QTY).toFixed(1)+"</div><div style=\"font-size:9px;color:#6b6b6b\">carbs</div></div>"
-        +"<div style=\"text-align:center;background:#dde0e5;border-radius:8px;padding:9px 3px\"><div id=\"plate-mac-fat\" style=\"font-size:18px;font-weight:700\">"+(pp.fat*PLATE_QTY).toFixed(1)+"</div><div style=\"font-size:9px;color:#6b6b6b\">fat</div></div></div>"
+        +"<div style=\"text-align:center;background:"+pp.col+"22;border-radius:8px;padding:9px 3px\"><div id=\"plate-mac-cal\" style=\"font-size:18px;font-weight:700;color:"+pp.col+"\">"+Math.round(pp.cal*PLATE_QTY)+"</div><div style=\"font-size:11px;color:#6b6b6b\">cal</div></div>"
+        +"<div style=\"text-align:center;background:#dde0e5;border-radius:8px;padding:9px 3px\"><div id=\"plate-mac-pro\" style=\"font-size:18px;font-weight:700\">"+(pp.pro*PLATE_QTY).toFixed(1)+"</div><div style=\"font-size:11px;color:#6b6b6b\">prot</div></div>"
+        +"<div style=\"text-align:center;background:#dde0e5;border-radius:8px;padding:9px 3px\"><div id=\"plate-mac-carb\" style=\"font-size:18px;font-weight:700\">"+(pp.carb*PLATE_QTY).toFixed(1)+"</div><div style=\"font-size:11px;color:#6b6b6b\">carbs</div></div>"
+        +"<div style=\"text-align:center;background:#dde0e5;border-radius:8px;padding:9px 3px\"><div id=\"plate-mac-fat\" style=\"font-size:18px;font-weight:700\">"+(pp.fat*PLATE_QTY).toFixed(1)+"</div><div style=\"font-size:11px;color:#6b6b6b\">fat</div></div></div>"
         +"<button id=\"hot-log-btn\" style=\"width:100%;padding:14px;border-radius:10px;border:none;background:"+pp.col+";color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit\">Hot Log &#10003;</button></div>";
     }
     h+="<div style=\"background:#22273a;border-radius:11px;padding:12px 13px;margin-bottom:9px;border:1px solid #d1d5db\">"
@@ -2027,7 +2025,7 @@ function bWeigh(){
   var bwAvg=bwVals.length?Math.round(bwVals.reduce(function(a,b){return a+b;},0)/bwVals.length*10)/10:null;
   var h=weightChart()+"<div class=\"card\"><div style=\"display:flex;justify-content:space-between;align-items:center;margin-bottom:10px\">"
     +"<div style=\"font-size:13px;font-weight:700\">Week "+W+" Daily Weigh-In</div>"
-    +(bwAvg?"<div style=\"text-align:right\"><div style=\"font-size:20px;font-weight:700;color:#4da6e8\">"+bwAvg+"</div><div style=\"font-size:9px;color:#6b6b6b\">LB AVG</div></div>":"")
+    +(bwAvg?"<div style=\"text-align:right\"><div style=\"font-size:20px;font-weight:700;color:#4da6e8\">"+bwAvg+"</div><div style=\"font-size:11px;color:#6b6b6b\">LB AVG</div></div>":"")
     +"</div>"
     +"<div style=\"font-size:11px;color:#8a9bb0;margin-bottom:12px\">Morning, before eating.</div>"
     +"<div style=\"display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:6px\">";
@@ -2217,9 +2215,9 @@ function bProgress(){
     +"<div style=\"display:grid;grid-template-columns:repeat(7,1fr);gap:3px\">";
   BWD.forEach(function(d){
     h+="<div style=\"text-align:center\">"
-      +"<div style=\"font-size:9px;color:#6b6b6b;margin-bottom:3px\">"+d.slice(0,2)+"</div>"
+      +"<div style=\"font-size:11px;color:#6b6b6b;margin-bottom:3px\">"+d.slice(0,2)+"</div>"
       +"<input type=\"number\" inputmode=\"decimal\" class=\"bw-inp\" data-day=\""+d+"\" value=\""+( bwObj2[d]||"")+"\""
-      +" placeholder=\"-\" style=\"width:100%;border:1px solid #d1d5db;border-radius:6px;padding:5px 2px;font-size:11px;text-align:center;font-family:inherit;background:"+(d===BWD[DAY]?"#e8f3fb":"#fff")+"\">"
+      +" placeholder=\"-\" style=\"width:100%;border:1px solid #2e3347;border-radius:6px;padding:5px 2px;font-size:11px;text-align:center;font-family:inherit;color:#e8eaf0;background:"+(d===BWD[DAY]?"#0d1e2e":"#1e2435")+"\">"
       +"</div>";
   });
   h+="</div></div>";
@@ -2265,7 +2263,7 @@ function bProgress(){
       ph.slice(-4).forEach(function(p){
         h+="<div style=\"flex:0 0 auto;text-align:center\">"
           +"<img src=\""+p.data+"\" style=\"width:90px;height:120px;object-fit:cover;border-radius:9px;border:2px solid #d1d5db\">"
-          +"<div style=\"font-size:9px;color:#6b7280;margin-top:3px\">W"+p.week+" &middot; "+p.date+"</div>"
+          +"<div style=\"font-size:11px;color:#8a9bb0;margin-top:3px\">W"+p.week+" &middot; "+p.date+"</div>"
           +"</div>";
       });
       h+="</div>";
@@ -2407,10 +2405,10 @@ function bGoals(){
   }
   h+="<div style=\"background:#fff;border-radius:12px;padding:14px;margin-bottom:10px;border:1px solid #d1d5db\">"+"<div style=\"font-size:12px;font-weight:700;margin-bottom:10px\">Start &amp; Goal Weights</div>"+"<div style=\"display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px\">"+"<div><div class=\"lbl\">Start (lb)</div><input type=\"number\" inputmode=\"decimal\" id=\"sw-inp\" class=\"inp\" value=\""+sw+"\" style=\"font-size:18px;font-weight:700\"></div>"+"<div><div class=\"lbl\">Goal (lb)</div><input type=\"number\" inputmode=\"decimal\" id=\"gw-inp\" class=\"inp\" value=\""+gw+"\" style=\"font-size:18px;font-weight:700\"></div>"+"</div><button id=\"wt-save-btn\" style=\"width:100%;padding:11px;border-radius:9px;border:none;background:#1a6fa8;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit\">Update</button></div>";
   h+="<div style=\"background:#fdecea;border:1px solid #f5c6c2;border-radius:10px;padding:10px 13px;margin-bottom:10px\">"+"<div style=\"display:grid;grid-template-columns:repeat(3,1fr);gap:6px\">";
-  h+="<div style=\"text-align:center\"><div style=\"font-size:18px;font-weight:700;color:#e05c52\">"+sw+"</div><div style=\"font-size:9px;color:#6b6b6b\">LB START</div></div>";
-  h+="<div style=\"text-align:center\"><div style=\"font-size:18px;font-weight:700;color:#4da6e8\">"+gw+"</div><div style=\"font-size:9px;color:#6b6b6b\">LB GOAL</div></div>";
+  h+="<div style=\"text-align:center\"><div style=\"font-size:18px;font-weight:700;color:#e05c52\">"+sw+"</div><div style=\"font-size:11px;color:#6b6b6b\">LB START</div></div>";
+  h+="<div style=\"text-align:center\"><div style=\"font-size:18px;font-weight:700;color:#4da6e8\">"+gw+"</div><div style=\"font-size:11px;color:#6b6b6b\">LB GOAL</div></div>";
   var lost=Math.round((sw-curW)*10)/10;
-  h+="<div style=\"text-align:center\"><div style=\"font-size:18px;font-weight:700;color:#3dd68c\">"+lost+"</div><div style=\"font-size:9px;color:#6b6b6b\">LB LOST</div></div>";
+  h+="<div style=\"text-align:center\"><div style=\"font-size:18px;font-weight:700;color:#3dd68c\">"+lost+"</div><div style=\"font-size:11px;color:#6b6b6b\">LB LOST</div></div>";
   h+="</div></div>";
   if(isMeasWeek){
     h+="<div class=\"card\" style=\"margin-bottom:10px\"><div style=\"font-size:12px;font-weight:700;margin-bottom:10px\">Log Measurements</div>"
@@ -2429,9 +2427,9 @@ function bGoals(){
   if(mdata.length){
     h+="<div class=\"card\"><div class=\"lbl\" style=\"margin-bottom:8px\">Progress</div>"
       +"<div style=\"display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px\">"
-      +"<div style=\"text-align:center;background:#0a1e14;border-radius:8px;padding:8px 3px\"><div style=\"font-size:18px;font-weight:700;color:#3dd68c\">"+(lost>=0?"-":"")+lost+"</div><div style=\"font-size:9px;color:#6b6b6b\">LB LOST</div></div>"
-      +"<div style=\"text-align:center;background:#dde0e5;border-radius:8px;padding:8px 3px\"><div style=\"font-size:18px;font-weight:700\">"+curW+"</div><div style=\"font-size:9px;color:#6b6b6b\">CURRENT</div></div>"
-      +"<div style=\"text-align:center;background:#0d1e2e;border-radius:8px;padding:8px 3px\"><div style=\"font-size:18px;font-weight:700;color:#4da6e8\">"+(gw0-curW>0?Math.round((gw0-curW)*10)/10:0)+"</div><div style=\"font-size:9px;color:#6b6b6b\">TO GO</div></div>"
+      +"<div style=\"text-align:center;background:#0a1e14;border-radius:8px;padding:8px 3px\"><div style=\"font-size:18px;font-weight:700;color:#3dd68c\">"+(lost>=0?"-":"")+lost+"</div><div style=\"font-size:11px;color:#6b6b6b\">LB LOST</div></div>"
+      +"<div style=\"text-align:center;background:#dde0e5;border-radius:8px;padding:8px 3px\"><div style=\"font-size:18px;font-weight:700\">"+curW+"</div><div style=\"font-size:11px;color:#6b6b6b\">CURRENT</div></div>"
+      +"<div style=\"text-align:center;background:#0d1e2e;border-radius:8px;padding:8px 3px\"><div style=\"font-size:18px;font-weight:700;color:#4da6e8\">"+(gw0-curW>0?Math.round((gw0-curW)*10)/10:0)+"</div><div style=\"font-size:11px;color:#6b6b6b\">TO GO</div></div>"
       +"</div>";
     for(var mi=mdata.length-1;mi>=Math.max(0,mdata.length-5);mi--){var me=mdata[mi];h+="<div style=\"display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #e8eaed\"><div><div style=\"font-size:12px;font-weight:600\">"+me.date+"</div>"+(me.note?"<div style=\"font-size:10px;color:#8a9bb0\">"+me.note+"</div>":"")+"</div><div style=\"display:flex;align-items:center;gap:8px\"><div style=\"text-align:right;font-size:11px;color:#8a9bb0\">"+(me.weight?"<span style=\"font-size:13px;font-weight:700;color:#e8eaf0\">"+me.weight+"lb</span> ":"")+(me.chest?" Ch:"+me.chest+"\"":"")+(me.waist?" W:"+me.waist+"\"":"")+(me.rightArm?" Arm:"+me.rightArm+"\"":"")+"</div><button data-del-meas=\""+mi+"\" style=\"color:#e05c52;background:#fdecea;border:1px solid #f5c6c2;border-radius:6px;padding:4px 8px;font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0\">&#10005;</button></div></div>";}
     h+="</div>";
@@ -2525,7 +2523,7 @@ function bHeroCard(opts){
       +"<text x=\"27\" y=\"30\" text-anchor=\"middle\" fill=\"white\" font-size=\"11\" font-weight=\"700\">"+Math.round(opts.ring.val*10)/10+"</text>"
       +"<text x=\"27\" y=\"40\" text-anchor=\"middle\" fill=\"rgba(255,255,255,.4)\" font-size=\"8\">/"+opts.ring.max+"</text>"
       +"</svg>"
-      +(opts.ring.label?"<div style=\"font-size:9px;color:rgba(255,255,255,.4);margin-top:-2px\">"+opts.ring.label+"</div>":"")
+      +(opts.ring.label?"<div style=\"font-size:10px;color:rgba(255,255,255,.4);margin-top:-2px\">"+opts.ring.label+"</div>":"")
       +"</div>";
   }
   h+="</div>";
