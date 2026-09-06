@@ -1710,9 +1710,19 @@ function bFood(){
   h+="</div>";
 
   var mt2=getMacroTargets();
-  h+="<div style=\"background:#fff;border-radius:12px;border:1px solid #d1d5db;padding:10px 13px;margin-bottom:8px\">"
-    +macroRing(tot.pro,tot.carb,tot.fat,mt2.pro,mt2.carb,mt2.fat,mt2.cal,tot.cal)
-    +"</div>";
+  // Dark hero food card
+  var calPct2=m.cal>0?Math.min(100,Math.round(tot.cal/m.cal*100)):0;
+  var calRem2=m.cal>0?Math.max(0,Math.round(m.cal-tot.cal)):0;
+  h+=bHeroCard({
+    badge:"Today\'s Nutrition",
+    title:tot.cal.toLocaleString()+" cal",
+    subtitle:"of "+m.cal.toLocaleString()+" target",
+    stats:[
+      {label:"Protein",value:Math.round(tot.pro)+"g",sub:"/"+Math.round(m.pro)+"g",bar:Math.min(100,Math.round(tot.pro/m.pro*100)),barCol:"#4da6e8"},
+      {label:"Carbs",  value:Math.round(tot.carb)+"g",sub:"/"+Math.round(m.carb)+"g",bar:Math.min(100,Math.round(tot.carb/m.carb*100)),barCol:"#f5a623"},
+      {label:"Fat",    value:Math.round(tot.fat)+"g",sub:"/"+Math.round(m.fat)+"g",bar:Math.min(100,Math.round(tot.fat/m.fat*100)),barCol:"#3dd68c"}
+    ]
+  });
   h+="<div class=\"pc\">";
   [["Calories","#c0392b",Math.round(tot.cal),m.cal,"cal"],["Protein","#1a6fa8",Math.round(tot.pro),m.pro,"g"],["Carbs","#1a7a44",Math.round(tot.carb),m.carb,"g"],["Fat","#c0580a",Math.round(tot.fat),m.fat,"g"]].forEach(function(b){
     h+="<div class=\"pr\"><div class=\"ph\"><span class=\"pl\">"+b[0]+"</span><span class=\"pv\">"+b[2]+" / "+b[3]+b[4]+"</span></div><div class=\"pb\"><div class=\"pf\" style=\"width:"+pct(b[2],b[3])+"%;background:"+b[1]+"\"></div></div></div>";
@@ -1843,12 +1853,13 @@ function bAI(){
     +"<div style=\"font-size:11px;color:rgba(255,255,255,.7);margin-top:2px\">Low intensity &middot; Active recovery &middot; Mobility &amp; movement</div></div>"
     +"<button id=\"recovery-exit\" style=\"font-size:11px;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);border-radius:7px;padding:4px 10px;color:#fff;cursor:pointer;font-family:inherit\">Exit</button>"
     +"</div>":"";
-  var h=travelBanner+recoveryBanner+'<div class="card" style="overflow:hidden;padding:0"><div style="background:linear-gradient(135deg,#1a6fa8,#1a7a44);padding:14px 14px 12px"><div style="font-size:18px;font-weight:800;color:#fff;margin-bottom:2px">&#9889; AI Workout Generator</div><div style="font-size:11px;color:rgba(255,255,255,.8)">Custom workout · any equipment · any duration</div></div><div style="padding:13px">'
-    +'<div style="font-size:12px;color:#6b6b6b;margin-bottom:12px">Custom workout based on your current week, phase, and available equipment.</div>'
-    +'<div style="background:#e8f3fb;border-radius:9px;padding:10px 12px;margin-bottom:12px;font-size:12px;">'
-    +'<b>Week '+W+' &middot; '+phaseNames[p.ph]+'</b><br>'
-    +'<span style="color:#6b6b6b">Program context auto-included in every generation</span>'
-    +'</div></div>';
+  var h=travelBanner+recoveryBanner;
+  h+=bHeroCard({
+    badge:"AI Workout Generator",
+    title:"Week "+W+" · Phase "+p.ph,
+    subtitle:phaseNames[p.ph],
+    meta:"Program context auto-included in every generation"
+  });
 
   if(AI_STATE==="idle"){
     if(AI_TRAVEL&&AI_EQUIPMENT.indexOf("Bodyweight")<0)AI_EQUIPMENT=["Bodyweight"];
@@ -2129,14 +2140,25 @@ function bProgress(){
   var streakMsg=streak===0?"Start your streak this week!":streak===1?"1 week strong!":streak+" weeks in a row!";
   var bestStreak=getBestStreak();
 
-  h+="<div style=\"background:#fff;border-radius:12px;border:1px solid #d1d5db;margin-bottom:10px;overflow:hidden\">"
-    +"<div style=\"background:"+streakCol+";padding:9px 13px;display:flex;align-items:center;justify-content:space-between\">"
-    +"<div style=\"display:flex;align-items:center;gap:8px\"><span style=\"font-size:20px\">"+(streak===0?"&#127919;":streak<4?"&#128293;":"&#127942;")+"</span>"
-    +"<span style=\"font-size:14px;font-weight:700;color:#fff\">"+streakMsg+"</span></div>"
-    +(streak>0?"<span style=\"font-size:24px;font-weight:700;color:#fff\">"+streak+"</span>":"")
-    +"</div>"
-    +(bestStreak>streak?"<div style=\"padding:6px 13px;font-size:11px;color:#6b7280;border-top:1px solid #d1d5db\">&#127942; Best: "+bestStreak+" week"+(bestStreak>1?"s":"")+"</div>":"")
-    +"</div>";
+  // Dark hero card for Progress tab
+  var weeksLeft2=26-W;
+  var endDate2=new Date(new Date((localStorage.getItem("tf_prog_start")||"2026-08-24")+"T12:00:00").getTime()+26*7*864e5);
+  var months2=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  var endStr2=months2[endDate2.getMonth()]+" "+endDate2.getDate();
+  var wkPts2=Math.round(getWeekPoints(W)*10)/10;
+  h+=bHeroCard({
+    badge:(streak===0?"No streak yet":streak<4?"Building momentum":streak<8?"On a roll":"Locked in"),
+    title:streak===0?"Start your streak":streak+" week"+(streak>1?"s":"")+" strong",
+    subtitle:streakMsg,
+    meta:bestStreak>0&&bestStreak>streak?"Personal best: "+bestStreak+" weeks":"",
+    ring:{val:wkPts2,max:6,label:"this week"},
+    stats:[
+      {label:"Week",value:W+" / 26",sub:""},
+      {label:"Phase",value:"Ph "+prog(W).ph,sub:"of 3"},
+      {label:"Finish",value:endStr2,sub:""}
+    ]
+  });
+
 
   // ── Program overview ─────────────────────────────────────────────────
   var pct=Math.round(W/26*100);
@@ -2469,6 +2491,51 @@ function generateMealSuggestion(){
 
 // AI WORKOUT GENERATOR
 // ── RUCK GPS TRACKER ─────────────────────────────────────────────────────
+// ── SHARED HERO CARD UTILITY ─────────────────────────────────────────────
+function bHeroCard(opts){
+  // opts: {title, subtitle, badge, meta, stats:[ {label,value,sub} ], ring:{val,max} }
+  var h="<div style=\"background:#0d1e2e;border-radius:16px;margin-bottom:10px;padding:16px;color:#fff\">";
+  h+="<div style=\"display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:"+(opts.stats?"14px":"0")+"\">";
+  h+="<div style=\"flex:1\">";
+  if(opts.badge) h+="<div style=\"display:inline-block;background:rgba(255,255,255,.12);border-radius:6px;padding:2px 8px;font-size:10px;font-weight:700;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px\">"+opts.badge+"</div>";
+  if(opts.title) h+="<div style=\"font-size:22px;font-weight:700;margin-bottom:2px;line-height:1.2\">"+opts.title+"</div>";
+  if(opts.subtitle) h+="<div style=\"font-size:12px;color:rgba(255,255,255,.5)\">"+opts.subtitle+"</div>";
+  if(opts.meta) h+="<div style=\"font-size:11px;color:rgba(255,255,255,.4);margin-top:4px\">"+opts.meta+"</div>";
+  h+="</div>";
+  if(opts.ring){
+    var C=125.7,offset=C-(C*Math.min(opts.ring.val,opts.ring.max)/opts.ring.max);
+    h+="<div style=\"text-align:center;margin-left:10px\">"
+      +"<svg width=\"54\" height=\"54\" viewBox=\"0 0 54 54\">"
+      +"<circle cx=\"27\" cy=\"27\" r=\"20\" fill=\"none\" stroke=\"rgba(255,255,255,.12)\" stroke-width=\"5\"/>"
+      +"<circle cx=\"27\" cy=\"27\" r=\"20\" fill=\"none\" stroke=\"#4da6e8\" stroke-width=\"5\""
+      +" stroke-dasharray=\""+C+"\" stroke-dashoffset=\""+offset+"\" stroke-linecap=\"round\" transform=\"rotate(-90 27 27)\"/>"
+      +"<text x=\"27\" y=\"30\" text-anchor=\"middle\" fill=\"white\" font-size=\"11\" font-weight=\"700\">"+Math.round(opts.ring.val*10)/10+"</text>"
+      +"<text x=\"27\" y=\"40\" text-anchor=\"middle\" fill=\"rgba(255,255,255,.4)\" font-size=\"8\">/"+opts.ring.max+"</text>"
+      +"</svg>"
+      +(opts.ring.label?"<div style=\"font-size:9px;color:rgba(255,255,255,.4);margin-top:-2px\">"+opts.ring.label+"</div>":"")
+      +"</div>";
+  }
+  h+="</div>";
+  if(opts.stats&&opts.stats.length){
+    h+="<div style=\"display:grid;grid-template-columns:repeat("+Math.min(opts.stats.length,3)+",1fr);gap:8px\">";
+    opts.stats.forEach(function(s){
+      h+="<div style=\"background:rgba(255,255,255,.07);border-radius:10px;padding:9px 11px\">"
+        +"<div style=\"font-size:10px;color:rgba(255,255,255,.4);margin-bottom:3px\">"+s.label+"</div>"
+        +"<div style=\"font-size:17px;font-weight:700;line-height:1\">"+s.value+(s.sub?"<span style=\"font-size:10px;font-weight:400;color:rgba(255,255,255,.4)\"> "+s.sub+"</span>":"")+"</div>"
+        +(s.bar?"<div style=\"margin-top:5px;height:3px;background:rgba(255,255,255,.1);border-radius:2px\"><div style=\"height:100%;border-radius:2px;background:"+s.barCol+";width:"+s.bar+"%\"></div></div>":"")
+        +"</div>";
+    });
+    h+="</div>";
+  }
+  h+="</div>";
+  return h;
+}
+function sectionHeader(label,col,bg){
+  return"<div style=\"background:"+bg+";border-radius:10px 10px 0 0;padding:8px 12px;\">"
+    +"<span style=\"font-size:11px;font-weight:700;color:"+col+";text-transform:uppercase;letter-spacing:.6px\">"+label+"</span>"
+    +"</div>";
+}
+
 function haversine(lat1,lon1,lat2,lon2){
   var R=3958.8; // miles
   var dLat=(lat2-lat1)*Math.PI/180;
