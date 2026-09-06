@@ -4,10 +4,22 @@
   "description": "26-week recomp program with AI coaching",
   "start_url": "/Train-Fuel-/",
   "display": "standalone",
-  "background_color": "#1a6fa8",
-  "theme_color": "#1a6fa8",
+  "background_color": "#1a1e2a",
+  "theme_color": "#1a1e2a",
   "orientation": "portrait",
   "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
     {
       "src": "icon.svg",
       "sizes": "any",
