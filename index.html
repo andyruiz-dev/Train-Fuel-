@@ -571,6 +571,9 @@ var WEEK_REVIEW_DONE=false;
 var DEBRIEF_STATE="idle";
 var RUCK_TRACKING=false;
 var NOTES_OPEN=false;
+var READINESS_SLEEP=0;
+var READINESS_ENERGY=0;
+var READINESS_DONE=false;
 var TOAST_MSG="";
 var TOAST_TIMER=null;
 var FOOD_SEARCH_TIMER=null;
@@ -1660,9 +1663,9 @@ function bWorkoutPanel(){
   }
   // Pre-workout check-in on workout days
   if(getDayType(DAY,W)==="workout"&&!CHECKIN_DONE){
-    return behindBanner+bDailySummary()+bCheckin();
+    return behindBanner+bDailySummary()+(getDayType(DAY,W)==="workout"?bReadinessCard():"")+bCheckin();
   }
-  return behindBanner+bDailySummary()+bDay();
+  return behindBanner+bDailySummary()+(getDayType(DAY,W)==="workout"?bReadinessCard():"")+bDay();
 }
 
 function bScheduleEditor(){
@@ -3001,6 +3004,81 @@ function sectionHeader(label,col,bg){
     +"</div>";
 }
 
+// ── MORNING READINESS ─────────────────────────────────────────────────────
+function getReadinessKey(){return"readiness_"+dk();}
+function loadReadiness(){
+  var r=null;try{r=JSON.parse(localStorage.getItem(getReadinessKey()));}catch(e){}
+  if(r){READINESS_SLEEP=r.sleep||0;READINESS_ENERGY=r.energy||0;READINESS_DONE=true;}
+  else{READINESS_SLEEP=0;READINESS_ENERGY=0;READINESS_DONE=false;}
+}
+function saveReadiness(sleep,energy){
+  localStorage.setItem(getReadinessKey(),JSON.stringify({sleep:sleep,energy:energy}));
+  READINESS_SLEEP=sleep;READINESS_ENERGY=energy;READINESS_DONE=true;
+  // Auto-set mode based on readiness score
+  var score=(sleep-4)/5*50+energy/5*50;
+  if(score>=75) WORKOUT_MODE="full";
+  else if(score>=50) WORKOUT_MODE="scaled";
+  else if(score>=30) WORKOUT_MODE="minimum";
+  else WORKOUT_MODE="minimum";
+  markAllDirty();paint();
+  showToast("✓ Readiness logged — "+getSuggestedMode(sleep,energy).label+" mode suggested");
+}
+function getSuggestedMode(sleep,energy){
+  var score=(sleep-4)/5*50+energy/5*50;
+  if(score>=75) return{mode:"full",   label:"Full",   col:"#3dd68c",reason:"Great sleep and energy — go hard"};
+  if(score>=50) return{mode:"scaled", label:"Scaled", col:"#f5a623",reason:"Decent readiness — solid session"};
+  if(score>=30) return{mode:"minimum",label:"Minimum",col:"#8a9bb0",reason:"Low readiness — keep it moving"};
+  return         {mode:"minimum",    label:"Recovery",col:"#e05c52",reason:"Rest up — minimum or recovery"};
+}
+function bReadinessCard(){
+  // Load today's readiness
+  var r=null;try{r=JSON.parse(localStorage.getItem(getReadinessKey()));}catch(e){}
+  var sl=r?r.sleep:READINESS_SLEEP;
+  var en=r?r.energy:READINESS_ENERGY;
+  var done=!!r;
+  if(done){
+    var sg=getSuggestedMode(sl,en);
+    return"<div style=\"background:#22273a;border-radius:12px;border:1px solid #2e3347;padding:12px 14px;margin-bottom:10px\">"
+      +"<div style=\"display:flex;justify-content:space-between;align-items:center\">"
+      +"<div style=\"font-size:11px;color:#8a9bb0\">&#128065; "+sl+"h sleep &middot; Energy "+en+"/5</div>"
+      +"<div style=\"font-size:11px;font-weight:700;color:"+sg.col+"\">"+sg.label+" suggested</div>"
+      +"</div>"
+      +"</div>";
+  }
+  // Not yet logged — show full card
+  var sleepOpts=[4,5,6,7,8,9];
+  var h="<div style=\"background:#22273a;border-radius:14px;border:1px solid #2e3347;padding:14px;margin-bottom:10px;\">"
+    +"<div style=\"font-size:13px;font-weight:700;color:#e8eaf0;margin-bottom:12px\">&#127774; Morning readiness</div>"
+    +"<div style=\"font-size:11px;color:#8a9bb0;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px\">Sleep last night</div>"
+    +"<div style=\"display:flex;gap:5px;margin-bottom:12px\">";
+  sleepOpts.forEach(function(s){
+    var lbl=s===9?"9+":String(s);
+    var sel=READINESS_SLEEP===s;
+    h+="<button data-sleep=\""+s+"\" style=\"flex:1;padding:8px 2px;border-radius:8px;border:1.5px solid "+(sel?"#4da6e8":"#2e3347")+";background:"+(sel?"#4da6e8":"#1e2435")+";color:"+(sel?"#0d1e2e":"#8a9bb0")+";font-size:12px;font-weight:700;cursor:pointer;font-family:inherit\">"+lbl+"h</button>";
+  });
+  h+="</div>"
+    +"<div style=\"font-size:11px;color:#8a9bb0;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px\">Energy level</div>"
+    +"<div style=\"display:flex;gap:8px;margin-bottom:12px\">";
+  [1,2,3,4,5].forEach(function(e){
+    var sel=READINESS_ENERGY===e;
+    var col=e<=2?"#e05c52":e===3?"#f5a623":"#3dd68c";
+    h+="<button data-energy=\""+e+"\" style=\"flex:1;padding:10px 2px;border-radius:8px;border:1.5px solid "+(sel?col:"#2e3347")+";background:"+(sel?col:"#1e2435")+";color:"+(sel?"#0d1e2e":"#8a9bb0")+";font-size:16px;cursor:pointer;font-family:inherit\">"+(e===1?"😴":e===2?"😑":e===3?"🙂":e===4?"💪":"🔥")+"</button>";
+  });
+  h+="</div>";
+  if(READINESS_SLEEP>0&&READINESS_ENERGY>0){
+    var sg=getSuggestedMode(READINESS_SLEEP,READINESS_ENERGY);
+    h+="<div style=\"background:#1e2435;border-radius:8px;padding:8px 10px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center\">"
+      +"<div style=\"font-size:12px;color:#8a9bb0\">"+sg.reason+"</div>"
+      +"<div style=\"font-size:12px;font-weight:700;color:"+sg.col+"\">"+sg.label+"</div>"
+      +"</div>";
+    h+="<button id=\"readiness-submit\" style=\"width:100%;padding:11px;border-radius:9px;border:none;background:#4da6e8;color:#0d1e2e;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit\">Set today&rsquo;s workout</button>";
+  } else {
+    h+="<div style=\"font-size:11px;color:#2e3347;text-align:center\">Select sleep and energy to continue</div>";
+  }
+  h+="</div>";
+  return h;
+}
+
 function haversine(lat1,lon1,lat2,lon2){
   var R=3958.8; // miles
   var dLat=(lat2-lat1)*Math.PI/180;
@@ -3115,6 +3193,15 @@ function buildWeekSummaryForAI(w){
         if(nd&&nd.note&&nd.note.trim()) ns.push(dayNames[d]+": "+nd.note.trim());
       }
       return ns;
+    })(),
+    readiness:(function(){
+      var rs=[];
+      for(var d=0;d<7;d++){
+        var dt=getDateForDay(w,d);
+        var r=null;try{r=JSON.parse(localStorage.getItem("readiness_"+dt));}catch(e){}
+        if(r) rs.push(dayNames[d]+": "+r.sleep+"h sleep, energy "+r.energy+"/5");
+      }
+      return rs;
     })()
   };
 }
@@ -3291,6 +3378,17 @@ document.addEventListener("click",function(e){
                setTimeout(function(){chip.style.opacity="0";},1500);}
     }
     return;
+  }
+  if(t.dataset&&t.dataset.sleep){
+    READINESS_SLEEP=parseInt(t.dataset.sleep);
+    markDirty("workout");paint();return;
+  }
+  if(t.dataset&&t.dataset.energy){
+    READINESS_ENERGY=parseInt(t.dataset.energy);
+    markDirty("workout");paint();return;
+  }
+  if(t.id==="readiness-submit"){
+    saveReadiness(READINESS_SLEEP,READINESS_ENERGY);return;
   }
   if(t.id==="ruck-start-btn"){startRuckTracking();return;}
   if(t.id==="ruck-stop-btn"){stopRuckTracking();return;}
