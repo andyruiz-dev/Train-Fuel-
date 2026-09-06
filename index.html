@@ -104,12 +104,12 @@ body.dark .overlay-card{background:#1a1e28}
 <div class="saved-chip" id="saved-chip">Saved &#10003;</div>
 
 <div class="app-hdr">
-  <div class="app-hdr-name">Train &amp; Fuel</div>
   <div style="display:flex;align-items:center;gap:8px">
-    <button id="today-btn" style="font-size:11px;font-weight:700;color:#4da6e8;background:#e8f3fb;border:1px solid #9fd0ef;border-radius:20px;padding:4px 10px;cursor:pointer;font-family:inherit;display:none">Today</button>
     <div class="app-hdr-week" id="hdr-week">W1</div>
+    <button id="today-btn" style="font-size:11px;font-weight:700;color:#4da6e8;background:#0d1e2e;border:1px solid #1a3a52;border-radius:20px;padding:4px 10px;cursor:pointer;font-family:inherit;display:none">Today</button>
   </div>
 </div>
+
 
 <div class="hdr">
   <div class="hdr-top">
@@ -950,7 +950,7 @@ function bDailySummary(){
     +"<div style=\"font-size:10px;color:rgba(255,255,255,.4);margin-bottom:4px\">Calories left</div>"
     +"<div style=\"font-size:18px;font-weight:700\">"+calRem.toLocaleString()+"<span style=\"font-size:11px;font-weight:400;color:rgba(255,255,255,.4)\"> cal</span></div>"
     +"<div style=\"margin-top:5px;height:3px;background:rgba(255,255,255,.1);border-radius:2px\">"
-    +"<div style=\"height:100%;border-radius:2px;background:"+(calRem>200?"#4da6e8":"#e05c52")+";width:"+Math.min(100,Math.round(tot.cal/m.cal*100))+"%\"></div>"
+    +"<div style=\"height:100%;border-radius:2px;background:#4da6e8"+";width:"+Math.min(100,Math.round(tot.cal/m.cal*100))+"%\"></div>"
     +"</div>"
     +"</div>"
     +"</div>"
@@ -1226,7 +1226,7 @@ function bWorkoutPanel(){
   var daysLeft=6-DAY;
   var behindBanner="";
   if(wkPts<2&&DAY>0){
-    behindBanner="<div style=\"background:#fdf0e6;border:1.5px solid #f5c89a;border-radius:12px;padding:10px 13px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center\">"
+    behindBanner="<div style=\"background:#1e1408;border:1.5px solid #3a2510;border-radius:12px;padding:10px 13px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center\">"
       +"<div><div style=\"font-size:12px;font-weight:700;color:#f5a623\">Week "+W+" &mdash; behind pace</div>"
       +"<div style=\"font-size:11px;color:#6b7280;margin-top:2px\">"+Math.round(wkPts*10)/10+"/6 pts &middot; Consider repeating this week</div></div>"
       +"<button id=\"repeat-week-btn\" style=\"padding:7px 12px;border-radius:8px;border:none;background:#c0580a;color:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit\">Repeat</button>"
@@ -1621,7 +1621,7 @@ function bRest(){
       });
       h+="</div></div>";
     } else {
-      h+="<div style=\"background:#e6f7ed;border-radius:10px;padding:10px 12px;margin-bottom:10px;font-size:12px;color:#3dd68c;font-weight:700\">&#10003; Review saved: "+review+"</div>";
+      h+="<div style=\"background:#0a1e14;border-radius:10px;padding:10px 12px;margin-bottom:10px;font-size:12px;color:#3dd68c;font-weight:700\">&#10003; Review saved: "+review+"</div>";
     }
     // AI Weekly Debrief
     h+="<div style=\"background:#22273a;border-radius:14px;border:1px solid #2e3347;padding:14px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,.08)\">";
@@ -1701,7 +1701,7 @@ function bFood(){
   var cats=["palm","cupped","fist","thumb"];
   var h="<div class=\"date-nav\"><button class=\"date-btn\" id=\"fd-prev\">&#8249;</button><div class=\"date-txt\">"+fmtDate(FDATE)+"</div><button class=\"date-btn\" id=\"fd-next\">&#8250;</button></div>";
 
-  h+="<div style=\"background:#fff;border-radius:11px;padding:12px 13px;margin-bottom:9px;border:1px solid #d1d5db\"><div class=\"lbl\" style=\"margin-bottom:10px\">Daily Portions</div>";
+  h+="<div style=\"background:#22273a;border-radius:11px;padding:12px 13px;margin-bottom:9px;border:1px solid #d1d5db\"><div class=\"lbl\" style=\"margin-bottom:10px\">Daily Portions</div>";
   cats.forEach(function(cat){
     var p=PN[cat],t=tgts[cat],c=Math.min(cons[cat]||0,t+3),dots="";
     for(var i=0;i<t;i++){var f=i<c;dots+="<button data-dot-cat=\""+cat+"\" data-dot-idx=\""+i+"\" style=\"width:26px;height:26px;border-radius:50%;border:2px solid "+p.col+";background:"+(f?p.col:"transparent")+";cursor:pointer;margin:2px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center\">"+(f?"<span style=\"color:#fff;font-size:10px;font-weight:700\">&#10003;</span>":"")+"</button>";}
@@ -1747,7 +1747,7 @@ function bFood(){
         +"<div style=\"text-align:center;background:#dde0e5;border-radius:8px;padding:9px 3px\"><div id=\"plate-mac-fat\" style=\"font-size:18px;font-weight:700\">"+(pp.fat*PLATE_QTY).toFixed(1)+"</div><div style=\"font-size:9px;color:#6b6b6b\">fat</div></div></div>"
         +"<button id=\"hot-log-btn\" style=\"width:100%;padding:14px;border-radius:10px;border:none;background:"+pp.col+";color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit\">Hot Log &#10003;</button></div>";
     }
-    h+="<div style=\"background:#fff;border-radius:11px;padding:12px 13px;margin-bottom:9px;border:1px solid #d1d5db\">"
+    h+="<div style=\"background:#22273a;border-radius:11px;padding:12px 13px;margin-bottom:9px;border:1px solid #d1d5db\">"
       +"<div style=\"display:flex;justify-content:space-between;align-items:center;margin-bottom:10px\"><div style=\"font-size:13px;font-weight:700\">Hand Log</div>"
       +"<button id=\"plate-cancel\" style=\"font-size:12px;color:#8a9bb0;background:none;padding:4px 8px;border:1px solid #d1d5db;border-radius:6px;cursor:pointer\">Done</button></div>"
       +"<div style=\"display:flex;gap:6px\">"+cBtns+"</div>"+det+"</div>";
@@ -2163,7 +2163,7 @@ function bProgress(){
   // ── Program overview ─────────────────────────────────────────────────
   var pct=Math.round(W/26*100);
   var weeksLeft=26-W;
-  var endDate=new Date(new Date("2026-08-24T12:00:00").getTime()+26*7*864e5);
+  var endDate=new Date(new Date((localStorage.getItem("tf_prog_start")||"2026-08-24")+"T12:00:00").getTime()+26*7*864e5);
   var months=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   var endStr=months[endDate.getMonth()]+" "+endDate.getDate();
   var deloadsHit=[4,8,12,16,20,24].filter(function(dw){return dw<W;}).length;
@@ -2311,22 +2311,35 @@ function bProgress(){
     h+="</div><button id=\"ms-save-btn\" style=\"width:100%;padding:11px;border-radius:9px;border:none;background:#c0580a;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit\">Save Measurements</button></div>";
   }
 
-  // ── Hand size settings ────────────────────────────────────────────────
-  h+="<div style=\"background:#22273a;border-radius:12px;border:1px solid #2e3347;padding:12px 13px;margin-bottom:10px\">"
-    +"<div style=\"display:flex;justify-content:space-between;align-items:center;margin-bottom:8px\">"+"<div style=\"font-size:12px;font-weight:700\">&#9881;&#65039; Settings</div>"+"<button id=\"dark-toggle\" style=\"font-size:12px;padding:5px 12px;border-radius:8px;border:1.5px solid #d1d5db;background:#fff;color:#e8eaf0;cursor:pointer;font-family:inherit;font-weight:700\">"+(DARK_MODE?"&#9728;&#65039; Light":"&#127763; Dark")+"</button>"+"</div>"
-    +"<button id=\"api-toggle\" style=\"width:100%;text-align:left;background:none;border:none;padding:8px 0;cursor:pointer;font-family:inherit;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #d1d5db;margin-bottom:"+(API_SETTINGS_OPEN?"10px":"0")+"\">"+"<span style=\"font-size:12px;font-weight:700\">&#9881;&#65039; API Key: "+(getApiKey()?"<span style=\"color:#3dd68c\">saved &#10003;</span>":"<span style=\"color:#f5a623\">not set</span>")+"</span>"+"<span style=\"font-size:11px;color:#6b7280\">"+(API_SETTINGS_OPEN?"&#9650;":"&#9660;")+"</span>"+"</button>"+(API_SETTINGS_OPEN?"<div style=\"margin-bottom:8px\">"
-+"<div style=\"font-size:11px;color:#6b7280;margin-bottom:6px\">Free at console.anthropic.com</div>"
-+"<input type=\"password\" id=\"api-key-inp\" class=\"inp\" placeholder=\"sk-ant-...\" value=\""+getApiKey()+"\" style=\"font-family:monospace;font-size:12px;margin-bottom:6px\">"
-+"<button id=\"api-key-save\" style=\"width:100%;padding:9px;border-radius:8px;border:none;background:#1a6fa8;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit\">Save API Key</button>"
-+"</div>"
-:"")
-+"</div>"+"<div style=\"font-size:12px;font-weight:700;color:#6b6b6b;margin-bottom:6px\">Hand Portion Sizes</div>"
-    +"<div style=\"display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px\">"
-    +[["hand-palm","Palm (oz protein)","4"],["hand-cup","Cup (oz carbs)","1"],["hand-fist","Fist (oz veg)","1"],["hand-thumb","Thumb (fat tbsp)","1"]].map(function(f){
+  // ── Settings (dark toggle only) ───────────────────────────────────────
+  h+="<div style=\"background:#22273a;border-radius:12px;border:1px solid #2e3347;padding:10px 13px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center\">"
+    +"<div style=\"font-size:12px;font-weight:700\">&#9881;&#65039; Settings</div>"
+    +"<button id=\"dark-toggle\" style=\"font-size:12px;padding:5px 12px;border-radius:8px;border:1px solid #2e3347;background:#1a1e2a;color:#e8eaf0;cursor:pointer;font-family:inherit;font-weight:700\">"+(DARK_MODE?"&#9728;&#65039; Light":"&#127763; Dark")+"</button>"
+    +"</div>";
+
+  // ── Advanced settings (collapsed) ───────────────────────────────────────
+  h+="<div style=\"background:#22273a;border-radius:12px;border:1px solid #2e3347;margin-bottom:10px;overflow:hidden\">";
+  h+="<button id=\"api-toggle\" style=\"width:100%;text-align:left;background:none;border:none;padding:10px 13px;cursor:pointer;font-family:inherit;display:flex;justify-content:space-between;align-items:center\">"
+    +"<span style=\"font-size:12px;font-weight:700;color:#e8eaf0\">&#128274; Advanced &mdash; API Key &amp; Portions</span>"
+    +"<span style=\"font-size:11px;color:#8a9bb0\">"+(API_SETTINGS_OPEN?"&#9650;":"&#9660;")+"</span>"
+    +"</button>";
+  if(API_SETTINGS_OPEN){
+    h+="<div style=\"padding:0 13px 13px\">";
+    h+="<div style=\"font-size:11px;font-weight:700;color:#8a9bb0;margin-bottom:4px\">Anthropic API Key</div>";
+    h+="<div style=\"font-size:10px;color:#8a9bb0;margin-bottom:8px\">Free at console.anthropic.com</div>";
+    h+="<input type=\"password\" id=\"api-key-inp\" class=\"inp\" placeholder=\"sk-ant-...\" value=\""+getApiKey()+"\" style=\"font-family:monospace;font-size:12px;margin-bottom:8px\">";
+    h+="<button id=\"api-key-save\" style=\"width:100%;padding:9px;border-radius:8px;border:none;background:#4da6e8;color:#0d1e2e;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:14px\">Save API Key</button>";
+    h+="<div style=\"font-size:11px;font-weight:700;color:#8a9bb0;margin-bottom:8px\">Hand Portion Sizes</div>";
+    h+="<div style=\"display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px\">";
+    [["hand-palm","Palm (oz protein)","4"],["hand-cup","Cup (oz carbs)","1"],["hand-fist","Fist (oz veg)","1"],["hand-thumb","Thumb (fat tbsp)","1"]].forEach(function(f){
       var val=localStorage.getItem(f[0])||f[2];
-      return"<div><div class=\"lbl\">"+f[1]+"</div><input type=\"number\" inputmode=\"decimal\" class=\"inp\" id=\""+f[0]+"\" value=\""+val+"\"></div>";
-    }).join("")
-    +"</div><button id=\"hand-save-btn\" style=\"width:100%;padding:10px;border-radius:9px;border:none;background:#6b6b6b;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit\">Save Hand Sizes</button></div>";
+      h+="<div><div class=\"lbl\">"+f[1]+"</div><input type=\"number\" inputmode=\"decimal\" class=\"inp\" id=\""+f[0]+"\" value=\""+val+"\"></div>";
+    });
+    h+="</div><button id=\"hand-save-btn\" style=\"width:100%;padding:9px;border-radius:8px;border:none;background:#22273a;border:1px solid #2e3347;color:#e8eaf0;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit\">Save Hand Sizes</button>";
+    h+="</div>";
+  }
+  h+="</div>";
+
 
   return h;
 }
