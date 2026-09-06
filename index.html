@@ -21,8 +21,8 @@
   --red:#c0392b;    --rlt:#fdecea;
   --purple:#6b21a8;
   --text:#1a1a2a;   --muted:#6b7280;
-  --bdr:#d1d5db;    --bg:#e8eaed;   --card:#ffffff;
-  --shadow:0 2px 8px rgba(0,0,0,0.10);
+  --bdr:#c4c8cf;    --bg:#d4d8df;   --card:#f2f3f5;
+  --shadow:0 2px 8px rgba(0,0,0,0.13);
 }
 body.dark{
   --blue:#4da6e8;--blt:#0d1e2e;--green:#3dd68c;--glt:#0a1e14;
@@ -342,7 +342,7 @@ function bProgressionSummary(){
   var ready=Object.keys(status).filter(function(k){return status[k].ready;});
   var hitting=Object.keys(status).filter(function(k){return !status[k].ready&&status[k].hit;});
   if(ready.length===0&&hitting.length===0) return "";
-  var h='<div style="background:#fff;border-radius:12px;border:1px solid #d1d5db;margin-bottom:10px;overflow:hidden">'
+  var h='<div style="background:#f2f3f5;border-radius:12px;border:1px solid #c4c8cf;margin-bottom:10px;overflow:hidden">'
     +'<div style="background:#1a7a44;padding:9px 13px;display:flex;align-items:center;gap:8px">'
     +'<span style="font-size:16px">&#128200;</span>'
     +'<span style="font-size:13px;font-weight:700;color:#fff">Progression Update</span>'
@@ -622,7 +622,7 @@ function setModeAndRefresh(mode){
   markDirty("workout");paint();
 }
 function bCheckin(){
-  return"<div style=\"background:#fff;border-radius:14px;border:1px solid #d1d5db;padding:18px 16px;margin-bottom:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.10)\">"
+  return"<div style=\"background:#f2f3f5;border-radius:14px;border:1px solid #c4c8cf;padding:18px 16px;margin-bottom:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.10)\">"
     +"<div style=\"font-size:24px;margin-bottom:8px\">&#128170;</div>"
     +"<div style=\"font-size:16px;font-weight:800;margin-bottom:4px\">How are you feeling today?</div>"
     +"<div style=\"font-size:12px;color:#6b7280;margin-bottom:16px\">This helps the app suggest the right session.</div>"
@@ -958,7 +958,7 @@ function bDailySummary(){
 }
 
 function bCheckin(){
-  return"<div style=\"background:#fff;border-radius:14px;border:1px solid #d1d5db;padding:18px 16px;margin-bottom:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.10)\">"
+  return"<div style=\"background:#f2f3f5;border-radius:14px;border:1px solid #c4c8cf;padding:18px 16px;margin-bottom:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.10)\">"
     +"<div style=\"font-size:24px;margin-bottom:8px\">&#128170;</div>"
     +"<div style=\"font-size:16px;font-weight:800;margin-bottom:4px\">How are you feeling today?</div>"
     +"<div style=\"font-size:12px;color:#6b7280;margin-bottom:16px\">This helps the app suggest the right session.</div>"
@@ -1359,7 +1359,7 @@ function bWorkout(){
   // WORKOUT NOTES
   var existingNote=getSessionData(W,DAY)&&getSessionData(W,DAY).note||"";
   var notesOpen=existingNote.length>0||NOTES_OPEN;
-  h+="<div style=\"background:#fff;border-radius:12px;border:1px solid #d1d5db;padding:10px 12px;margin-bottom:10px\">"
+  h+="<div style=\"background:#f2f3f5;border-radius:12px;border:1px solid #c4c8cf;padding:10px 12px;margin-bottom:10px\">"
     +"<button id=\"notes-toggle\" style=\"width:100%;text-align:left;background:none;border:none;padding:0;cursor:pointer;font-family:inherit;display:flex;justify-content:space-between;align-items:center\">"
     +"<span style=\"font-size:12px;font-weight:700\">&#128221; Session Notes"+(existingNote?" &#10003;":"")+"</span>"
     +"<span style=\"font-size:11px;color:#6b7280\">"+(notesOpen?"&#9650;":"&#9660;")+"</span>"
@@ -1367,7 +1367,7 @@ function bWorkout(){
     +(notesOpen
       ?"<textarea id=\"session-note\" rows=\"3\" placeholder=\"How did it feel? Any PRs? Adjustments?\" "
         +"style=\"width:100%;margin-top:8px;border:1.5px solid #d1d5db;border-radius:8px;padding:8px;font-size:13px;"
-        +"font-family:inherit;color:#1a1a2a;background:#f9fafb;resize:none;outline:none\">"
+        +"font-family:inherit;color:#1a1a2a;background:#f2f3f5;resize:none;outline:none\">"
         +existingNote+"</textarea>"
         +"<button id=\"note-save-btn\" style=\"margin-top:6px;padding:7px 16px;border-radius:8px;border:none;"
         +"background:#1a6fa8;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit\">Save Note</button>"
@@ -1568,7 +1568,7 @@ function bWeeklySummary(){
   var good=workoutsDone>=workoutDays.length-1&&rucksDone>=ruckDays.length-1;
   var grade=perfect?"&#127942; Perfect week!":good?"&#128079; Solid week":"&#128165; Keep pushing";
   var gradCol=perfect?"#1a7a44":good?"#1a6fa8":"#c0580a";
-  return "<div style=\"background:#fff;border-radius:12px;border:1px solid #d1d5db;margin-bottom:10px;overflow:hidden\">"
+  return "<div style=\"background:#f2f3f5;border-radius:12px;border:1px solid #c4c8cf;margin-bottom:10px;overflow:hidden\">"
     +"<div style=\"background:#1a6fa8;padding:10px 13px;display:flex;align-items:center;gap:8px\">"
     +"<span style=\"font-size:16px\">&#128203;</span>"
     +"<span style=\"font-size:13px;font-weight:700;color:#fff\">Week "+W+" Summary</span></div>"
@@ -1594,7 +1594,7 @@ function bRest(){
     var pts=Math.round(getWeekPoints(W)*10)/10;
     var eligible=pts>=4;
     var review=localStorage.getItem("review_w"+W);
-    h+="<div style=\"background:#fff;border-radius:14px;border:1px solid #d1d5db;padding:14px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,.08)\">"
+    h+="<div style=\"background:#f2f3f5;border-radius:14px;border:1px solid #c4c8cf;padding:14px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,.08)\">"
       +"<div style=\"font-size:14px;font-weight:800;margin-bottom:8px\">Week "+W+" Completion</div>"
       +"<div style=\"display:flex;align-items:center;gap:8px;margin-bottom:10px\">"
       +"<div style=\"flex:1;background:#e8eaed;border-radius:6px;height:10px\">"
@@ -1611,7 +1611,7 @@ function bRest(){
     }
     h+="</div>";
     if(!review){
-      h+="<div style=\"background:#fff;border-radius:14px;border:1px solid #d1d5db;padding:14px;margin-bottom:10px\">"
+      h+="<div style=\"background:#f2f3f5;border-radius:14px;border:1px solid #c4c8cf;padding:14px;margin-bottom:10px\">"
         +"<div style=\"font-size:13px;font-weight:800;margin-bottom:10px\">What got in the way this week?</div>"
         +"<div style=\"display:flex;flex-direction:column;gap:6px\">";
       [["time","&#128336; Time"],["energy","&#128564; Low energy"],
@@ -1624,7 +1624,7 @@ function bRest(){
       h+="<div style=\"background:#e6f7ed;border-radius:10px;padding:10px 12px;margin-bottom:10px;font-size:12px;color:#1a7a44;font-weight:700\">&#10003; Review saved: "+review+"</div>";
     }
     // AI Weekly Debrief
-    h+="<div style=\"background:#fff;border-radius:14px;border:1px solid #d1d5db;padding:14px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,.08)\">";
+    h+="<div style=\"background:#f2f3f5;border-radius:14px;border:1px solid #c4c8cf;padding:14px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,.08)\">";
     h+="<div style=\"display:flex;justify-content:space-between;align-items:center;margin-bottom:10px\">";
     h+="<div style=\"font-size:13px;font-weight:800\">&#9889; AI Coach Debrief</div>";
     // Share week summary button
@@ -1742,9 +1742,9 @@ function bFood(){
         +"<button id=\"plate-plus\" style=\"width:44px;height:44px;border-radius:9px;background:#e8eaed;border:1.5px solid #d1d5db;font-size:24px;font-weight:700;cursor:pointer;font-family:inherit\">+</button></div>"
         +"<div style=\"display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px\">"
         +"<div style=\"text-align:center;background:"+pp.col+"22;border-radius:8px;padding:9px 3px\"><div id=\"plate-mac-cal\" style=\"font-size:18px;font-weight:700;color:"+pp.col+"\">"+Math.round(pp.cal*PLATE_QTY)+"</div><div style=\"font-size:9px;color:#6b6b6b\">cal</div></div>"
-        +"<div style=\"text-align:center;background:#e8eaed;border-radius:8px;padding:9px 3px\"><div id=\"plate-mac-pro\" style=\"font-size:18px;font-weight:700\">"+(pp.pro*PLATE_QTY).toFixed(1)+"</div><div style=\"font-size:9px;color:#6b6b6b\">prot</div></div>"
-        +"<div style=\"text-align:center;background:#e8eaed;border-radius:8px;padding:9px 3px\"><div id=\"plate-mac-carb\" style=\"font-size:18px;font-weight:700\">"+(pp.carb*PLATE_QTY).toFixed(1)+"</div><div style=\"font-size:9px;color:#6b6b6b\">carbs</div></div>"
-        +"<div style=\"text-align:center;background:#e8eaed;border-radius:8px;padding:9px 3px\"><div id=\"plate-mac-fat\" style=\"font-size:18px;font-weight:700\">"+(pp.fat*PLATE_QTY).toFixed(1)+"</div><div style=\"font-size:9px;color:#6b6b6b\">fat</div></div></div>"
+        +"<div style=\"text-align:center;background:#dde0e5;border-radius:8px;padding:9px 3px\"><div id=\"plate-mac-pro\" style=\"font-size:18px;font-weight:700\">"+(pp.pro*PLATE_QTY).toFixed(1)+"</div><div style=\"font-size:9px;color:#6b6b6b\">prot</div></div>"
+        +"<div style=\"text-align:center;background:#dde0e5;border-radius:8px;padding:9px 3px\"><div id=\"plate-mac-carb\" style=\"font-size:18px;font-weight:700\">"+(pp.carb*PLATE_QTY).toFixed(1)+"</div><div style=\"font-size:9px;color:#6b6b6b\">carbs</div></div>"
+        +"<div style=\"text-align:center;background:#dde0e5;border-radius:8px;padding:9px 3px\"><div id=\"plate-mac-fat\" style=\"font-size:18px;font-weight:700\">"+(pp.fat*PLATE_QTY).toFixed(1)+"</div><div style=\"font-size:9px;color:#6b6b6b\">fat</div></div></div>"
         +"<button id=\"hot-log-btn\" style=\"width:100%;padding:14px;border-radius:10px;border:none;background:"+pp.col+";color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit\">Hot Log &#10003;</button></div>";
     }
     h+="<div style=\"background:#fff;border-radius:11px;padding:12px 13px;margin-bottom:9px;border:1px solid #d1d5db\">"
@@ -1769,7 +1769,7 @@ function bFood(){
       h+="<div class=\"card\" style=\"text-align:center;padding:20px\"><div style=\"font-size:30px;margin-bottom:8px\">&#10024;</div><div style=\"font-size:14px;font-weight:700;margin-bottom:4px\">Finding meal ideas...</div><div style=\"font-size:12px;color:#6b6b6b\">Checking your macros and time of day</div></div>";
     }
     if(MEAL_STATE==="result"&&MEAL_RESULT){
-      h+="<div style=\"background:#fff;border-radius:12px;border:1px solid #d1d5db;margin-bottom:9px;overflow:hidden\">"
+      h+="<div style=\"background:#f2f3f5;border-radius:12px;border:1px solid #c4c8cf;margin-bottom:9px;overflow:hidden\">"
         +"<div style=\"background:linear-gradient(135deg,#7c3aed,#1a6fa8);padding:10px 13px;display:flex;justify-content:space-between;align-items:center\">"
         +"<span style=\"font-size:13px;font-weight:700;color:#fff\">&#10024; Meal Suggestions</span>"
         +"<button id=\"meal-clear-btn\" style=\"font-size:11px;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);border-radius:7px;padding:4px 10px;color:#fff;cursor:pointer;font-family:inherit\">New</button>"
@@ -1937,7 +1937,7 @@ function bAI(){
   // Saved workouts library
   var saved=getSavedWorkouts();
   if(saved.length>0){
-    h+='<div style="background:#fff;border-radius:12px;border:1px solid #d1d5db;overflow:hidden;margin-top:8px">'
+    h+='<div style="background:#f2f3f5;border-radius:12px;border:1px solid #c4c8cf;overflow:hidden;margin-top:8px">'
       +'<div style="background:#1a1a2e;padding:9px 13px"><span style="font-size:13px;font-weight:700;color:#fff">&#128218; Saved Workouts</span></div>';
     saved.forEach(function(w){
       h+='<div style="padding:10px 13px;border-bottom:1px solid #d1d5db;display:flex;justify-content:space-between;align-items:center">'
@@ -1968,7 +1968,7 @@ function weightChart(){
       }
     }catch(e){}
   }
-  if(weeks.length<2) return"<div style=\"background:#fff;border-radius:12px;border:1px solid #d1d5db;padding:14px 13px;margin-bottom:10px;text-align:center;color:#6b6b6b;font-size:12px\">Log weight for 2+ weeks to see your trend chart</div>";
+  if(weeks.length<2) return"<div style=\"background:#f2f3f5;border-radius:12px;border:1px solid #c4c8cf;padding:14px 13px;margin-bottom:10px;text-align:center;color:#6b6b6b;font-size:12px\">Log weight for 2+ weeks to see your trend chart</div>";
   // SVG dimensions
   var svgW=300,svgH=120,padL=34,padR=10,padT=10,padB=20;
   var chartW=svgW-padL-padR,chartH=svgH-padT-padB;
@@ -2010,7 +2010,7 @@ function weightChart(){
     +"</svg>";
   var firstW=weeks[0].avg,lastW=weeks[weeks.length-1].avg;
   var diff=Math.round((firstW-lastW)*10)/10;
-  return"<div style=\"background:#fff;border-radius:12px;border:1px solid #d1d5db;padding:12px 13px;margin-bottom:10px\">"
+  return"<div style=\"background:#f2f3f5;border-radius:12px;border:1px solid #c4c8cf;padding:12px 13px;margin-bottom:10px\">"
     +"<div style=\"display:flex;justify-content:space-between;align-items:center;margin-bottom:8px\">"
     +"<div style=\"font-size:13px;font-weight:700\">Weight Trend</div>"
     +(diff>0?"<div style=\"font-size:12px;color:#1a7a44;font-weight:700\">-"+diff+" lb lost</div>":diff<0?"<div style=\"font-size:12px;color:#c0580a;font-weight:700\">+"+Math.abs(diff)+" lb</div>":"<div style=\"font-size:12px;color:#6b6b6b\">Tracking...</div>")
@@ -2169,7 +2169,7 @@ function bProgress(){
   var deloadsHit=[4,8,12,16,20,24].filter(function(dw){return dw<W;}).length;
   var phase=W<=12?1:W<=20?2:3;
 
-  h+="<div style=\"background:#fff;border-radius:12px;border:1px solid #d1d5db;padding:13px 14px;margin-bottom:10px\">"
+  h+="<div style=\"background:#f2f3f5;border-radius:12px;border:1px solid #c4c8cf;padding:13px 14px;margin-bottom:10px\">"
     +"<div style=\"display:flex;justify-content:space-between;align-items:center;margin-bottom:6px\">"
     +"<div style=\"font-size:14px;font-weight:700\">Week "+W+" of 26</div>"
     +"<div style=\"font-size:12px;color:#6b6b6b\">"+weeksLeft+" weeks left</div></div>"
@@ -2194,7 +2194,7 @@ function bProgress(){
   var curW2=mdataM.length&&mdataM[mdataM.length-1].weight?mdataM[mdataM.length-1].weight:sw;
   var lost=Math.round((sw-curW2)*10)/10;
 
-  h+="<div style=\"background:#fff;border-radius:12px;border:1px solid #d1d5db;padding:12px 13px;margin-bottom:10px\">"
+  h+="<div style=\"background:#f2f3f5;border-radius:12px;border:1px solid #c4c8cf;padding:12px 13px;margin-bottom:10px\">"
     +"<div style=\"font-size:12px;font-weight:700;margin-bottom:8px\">Start &amp; Goal Weights</div>"
     +"<div style=\"display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px\">"
     +"<div><div class=\"lbl\">Start (lb)</div><input type=\"number\" inputmode=\"decimal\" id=\"sw-inp\" class=\"inp\" value=\""+sw+"\" style=\"font-size:18px;font-weight:700\"></div>"
@@ -2209,7 +2209,7 @@ function bProgress(){
   var bwVals2=BWD.map(function(d){return parseFloat(bwObj2[d]);}).filter(function(v){return!isNaN(v)&&v>0;});
   var bwAvg2=bwVals2.length?Math.round(bwVals2.reduce(function(a,b){return a+b;},0)/bwVals2.length*10)/10:null;
 
-  h+="<div style=\"background:#fff;border-radius:12px;border:1px solid #d1d5db;padding:12px 13px;margin-bottom:10px\">"
+  h+="<div style=\"background:#f2f3f5;border-radius:12px;border:1px solid #c4c8cf;padding:12px 13px;margin-bottom:10px\">"
     +"<div style=\"display:flex;justify-content:space-between;align-items:center;margin-bottom:10px\">"
     +"<div style=\"font-size:13px;font-weight:700\">This Week</div>"
     +(bwAvg2?"<div style=\"font-size:13px;font-weight:700;color:#1a6fa8\">Avg: "+bwAvg2+" lb</div>":"")
@@ -2231,7 +2231,7 @@ function bProgress(){
   var volData=[];
   for(var wv=1;wv<=W;wv++){var v=getWeekVolume(wv);if(v>0)volData.push({w:wv,val:v});}
   if(volData.length>0){
-    h+="<div style=\"background:#fff;border-radius:12px;border:1px solid #d1d5db;padding:12px 13px;margin-bottom:10px\">"
+    h+="<div style=\"background:#f2f3f5;border-radius:12px;border:1px solid #c4c8cf;padding:12px 13px;margin-bottom:10px\">"
       +"<div style=\"font-size:13px;font-weight:700;margin-bottom:8px\">&#128170; Weekly Volume (sets logged)</div>"
       +svgBarChart(volData,"#1a6fa8","sets",function(v){return v+"";})
       +"</div>";
@@ -2241,7 +2241,7 @@ function bProgress(){
   var ruckData=[];
   for(var wr=1;wr<=W;wr++){var pace=getWeekRuckPace(wr);if(pace)ruckData.push({w:wr,val:pace});}
   if(ruckData.length>0){
-    h+="<div style=\"background:#fff;border-radius:12px;border:1px solid #d1d5db;padding:12px 13px;margin-bottom:10px\">"
+    h+="<div style=\"background:#f2f3f5;border-radius:12px;border:1px solid #c4c8cf;padding:12px 13px;margin-bottom:10px\">"
       +"<div style=\"font-size:13px;font-weight:700;margin-bottom:8px\">&#128098; Ruck Pace (min/mi)</div>"
       +svgBarChart(ruckData,"#1a7a44","min/mi",function(v){return v+"";})
       +"<div style=\"font-size:10px;color:#6b6b6b;margin-top:4px\">Lower = faster</div>"
@@ -2250,7 +2250,7 @@ function bProgress(){
 
   // ── Measurements progress ─────────────────────────────────────────────
   // ── Progress photos ──────────────────────────────────────────────────────
-  h+="<div style=\"background:#fff;border-radius:12px;border:1px solid #d1d5db;padding:12px 13px;margin-bottom:10px\">"
+  h+="<div style=\"background:#f2f3f5;border-radius:12px;border:1px solid #c4c8cf;padding:12px 13px;margin-bottom:10px\">"
     +"<div style=\"display:flex;justify-content:space-between;align-items:center;margin-bottom:8px\">"
     +"<div style=\"font-size:13px;font-weight:700\">&#128247; Progress Photos</div>"
     +"<button id=\"photo-btn\" style=\"padding:6px 12px;border-radius:8px;border:none;background:#1a6fa8;color:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit\">Add Photo</button>"
@@ -2277,7 +2277,7 @@ function bProgress(){
     var firstM=mdataM[0],lastM=mdataM[mdataM.length-1];
     var mFieldsM=["weight","chest","waist","hips","neck","arm"];
     var mLabelsM={"weight":"Weight","chest":"Chest","waist":"Waist","hips":"Hips","neck":"Neck","arm":"Arm"};
-    h+="<div style=\"background:#fff;border-radius:12px;border:1px solid #d1d5db;padding:12px 13px;margin-bottom:10px\">"
+    h+="<div style=\"background:#f2f3f5;border-radius:12px;border:1px solid #c4c8cf;padding:12px 13px;margin-bottom:10px\">"
       +"<div style=\"font-size:13px;font-weight:700;margin-bottom:8px\">&#128207; Measurements Progress</div>"
       +"<div style=\"display:grid;grid-template-columns:repeat(2,1fr);gap:6px\">";
     mFieldsM.forEach(function(f){
@@ -2286,7 +2286,7 @@ function bProgress(){
       var diff=Math.round((lv-fv)*10)/10;
       var good=(f==="weight"||f==="waist"||f==="hips")?diff<0:diff>0;
       var col=diff===0?"#6b6b6b":good?"#1a7a44":"#c0580a";
-      h+="<div style=\"background:#f8f9fa;border-radius:8px;padding:8px 10px\">"
+      h+="<div style=\"background:#eceef0;border-radius:8px;padding:8px 10px\">"
         +"<div style=\"font-size:10px;color:#6b6b6b;margin-bottom:2px\">"+mLabelsM[f]+"</div>"
         +"<div style=\"display:flex;justify-content:space-between;align-items:baseline\">"
         +"<span style=\"font-size:15px;font-weight:700\">"+lv+"</span>"
@@ -2312,7 +2312,7 @@ function bProgress(){
   }
 
   // ── Hand size settings ────────────────────────────────────────────────
-  h+="<div style=\"background:#fff;border-radius:12px;border:1px solid #d1d5db;padding:12px 13px;margin-bottom:10px\">"
+  h+="<div style=\"background:#f2f3f5;border-radius:12px;border:1px solid #c4c8cf;padding:12px 13px;margin-bottom:10px\">"
     +"<div style=\"display:flex;justify-content:space-between;align-items:center;margin-bottom:8px\">"+"<div style=\"font-size:12px;font-weight:700\">&#9881;&#65039; Settings</div>"+"<button id=\"dark-toggle\" style=\"font-size:12px;padding:5px 12px;border-radius:8px;border:1.5px solid #d1d5db;background:#fff;color:#1c1c1e;cursor:pointer;font-family:inherit;font-weight:700\">"+(DARK_MODE?"&#9728;&#65039; Light":"&#127763; Dark")+"</button>"+"</div>"
     +"<button id=\"api-toggle\" style=\"width:100%;text-align:left;background:none;border:none;padding:8px 0;cursor:pointer;font-family:inherit;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #d1d5db;margin-bottom:"+(API_SETTINGS_OPEN?"10px":"0")+"\">"+"<span style=\"font-size:12px;font-weight:700\">&#9881;&#65039; API Key: "+(getApiKey()?"<span style=\"color:#1a7a44\">saved &#10003;</span>":"<span style=\"color:#c0580a\">not set</span>")+"</span>"+"<span style=\"font-size:11px;color:#6b7280\">"+(API_SETTINGS_OPEN?"&#9650;":"&#9660;")+"</span>"+"</button>"+(API_SETTINGS_OPEN?"<div style=\"margin-bottom:8px\">"
 +"<div style=\"font-size:11px;color:#6b7280;margin-bottom:6px\">Free at console.anthropic.com</div>"
@@ -2357,7 +2357,7 @@ function bGoals(){
   var bestStreak=getBestStreak();
   var streakCol=streak===0?"#6b6b6b":streak<4?"#1a6fa8":streak<8?"#c0580a":"#1a7a44";
 
-  var h="<div style=\"background:#fff;border-radius:12px;border:1px solid #d1d5db;margin-bottom:10px;overflow:hidden\">"
+  var h="<div style=\"background:#f2f3f5;border-radius:12px;border:1px solid #c4c8cf;margin-bottom:10px;overflow:hidden\">"
     +"<div style=\"background:"+streakCol+";padding:10px 13px;display:flex;align-items:center;justify-content:space-between\">"
     +"<div style=\"display:flex;align-items:center;gap:8px\"><span style=\"font-size:20px\">"+(streak===0?"&#127919;":streak<4?"&#128293;":"&#127942;")+"</span>"
     +"<span style=\"font-size:14px;font-weight:700;color:#fff\">"+streakMsg+"</span></div>"
@@ -2417,7 +2417,7 @@ function bGoals(){
     h+="<div class=\"card\"><div class=\"lbl\" style=\"margin-bottom:8px\">Progress</div>"
       +"<div style=\"display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px\">"
       +"<div style=\"text-align:center;background:#e6f7ed;border-radius:8px;padding:8px 3px\"><div style=\"font-size:18px;font-weight:700;color:#1a7a44\">"+(lost>=0?"-":"")+lost+"</div><div style=\"font-size:9px;color:#6b6b6b\">LB LOST</div></div>"
-      +"<div style=\"text-align:center;background:#e8eaed;border-radius:8px;padding:8px 3px\"><div style=\"font-size:18px;font-weight:700\">"+curW+"</div><div style=\"font-size:9px;color:#6b6b6b\">CURRENT</div></div>"
+      +"<div style=\"text-align:center;background:#dde0e5;border-radius:8px;padding:8px 3px\"><div style=\"font-size:18px;font-weight:700\">"+curW+"</div><div style=\"font-size:9px;color:#6b6b6b\">CURRENT</div></div>"
       +"<div style=\"text-align:center;background:#e8f3fb;border-radius:8px;padding:8px 3px\"><div style=\"font-size:18px;font-weight:700;color:#1a6fa8\">"+(gw0-curW>0?Math.round((gw0-curW)*10)/10:0)+"</div><div style=\"font-size:9px;color:#6b6b6b\">TO GO</div></div>"
       +"</div>";
     for(var mi=mdata.length-1;mi>=Math.max(0,mdata.length-5);mi--){var me=mdata[mi];h+="<div style=\"display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #e8eaed\"><div><div style=\"font-size:12px;font-weight:600\">"+me.date+"</div>"+(me.note?"<div style=\"font-size:10px;color:#6b6b6b\">"+me.note+"</div>":"")+"</div><div style=\"display:flex;align-items:center;gap:8px\"><div style=\"text-align:right;font-size:11px;color:#6b6b6b\">"+(me.weight?"<span style=\"font-size:13px;font-weight:700;color:#1c1c1e\">"+me.weight+"lb</span> ":"")+(me.chest?" Ch:"+me.chest+"\"":"")+(me.waist?" W:"+me.waist+"\"":"")+(me.rightArm?" Arm:"+me.rightArm+"\"":"")+"</div><button data-del-meas=\""+mi+"\" style=\"color:#c0392b;background:#fdecea;border:1px solid #f5c6c2;border-radius:6px;padding:4px 8px;font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0\">&#10005;</button></div></div>";}
