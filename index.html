@@ -2596,6 +2596,7 @@ function svgBarChart(data,color,yLabel,formatVal){
 
 // ── EXERCISE LIBRARY ──────────────────────────────────────────────────────
 var LIBRARY_SEARCH="";
+var LIBRARY_OPEN_EX=null;
 var EXERCISE_LIB=[
   // Push board
   {name:"Push-Up",muscles:"Chest, Shoulders, Triceps",type:"Push",desc:"Standard push-up. Elbows at 45°, full range of motion. Scale with knee push-ups or elevate hands."},
@@ -2663,6 +2664,36 @@ function bLibrary(){
 
 
 // ── SHARE WEEK ────────────────────────────────────────────────────────────
+// ── LIBRARY LOOKUP ────────────────────────────────────────────────────────
+var LIBRARY_OPEN_EX=null;
+
+function getLibraryEx(name){
+  if(!name) return null;
+  var q=name.toLowerCase();
+  return EXERCISE_LIB.find(function(e){
+    return e.name.toLowerCase()===q
+      ||q.indexOf(e.name.toLowerCase())>=0
+      ||e.name.toLowerCase().indexOf(q)>=0;
+  })||null;
+}
+
+function exLink(name){
+  // Wrap exercise name in a tappable chip that opens library card
+  var ex=getLibraryEx(name);
+  if(!ex) return name;
+  var isOpen=LIBRARY_OPEN_EX===name;
+  var typeCol=ex.type==="Push"?"#4da6e8":ex.type==="Pull"?"#3dd68c":ex.type==="Legs"||ex.type==="Hinge"?"#f5a623":ex.type==="Core"?"#e05c52":"#2dd4bf";
+  var html="<span data-exlink=\""+name.replace(/"/g,"")+"\""
+    +" style=\"cursor:pointer;border-bottom:1px dashed "+typeCol+";color:"+typeCol+"\">"+name+"</span>";
+  if(isOpen){
+    html+="<div style=\"background:#1e2435;border-radius:8px;border:1px solid #2e3347;padding:8px 10px;margin-top:4px;font-size:12px;\">"
+      +"<div style=\"color:#8a9bb0;margin-bottom:3px\">"+ex.muscles+"</div>"
+      +"<div style=\"color:#e8eaf0;line-height:1.4\">"+ex.desc+"</div>"
+      +"</div>";
+  }
+  return html;
+}
+
 function shareWeek(){
   var wkPts=getWeekPoints(W)||0;
   // Weight change this week
@@ -3394,6 +3425,7 @@ var IMPORT_ERROR="";
 var STAGED_FILES=[];
 var PREVIEW_PROGRAM_ID=null;
 var LIBRARY_SEARCH="";
+var LIBRARY_OPEN_EX=null;
 
 function getCustomPrograms(){
   try{return JSON.parse(localStorage.getItem("custom_programs")||"[]");}
@@ -3475,7 +3507,7 @@ function bCustomWorkout(){
       var prev=sg(key+".w")||"";
       h+="<div style=\"background:#22273a;padding:10px 12px;"+(ei>0?"border-top:1px solid #2e3347;":"")+"display:flex;justify-content:space-between;align-items:center\">"
         +"<div style=\"flex:1\">"
-        +"<div style=\"font-size:14px;font-weight:700;color:#e8eaf0\">"+ex.name+"</div>"
+        +"<div style=\"font-size:14px;font-weight:700;color:#e8eaf0\">"+exLink(ex.name)+"</div>"
         +"<div style=\"font-size:12px;color:#8a9bb0;margin-top:2px\">"+sets+" × "+p.reps+(prev?" &middot; prev: "+prev+"lb":"")+"</div>"
         +"</div>"
         +"<div style=\"display:flex;gap:5px;align-items:center\">"
@@ -3895,6 +3927,10 @@ document.addEventListener("click",function(e){
   if(t.dataset&&t.dataset.delprog){
     if(confirm("Delete this program?")) deleteCustomProgram(t.dataset.delprog);
     return;
+  }
+  if(t.dataset&&t.dataset.exlink!==undefined){
+    LIBRARY_OPEN_EX=LIBRARY_OPEN_EX===t.dataset.exlink?null:t.dataset.exlink;
+    markAllDirty();paint();return;
   }
   if(t.dataset&&t.dataset.libtype!==undefined){
     LIBRARY_SEARCH=t.dataset.libtype==="All"?"":t.dataset.libtype.toLowerCase();
