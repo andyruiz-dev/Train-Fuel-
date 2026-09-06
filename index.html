@@ -131,7 +131,7 @@ body.dark .overlay-card{background:#1a1e28}
 <div id="panel-ai"       class="content" style="display:none"></div>
 
 <div class="tabs">
-    <button class="tab act" id="tab-workout" onclick="setTab('workout')"><span class="ti">&#127968;</span><span class="tl">Today</span></button>
+    <button class="tab act" id="tab-workout" onclick="W=calcCurrentWeekGated();DAY=defaultDay();FDATE=getDateForDay(W,DAY);CHECKIN_DONE=false;markAllDirty();renderDayTabs();setTab('workout')"><span class="ti">&#127968;</span><span class="tl">Today</span></button>
     <button class="tab" id="tab-food" onclick="setTab('food')"><span class="ti">&#127822;</span><span class="tl">Food</span></button>
     <button class="tab" id="tab-progress" onclick="setTab('progress')"><span class="ti">&#128200;</span><span class="tl">Progress</span></button>
     <button class="tab" id="tab-ai" onclick="setTab('ai')"><span class="ti">&#9889;</span><span class="tl">AI</span></button>
